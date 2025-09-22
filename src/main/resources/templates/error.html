@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Error - Community Blog</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center px-4">
+<div class="max-w-md w-full">
+    <!-- Error Card -->
+    <div class="bg-white rounded-2xl shadow-xl p-8 text-center">
+        <!-- Error Icon -->
+        <div class="mx-auto w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-red-600" style="fill: none;" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"></path>
+            </svg>
+        </div>
+
+        <!-- Error Title -->
+        <h1 class="text-2xl font-bold text-gray-900 mb-4">Oops! Something went wrong</h1>
+
+        <!-- Dynamic Error Message -->
+        <div class="mb-6">
+            <p class="text-gray-600 mb-4" th:if="${error}" th:text="${error}">
+                An unexpected error occurred. Please try again.
+            </p>
+            <p class="text-gray-600 mb-4" th:unless="${error}">
+                An unexpected error occurred. Please try again.
+            </p>
+
+            <!-- Error Code Display -->
+            <div th:if="${status}" class="inline-block bg-gray-100 px-3 py-1 rounded-full text-sm text-gray-700">
+                Error Code: <span th:text="${status}" class="font-mono">500</span>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="space-y-3">
+            <a th:href="@{/}"
+               class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-6 rounded-lg transition duration-200 inline-block">
+                Go Back Home
+            </a>
+
+            <button onclick="history.back()"
+                    class="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-6 rounded-lg transition duration-200">
+                Go Back
+            </button>
+        </div>
+
+        <!-- Additional Help -->
+        <div class="mt-8 pt-6 border-t border-gray-200">
+            <p class="text-sm text-gray-500 mb-3">Need help? Contact our support team</p>
+            <a href="mailto:support@communityblog.com"
+               class="text-indigo-600 hover:text-indigo-700 text-sm font-medium transition duration-200">
+                support@communityblog.com
+            </a>
+        </div>
+    </div>
+
+    <!-- Additional Error Details (for development) -->
+    <div th:if="${trace}" class="mt-6 bg-gray-900 text-gray-300 p-4 rounded-lg text-xs font-mono overflow-auto max-h-40">
+        <details>
+            <summary class="cursor-pointer text-gray-400 hover:text-white mb-2">View Error Details</summary>
+            <pre th:text="${trace}">Stack trace will appear here</pre>
+        </details>
+    </div>
+</div>
+</body>
+</html>
