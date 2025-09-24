@@ -27,16 +27,33 @@ const imageInput = document.getElementById('imageInput');
 // Tags functionality
 const tagInput = document.getElementById('tagInput');
 const tagsContainer = document.getElementById('tagsContainer');
-const topicsHidden = document.getElementById('topicsHidden');
+const tagsHidden = document.getElementById('topicsHidden');
 let tags = [];
 
 // Modern formatting helpers (no deprecated execCommand)
 function getSelectionRange() {
     const sel = window.getSelection();
-    if (!sel || sel.rangeCount === 0) return null;
-    const range = sel.getRangeAt(0);
-    // Ensure selection is within editor
-    if (!editor.contains(range.startContainer)) return null;
+    let range = (sel && sel.rangeCount > 0) ? sel.getRangeAt(0) : null;
+
+    // If there's no selection or it's outside the editor, create a caret
+    // inside the editor (place it at the end) so toolbar actions still work.
+    if (!range || !editor.contains(range.startContainer)) {
+        // Ensure the editor has at least one child to place the caret
+        if (editor.childNodes.length === 0) {
+            const p = document.createElement('div');
+            p.appendChild(document.createElement('br'));
+            editor.appendChild(p);
+        }
+        editor.focus();
+        const newRange = document.createRange();
+        newRange.selectNodeContents(editor);
+        newRange.collapse(false); // place at end
+        if (sel) {
+            sel.removeAllRanges();
+            sel.addRange(newRange);
+        }
+        range = newRange;
+    }
     return range;
 }
 
@@ -315,7 +332,7 @@ numberListBtn.addEventListener('click', () => { toggleList('ol'); updateToolbarS
 // Media insertion
 imageBtn.addEventListener('click', () => imageInput.click());
 
-imageInput.addEventListener('change', (e) => {
+imageInput.addEventListener('change', async (e) => {
     const files = e.target.files;
     for (let file of files) {
         const reader = new FileReader();
@@ -323,9 +340,10 @@ imageInput.addEventListener('change', (e) => {
             const imgEl = document.createElement('img');
             imgEl.src = ev.target.result;
             imgEl.alt = 'Uploaded image';
-            imgEl.style.maxWidth = '100%';
+            imgEl.style.maxWidth = '30%';
             imgEl.style.height = 'auto';
             imgEl.style.margin = '10px 0';
+            imgEl.style.borderRadius = '4px';
             insertNodeAtSelection(imgEl);
         };
         reader.readAsDataURL(file);
@@ -340,7 +358,7 @@ linkBtn.addEventListener('click', () => {
     }
 });
 
-// Update hidden content field
+// Update the hidden content field
 function updateContent() {
     contentHidden.value = editor.innerHTML;
 }
@@ -373,7 +391,7 @@ function updateTagsDisplay() {
         `;
         tagsContainer.appendChild(tagElement);
     });
-    topicsHidden.value = tags.join(',');
+    tagsHidden.value = tags.join(',');
 }
 
 // Global function to remove tags

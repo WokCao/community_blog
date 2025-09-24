@@ -9,6 +9,8 @@ import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,8 +33,19 @@ public class UserService {
 
     private static final String PRODUCT_CACHE = "verificationToken:";
 
-    @Value("${BLOG.CONTROL.EMAIL.ACCOUNT}")
+    @Value("${blog.control.email.account}")
     private String controlEmail;
+
+    public UserModel getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+
+        if (email == null) {
+            return null;
+        }
+
+        return userRepository.findByEmail(email).orElse(null);
+    }
 
     @Transactional
     public UserModel registerUser(RegisterRequest registerRequest) throws BadRequestException {

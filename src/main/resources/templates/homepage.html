@@ -19,8 +19,8 @@
                 </a>
                 <div class="relative">
                     <button class="flex items-center space-x-2 text-gray-700 hover:text-gray-900">
-                        <div class="w-8 h-8 bg-gray-300 rounded-full"></div>
-                        <span th:text="${user?.fullname ?: 'Guest'}">User Name</span>
+                        <img th:src="${user?.avatarUrl}" th:alt="${user?.fullName}" class="w-8 h-8 rounded-full object-cover">
+                        <span th:text="${user?.fullName ?: 'Guest'}"></span>
                     </button>
                 </div>
             </div>

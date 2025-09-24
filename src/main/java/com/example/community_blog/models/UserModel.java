@@ -33,6 +33,14 @@ public class UserModel {
     @Column(nullable = true)
     private String avatarUrl;
 
+    @Transient
+    public String getAvatarUrl() {
+        if (avatarUrl == null) {
+            return "/img/bear.png";
+        }
+        return "/img/" + avatarUrl;
+    }
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
