@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="border-b border-gray-200 p-3 sticky top-0 z-20 bg-white editor-toolbar" th:fragment="toolbar">
+    <div class="flex flex-wrap items-center gap-2">
+        <!-- Primary Controls -->
+        <div class="flex items-center space-x-1 mr-3">
+            <button type="button" id="boldBtn" class="editor-btn" title="Bold">
+                <i class="fas fa-bold"></i>
+            </button>
+            <button type="button" id="italicBtn" class="editor-btn" title="Italic">
+                <i class="fas fa-italic"></i>
+            </button>
+            <button type="button" id="underlineBtn" class="editor-btn" title="Underline">
+                <i class="fas fa-underline"></i>
+            </button>
+        </div>
+
+        <div class="h-6 border-r border-gray-300 mx-1"></div>
+
+        <!-- Headings -->
+        <label for="heading"></label><select id="heading" class="editor-select">
+            <option value="">Normal Text</option>
+            <option value="h1">Heading 1</option>
+            <option value="h2">Heading 2</option>
+            <option value="h3">Heading 3</option>
+            <option value="h4">Heading 4</option>
+            <option value="h5">Heading 5</option>
+            <option value="h6">Heading 6</option>
+        </select>
+
+        <div class="h-6 border-r border-gray-300 mx-1"></div>
+
+        <!-- Font Controls -->
+        <label for="fontFamily"></label><select id="fontFamily" class="editor-select">
+            <option value="Arial">Arial</option>
+            <option value="Georgia" selected>Georgia</option>
+            <option value="Helvetica">Helvetica</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Verdana">Verdana</option>
+        </select>
+
+        <label for="fontSize"></label><select id="fontSize" class="editor-select">
+            <option value="11px">11px</option>
+            <option value="12px">12px</option>
+            <option value="13px">13px</option>
+            <option value="14px">14px</option>
+            <option value="15px">15px</option>
+            <option value="16px">16px</option>
+            <option value="17px">17px</option>
+            <option value="18px" selected>18px</option>
+            <option value="19px">19px</option>
+            <option value="20px">20px</option>
+            <option value="21px">21px</option>
+            <option value="22px">22px</option>
+            <option value="23px">23px</option>
+            <option value="24px">24px</option>
+            <option value="25px">25px</option>
+            <option value="26px">26px</option>
+            <option value="27px">27px</option>
+            <option value="28px">28px</option>
+            <option value="29px">29px</option>
+            <option value="30px">30px</option>
+            <option value="31px">31px</option>
+            <option value="32px">32px</option>
+        </select>
+
+        <div class="h-6 border-r border-gray-300 mx-1"></div>
+
+        <!-- Alignment -->
+        <div class="flex items-center space-x-1">
+            <button type="button" id="alignLeftBtn" class="editor-btn" title="Align Left">
+                <i class="fas fa-align-left"></i>
+            </button>
+            <button type="button" id="alignCenterBtn" class="editor-btn" title="Align Center">
+                <i class="fas fa-align-center"></i>
+            </button>
+            <button type="button" id="alignRightBtn" class="editor-btn" title="Align Right">
+                <i class="fas fa-align-right"></i>
+            </button>
+        </div>
+
+        <div class="h-6 border-r border-gray-300 mx-1 hidden sm:block"></div>
+
+        <!-- Lists -->
+        <div class="flex items-center space-x-1">
+            <button type="button" id="bulletListBtn" class="editor-btn" title="Bullet List">
+                <i class="fas fa-list-ul"></i>
+            </button>
+            <button type="button" id="numberListBtn" class="editor-btn" title="Numbered List">
+                <i class="fas fa-list-ol"></i>
+            </button>
+        </div>
+
+        <div class="h-6 border-r border-gray-300 mx-1 hidden sm:block"></div>
+
+        <!-- Media -->
+        <div class="flex items-center space-x-1">
+            <button type="button" id="imageBtn" class="editor-btn" title="Insert Image">
+                <i class="fas fa-image"></i>
+            </button>
+            <button type="button" id="linkBtn" class="editor-btn" title="Insert Link">
+                <i class="fas fa-link"></i>
+            </button>
+        </div>
+    </div>
+</div>
+</body>
+</html>

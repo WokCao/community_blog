@@ -16,6 +16,11 @@ public class AuthenticatedController {
         return "homepage";
     }
 
+    @GetMapping("/write-post")
+    public String writePost(Model model) {
+        return "write-post";
+    }
+
     @GetMapping("/posts/test")
     public String testPost(Model model) {
         // Mock author

@@ -7,14 +7,14 @@
 </head>
 <body class="bg-gray-50 min-h-screen">
 <!-- Navigation -->
-<nav class="bg-white shadow-sm border-b border-gray-200">
+<nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
             <div class="flex items-center">
                 <a th:href="@{/home}" class="text-2xl font-bold text-indigo-600">Community Blog</a>
             </div>
             <div class="flex items-center space-x-4">
-                <a th:href="@{/write}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition">
+                <a th:href="@{/write-post}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition">
                     Write Post
                 </a>
                 <div class="relative">

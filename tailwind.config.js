@@ -1,5 +1,5 @@
 export default {
-  content: ["./src/main/resources/templates/**/*.html"],
+  content: ["./src/main/resources/templates/**"],
   theme: {
     extend: {},
   },

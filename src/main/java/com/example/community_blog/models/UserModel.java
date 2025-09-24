@@ -45,5 +45,5 @@ public class UserModel {
     private Instant createdAt;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Post> posts = new HashSet<>();
+    private Set<PostModel> posts = new HashSet<>();
 }

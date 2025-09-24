@@ -7,7 +7,13 @@ import com.example.community_blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 @Controller
 public class ClientController {
@@ -38,7 +44,10 @@ public class ClientController {
 
             String token = userService.createVerificationToken(savedUser);
 
-            String verificationUrl = "http://localhost:8080/auth/verify?token=" + token + "&email=" + savedUser.getEmail();
+            String encodedEmail = Base64.getUrlEncoder()
+                    .encodeToString(savedUser.getEmail().getBytes(StandardCharsets.UTF_8));
+
+            String verificationUrl = "http://localhost:8080/auth/verify?token=" + token + "&email=" + encodedEmail;
 
             emailService.sendVerificationEmail(savedUser.getEmail(), verificationUrl);
 
@@ -51,7 +60,8 @@ public class ClientController {
     }
 
     @GetMapping("/auth/verify")
-    public String verifyAccount(@RequestParam("token") String token, @RequestParam("email") String email, Model model) {
+    public String verifyAccount(@RequestParam("token") String token, @RequestParam("email") String encodedEmail, Model model) {
+        String email = new String(Base64.getUrlDecoder().decode(encodedEmail), StandardCharsets.UTF_8);
         boolean verified = userService.verifyUser(token, email);
 
         if (verified) {
