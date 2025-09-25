@@ -5,6 +5,7 @@
     <title>Home - Community Blog</title>
     <link th:href="@{/css/output.css}" rel="stylesheet">
     <script th:src="@{/js/tag-colors.js}" defer></script>
+    <script th:src="@{/js/tag-overflow.js}" defer></script>
 </head>
 <body class="bg-gray-50 min-h-screen">
 <!-- Navigation -->
@@ -57,11 +58,11 @@
 
                         <!-- Title and Topics -->
                         <div class="mb-3">
-                            <div class="flex items-start justify-between">
+                            <div class="flex items-center justify-between">
                                 <h2 class="text-xl font-semibold text-gray-900 hover:text-indigo-600 cursor-pointer flex-1 mr-4"
                                     th:text="${post.title}">
                                 </h2>
-                                <div class="flex flex-wrap gap-2 flex-shrink-0">
+                                <div class="flex items-center gap-2 overflow-hidden tag-row" style="max-width: 40%; white-space: nowrap;">
                                     <span th:each="tag : ${post.tags}"
                                           class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium tag-pill"
                                           th:text="${tag}">
@@ -105,52 +106,6 @@
                     </div>
                 </div>
             </a>
-        </div>
-    </div>
-
-    <!-- Currently Reading Section (only for authenticated users) -->
-    <div th:if="${user != null}" class="mt-12 pt-8 border-t border-gray-200">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Continue Reading</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div th:each="readingPost : ${currentlyReading}"
-                 class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
-                <div class="flex items-start space-x-4">
-                    <div class="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0"></div>
-                    <div class="flex-1 min-w-0">
-                        <h3 class="text-lg font-medium text-gray-900 mb-1 truncate" th:text="${readingPost.title}">
-                            Understanding React Hooks in Depth
-                        </h3>
-                        <p class="text-sm text-gray-600 mb-2" th:text="${readingPost.author.fullname}">Mike Chen</p>
-                        <div class="flex items-center justify-between">
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-indigo-600 h-2 rounded-full"
-                                     th:style="'width: ' + ${readingPost.readProgress} + '%'" style="width: 65%"></div>
-                            </div>
-                            <span class="text-xs text-gray-500 ml-3"
-                                  th:text="${readingPost.readProgress} + '%'">65%</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Static example for demonstration -->
-            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
-                <div class="flex items-start space-x-4">
-                    <div class="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0"></div>
-                    <div class="flex-1 min-w-0">
-                        <h3 class="text-lg font-medium text-gray-900 mb-1 truncate">
-                            CSS Grid vs Flexbox: When to Use What
-                        </h3>
-                        <p class="text-sm text-gray-600 mb-2">Emma Wilson</p>
-                        <div class="flex items-center justify-between">
-                            <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-indigo-600 h-2 rounded-full" style="width: 30%"></div>
-                            </div>
-                            <span class="text-xs text-gray-500 ml-3">30%</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 
