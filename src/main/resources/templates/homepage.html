@@ -32,7 +32,7 @@
     </div>
 </nav>
 
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header -->
     <div class="mb-8">
         <h1 class="text-3xl font-bold text-gray-900 mb-2">Latest Posts</h1>
@@ -49,7 +49,8 @@
                     <div class="flex-1">
                         <!-- Author and Time -->
                         <div class="flex items-center space-x-3 mb-3">
-                            <img th:src="${post.author.avatarUrl}" th:alt="${post.author.fullName}" class="w-10 h-10 rounded-full object-cover">
+                            <img th:src="${post.author.avatarUrl}" th:alt="${post.author.fullName}"
+                                 class="w-10 h-10 rounded-full object-cover">
                             <div>
                                 <p class="text-sm font-medium text-gray-900" th:text="${post.author.fullName}"></p>
                                 <p class="text-xs text-gray-500" th:text="${post.timeAgo}"></p>
@@ -62,7 +63,8 @@
                                 <h2 class="text-xl font-semibold text-gray-900 hover:text-indigo-600 cursor-pointer flex-1 mr-4"
                                     th:text="${post.title}">
                                 </h2>
-                                <div class="flex items-center gap-2 overflow-hidden tag-row" style="max-width: 40%; white-space: nowrap;">
+                                <div class="flex items-center gap-2 overflow-hidden tag-row"
+                                     style="max-width: 40%; white-space: nowrap;">
                                     <span th:each="tag : ${post.tags}"
                                           class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium tag-pill"
                                           th:text="${tag}">

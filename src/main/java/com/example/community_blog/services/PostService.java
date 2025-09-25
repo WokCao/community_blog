@@ -40,12 +40,15 @@ public class PostService {
     }
 
     private PostModel updatePostView(Long id) throws BadRequestException {
-        PostModel post = postRepository.findById(id).orElse(null);
+        PostModel post = postRepository.findByIdWithDetails(id).orElse(null);
         if (post == null) {
             throw new BadRequestException("Post not found");
         }
+        // Increment view count via bulk update to avoid triggering @PreUpdate (and thus not touch updatedAt)
+        postRepository.incrementViewCount(id);
+        // Reflect the increment locally for the returned object without persisting it again
         post.setViewCount(post.getViewCount() + 1);
-        return postRepository.save(post);
+        return post;
     }
 
     public PostModel publishPost(CreatePostRequest createPostRequest) throws BadRequestException {
