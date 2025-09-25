@@ -1,6 +1,8 @@
 package com.example.community_blog.repositories;
 
 import com.example.community_blog.models.PostModel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -24,4 +26,7 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
             "LEFT JOIN FETCH p.tags " +
             "WHERE p.id = :id")
     Optional<PostModel> findByIdWithDetails(@Param("id") Long id);
+
+    @Query("SELECT p FROM PostModel p WHERE p.id != :id ORDER BY (p.likeCount * 10 + p.shareCount * 5 + p.saveCount * 2) DESC")
+    Page<PostModel> findNotable(@Param("id") Long id, Pageable pageable);
 }

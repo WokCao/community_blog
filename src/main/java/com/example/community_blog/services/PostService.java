@@ -73,6 +73,11 @@ public class PostService {
         return postRepository.findAll(pageable);
     }
 
+    public Page<PostModel> getNotablePostsExceptFor(Long postId) {
+        Pageable pageable = PageRequest.of(0, PAGE_SIZE);
+        return postRepository.findNotable(postId, pageable);
+    }
+
     private UserModel getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();

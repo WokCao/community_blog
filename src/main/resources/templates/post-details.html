@@ -14,7 +14,7 @@
 </head>
 <body class="bg-gray-50 min-h-screen">
 <!-- Navigation -->
-<nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
+<nav class="bg-white shadow-sm border-b border-gray-200">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
             <div class="flex items-center">
@@ -23,12 +23,15 @@
             <div class="flex items-center space-x-4">
                 <a th:href="@{/home}" class="text-gray-600 hover:text-gray-900 transition">Home</a>
                 <div th:if="${user != null}" class="flex items-center space-x-4">
-                    <a th:href="@{/profile}" class="text-gray-600 hover:text-gray-900 transition" th:text="${user.fullName}">User Name</a>
-                    <a th:href="@{/logout}" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition">Logout</a>
+                    <a th:href="@{/profile}" class="text-gray-600 hover:text-gray-900 transition"
+                       th:text="${user.fullName}">User Name</a>
+                    <a th:href="@{/logout}"
+                       class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition">Logout</a>
                 </div>
                 <div th:unless="${user != null}" class="flex items-center space-x-2">
                     <a th:href="@{/auth/login}" class="text-indigo-600 hover:text-indigo-700 transition">Login</a>
-                    <a th:href="@{/auth/register}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition">Register</a>
+                    <a th:href="@{/auth/register}"
+                       class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition">Register</a>
                 </div>
             </div>
         </div>
@@ -43,7 +46,8 @@
             <article class="bg-white rounded-xl shadow-sm p-8 mb-8">
                 <div class="mb-6">
                     <div class="flex items-center space-x-4 mb-4">
-                        <img th:src="${post.author.avatarUrl}" th:alt="${post.author.fullName}" class="w-12 h-12 rounded-full object-cover">
+                        <img th:src="${post.author.avatarUrl}" th:alt="${post.author.fullName}"
+                             class="w-12 h-12 rounded-full object-cover">
                         <div>
                             <h3 class="font-semibold text-gray-900" th:text="${post.author.fullName}">Author Name</h3>
                             <p class="text-sm text-gray-500" th:text="${post.timeAgo}"></p>
@@ -61,22 +65,26 @@
                         <div class="flex items-center space-x-4 text-sm text-gray-500">
                                 <span class="flex items-center">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                     </svg>
                                     <span th:text="${post.viewCount}" class="mr-1"></span>
                                     <span>views</span>
                                 </span>
                             <span class="flex items-center">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                                     </svg>
                                     <span th:text="${post.commentCount}" class="mr-1"></span>
                                     <span>comments</span>
                                 </span>
                             <span class="flex items-center">
                                     <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
                                     </svg>
                                     <span th:text="${post.saveCount}" class="mr-1"></span>
                                     <span>saved</span>
@@ -90,7 +98,8 @@
                             <!-- Like/Dislike for authenticated users -->
                             <div th:if="${user != null}" class="flex items-center space-x-2">
                                 <form th:action="@{'/posts/' + ${post.id} + '/like'}" method="post" class="inline">
-                                    <button type="submit" class="flex items-center space-x-1 px-4 py-2 rounded-lg transition"
+                                    <button type="submit"
+                                            class="flex items-center space-x-1 px-4 py-2 rounded-lg transition"
                                             th:classappend="${post.likeCount > 0} ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600 hover:bg-green-100 hover:text-green-700'">
                                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M7.493 18.75c-.425 0-.82-.236-.975-.632A7.48 7.48 0 016 15.375c0-1.75.599-3.358 1.602-4.634.151-.192.373-.309.6-.397.473-.183.89-.514 1.212-.924a9.042 9.042 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75 2.25 2.25 0 012.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558-.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H14.23c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23h-.777zM2.331 10.977a11.969 11.969 0 00-.831 4.398 12 12 0 00.52 3.507c.26.85 1.084 1.368 1.973 1.368H4.9c.445 0 .72-.498.523-.898a8.963 8.963 0 01-.924-3.977c0-1.708.476-3.305 1.302-4.666.245-.403-.028-.959-.5-.959H4.25c-.832 0-1.612.453-1.918 1.227z"/>
@@ -99,7 +108,8 @@
                                     </button>
                                 </form>
                                 <form th:action="@{'/posts/' + ${post.id} + '/dislike'}" method="post" class="inline">
-                                    <button type="submit" class="flex items-center space-x-1 px-4 py-2 rounded-lg transition"
+                                    <button type="submit"
+                                            class="flex items-center space-x-1 px-4 py-2 rounded-lg transition"
                                             th:classappend="${post.likeCount > 0} ? 'bg-red-100 text-red-700' : 'bg-gray-100 text-gray-600 hover:bg-red-100 hover:text-red-700'">
                                         <svg class="w-5 h-5 rotate-180" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M7.493 18.75c-.425 0-.82-.236-.975-.632A7.48 7.48 0 016 15.375c0-1.75.599-3.358 1.602-4.634.151-.192.373-.309.6-.397.473-.183.89-.514 1.212-.924a9.042 9.042 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75 2.25 2.25 0 012.25 2.25c0 1.152-.26 2.243-.723 3.218-.266.558-.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H14.23c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23h-.777zM2.331 10.977a11.969 11.969 0 00-.831 4.398 12 12 0 00.52 3.507c.26.85 1.084 1.368 1.973 1.368H4.9c.445 0 .72-.498.523-.898a8.963 8.963 0 01-.924-3.977c0-1.708.476-3.305 1.302-4.666.245-.403-.028-.959-.5-.959H4.25c-.832 0-1.612.453-1.918 1.227z"/>
@@ -111,7 +121,8 @@
                         </div>
 
                         <!-- Share Button -->
-                        <button onclick="shareOnFacebook()" class="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
+                        <button onclick="shareOnFacebook()"
+                                class="flex items-center space-x-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                 <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                             </svg>
@@ -127,18 +138,23 @@
             </article>
 
             <!-- Comments Section -->
-            <div th:if="${user != null}" class="bg-white rounded-xl shadow-sm p-8 mb-8">
+            <div th:if="${user != null && post.isAllowComment() == true}"
+                 class="bg-white rounded-xl shadow-sm p-8 mb-8">
                 <h2 class="text-2xl font-bold text-gray-900 mb-6">Comments</h2>
 
                 <!-- Add Comment Form -->
                 <form th:action="@{'/posts/' + ${post.id} + '/comment'}" method="post" class="mb-8">
                     <div class="flex space-x-4">
-                        <img th:src="${user.avatarUrl}" th:alt="${user.fullName}" class="w-10 h-10 rounded-full object-cover flex-shrink-0">
+                        <img th:src="${user.avatarUrl}" th:alt="${user.fullName}"
+                             class="w-10 h-10 rounded-full object-cover flex-shrink-0">
                         <div class="flex-1">
+                            <label>
                                 <textarea name="content" rows="3" placeholder="Write a comment..."
                                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent resize-none"></textarea>
+                            </label>
                             <div class="flex justify-end mt-3">
-                                <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg transition">
+                                <button type="submit"
+                                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg transition">
                                     Post Comment
                                 </button>
                             </div>
@@ -149,7 +165,8 @@
                 <!-- Comments List -->
                 <div class="space-y-6">
                     <div th:each="comment : ${post.comments}" class="flex space-x-4">
-                        <img th:src="${comment.commenter.avatarUrl}" th:alt="${comment.commenter.fullName}" class="w-10 h-10 rounded-full object-cover flex-shrink-0">
+                        <img th:src="${comment.commenter.avatarUrl}" th:alt="${comment.commenter.fullName}"
+                             class="w-10 h-10 rounded-full object-cover flex-shrink-0">
                         <div class="flex-1">
                             <div class="bg-gray-50 rounded-lg p-4">
                                 <div class="flex items-center space-x-2 mb-2">
@@ -164,58 +181,73 @@
             </div>
 
             <!-- Related Posts -->
-<!--            <div class="bg-white rounded-xl shadow-sm p-8 mb-8">-->
-<!--                <h2 class="text-2xl font-bold text-gray-900 mb-6">Related Posts</h2>-->
-<!--                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">-->
-<!--                    <article th:each="relatedPost : ${relatedPosts}" class="group cursor-pointer">-->
-<!--                        <a th:href="@{'/post/' + ${relatedPost.id}}" class="block">-->
-<!--                            <div class="aspect-w-16 aspect-h-9 mb-4">-->
-<!--                                <img th:src="${relatedPost.thumbnail}" th:alt="${relatedPost.title}"-->
-<!--                                     class="w-full h-48 object-cover rounded-lg group-hover:opacity-90 transition">-->
-<!--                            </div>-->
-<!--                            <h3 class="font-semibold text-gray-900 group-hover:text-indigo-600 transition mb-2" th:text="${relatedPost.title}">Related Post Title</h3>-->
-<!--                            <p class="text-sm text-gray-600 mb-2" th:text="${relatedPost.excerpt}">Brief excerpt of the related post...</p>-->
-<!--                            <div class="flex items-center text-sm text-gray-500">-->
-<!--                                <span th:text="${relatedPost.author.fullname}">Author</span>-->
-<!--                                <span class="mx-2">•</span>-->
-<!--                                <span th:text="${relatedPost.timeAgo}">3 days ago</span>-->
-<!--                            </div>-->
-<!--                        </a>-->
-<!--                    </article>-->
-<!--                </div>-->
-<!--            </div>-->
+            <!--            <div class="bg-white rounded-xl shadow-sm p-8 mb-8">-->
+            <!--                <h2 class="text-2xl font-bold text-gray-900 mb-6">Related Posts</h2>-->
+            <!--                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">-->
+            <!--                    <article th:each="relatedPost : ${relatedPosts}" class="group cursor-pointer">-->
+            <!--                        <a th:href="@{'/post/' + ${relatedPost.id}}" class="block">-->
+            <!--                            <div class="aspect-w-16 aspect-h-9 mb-4">-->
+            <!--                                <img th:src="${relatedPost.thumbnail}" th:alt="${relatedPost.title}"-->
+            <!--                                     class="w-full h-48 object-cover rounded-lg group-hover:opacity-90 transition">-->
+            <!--                            </div>-->
+            <!--                            <h3 class="font-semibold text-gray-900 group-hover:text-indigo-600 transition mb-2" th:text="${relatedPost.title}">Related Post Title</h3>-->
+            <!--                            <p class="text-sm text-gray-600 mb-2" th:text="${relatedPost.excerpt}">Brief excerpt of the related post...</p>-->
+            <!--                            <div class="flex items-center text-sm text-gray-500">-->
+            <!--                                <span th:text="${relatedPost.author.fullname}">Author</span>-->
+            <!--                                <span class="mx-2">•</span>-->
+            <!--                                <span th:text="${relatedPost.timeAgo}">3 days ago</span>-->
+            <!--                            </div>-->
+            <!--                        </a>-->
+            <!--                    </article>-->
+            <!--                </div>-->
+            <!--            </div>-->
 
-            <!-- Author's Notable Posts -->
-<!--            <div class="bg-white rounded-xl shadow-sm p-8">-->
-<!--                <h2 class="text-2xl font-bold text-gray-900 mb-6">More from <span th:text="${post.author.fullname}">Author Name</span></h2>-->
-<!--                <div class="space-y-4">-->
-<!--                    <article th:each="notablePost : ${authorNotablePosts}" class="group">-->
-<!--                        <a th:href="@{'/post/' + ${notablePost.id}}" class="flex space-x-4 p-4 rounded-lg hover:bg-gray-50 transition">-->
-<!--                            <img th:src="${notablePost.thumbnail}" th:alt="${notablePost.title}"-->
-<!--                                 class="w-20 h-20 object-cover rounded-lg flex-shrink-0">-->
-<!--                            <div class="flex-1">-->
-<!--                                <h3 class="font-semibold text-gray-900 group-hover:text-indigo-600 transition mb-1" th:text="${notablePost.title}">Notable Post Title</h3>-->
-<!--                                <p class="text-sm text-gray-600 mb-2" th:text="${notablePost.excerpt}">Brief excerpt...</p>-->
-<!--                                <div class="flex items-center space-x-4 text-sm text-gray-500">-->
-<!--                                    <span th:text="${notablePost.timeAgo}">1 week ago</span>-->
-<!--                                    <span class="flex items-center">-->
-<!--                                            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">-->
-<!--                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>-->
-<!--                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>-->
-<!--                                            </svg>-->
-<!--                                            <span th:text="${notablePost.viewCount}">2.1k</span>-->
-<!--                                        </span>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </a>-->
-<!--                    </article>-->
-<!--                </div>-->
-<!--            </div>-->
+            <!--             Author's Notable Posts -->
+            <div class="bg-white rounded-xl shadow-sm p-8">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">More from <span
+                        th:text="${post.author.fullName}"></span>
+                </h2>
+                <div class="space-y-4">
+                    <article th:each="notablePost : ${notablePosts}" class="group">
+                        <a th:href="@{'/post/' + ${notablePost.id}}"
+                           class="flex space-x-4 p-4 rounded-lg hover:bg-gray-50 transition">
+                            <img th:src="${notablePost.author.avatarUrl}" th:alt="${notablePost.title}"
+                                 class="w-20 h-20 object-cover rounded-lg flex-shrink-0">
+                            <div class="flex-1">
+                                <h3 class="font-semibold text-gray-900 group-hover:text-indigo-600 transition mb-1"
+                                    th:text="${notablePost.title}"></h3>
+                                <p class="text-sm text-gray-600 mb-2 line-clamp-2"
+                                   th:text="${notablePost.plainContent}"></p>
+                                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                                    <span th:text="${notablePost.timeAgo}"></span>
+                                    <span class="flex items-center space-x-2">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor"
+                                             viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                  stroke-width="2"
+                                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                  stroke-width="2"
+                                                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                        <span th:text="${notablePost.viewCount}"></span>
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                  d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                                        </svg>
+                                        <span th:text="${notablePost.saveCount}"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+                </div>
+            </div>
         </div>
 
         <!-- Table of Contents Sidebar -->
         <div class="lg:col-span-1">
-            <div class="sticky top-1/2 -translate-y-1/2">
+            <div class="sticky top-8">
                 <div class="bg-white rounded-xl shadow-sm p-6">
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Table of Contents</h3>
                     <nav id="table-of-contents" class="space-y-2">
@@ -229,7 +261,7 @@
 
 <script>
     // Generate Table of Contents
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         const tocContainer = document.getElementById('table-of-contents');
         const headings = document.querySelectorAll('.prose h1, .prose h2, .prose h3, .prose h4, .prose h5, .prose h6');
 
@@ -253,25 +285,32 @@
 
         // Smooth scrolling
         document.querySelectorAll('#table-of-contents a').forEach(link => {
-            link.addEventListener('click', function(e) {
+            link.addEventListener('click', function (e) {
                 e.preventDefault();
                 const target = document.querySelector(this.getAttribute('href'));
                 if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    target.scrollIntoView({behavior: 'smooth', block: 'start'});
                 }
             });
         });
     });
 
     function getTocClass(tagName) {
-        switch(tagName.toLowerCase()) {
-            case 'h1': return 'text-gray-900 font-semibold';
-            case 'h2': return 'text-gray-800 font-medium pl-2';
-            case 'h3': return 'text-gray-700 pl-4';
-            case 'h4': return 'text-gray-600 pl-6';
-            case 'h5': return 'text-gray-500 pl-8';
-            case 'h6': return 'text-gray-400 pl-10';
-            default: return 'text-gray-600';
+        switch (tagName.toLowerCase()) {
+            case 'h1':
+                return 'text-gray-900 font-semibold';
+            case 'h2':
+                return 'text-gray-800 font-medium pl-2';
+            case 'h3':
+                return 'text-gray-700 pl-4';
+            case 'h4':
+                return 'text-gray-600 pl-6';
+            case 'h5':
+                return 'text-gray-500 pl-8';
+            case 'h6':
+                return 'text-gray-400 pl-10';
+            default:
+                return 'text-gray-600';
         }
     }
 

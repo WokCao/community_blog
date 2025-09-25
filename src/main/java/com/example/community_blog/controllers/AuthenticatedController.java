@@ -39,6 +39,7 @@ public class AuthenticatedController {
 
         Page<PostModel> postModelPage = postService.getLatestPosts();
         model.addAttribute("posts", postModelPage.getContent());
+        model.addAttribute("totalElements", postModelPage.getTotalElements());
         return "homepage";
     }
 
@@ -56,7 +57,6 @@ public class AuthenticatedController {
             model.addAttribute("errorMessage", e.getMessage());
             return "write-post";
         }
-
     }
 
     @GetMapping("/posts/{id}")
@@ -68,8 +68,11 @@ public class AuthenticatedController {
                 throw new Exception("Post not found");
             }
 
+            Page<PostModel> notablePosts = postService.getNotablePostsExceptFor(postModel.getId());
+
             model.addAttribute("post", postModel);
             model.addAttribute("user", postModel.getAuthor());
+            model.addAttribute("notablePosts", notablePosts.getContent());
             return "post-details";
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
