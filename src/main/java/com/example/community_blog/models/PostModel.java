@@ -91,4 +91,20 @@ public class PostModel {
         comment.setPost(null);
         this.commentCount = Math.max(0, this.commentCount - 1);
     }
+
+    @Transient
+    public String getPlainContent() {
+        if (content == null) return "";
+        String text = content;
+        text = text.replaceAll("(?is)<script[^>]*>.*?</script>", " ");
+        text = text.replaceAll("(?is)<style[^>]*>.*?</style>", " ");
+        text = text.replaceAll("<[^>]+>", " ");
+        text = text.replaceAll("&nbsp;", " ");
+        text = text.replaceAll("&amp;", "&");
+        text = text.replaceAll("&lt;", "<");
+        text = text.replaceAll("&gt;", ">");
+        text = text.replaceAll("&quot;", "\"");
+        text = text.replaceAll("&apos;", "'");
+        return text.replaceAll("\\s+", " ").trim();
+    }
 }

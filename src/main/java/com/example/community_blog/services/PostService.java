@@ -7,6 +7,11 @@ import com.example.community_blog.repositories.PostRepository;
 import com.example.community_blog.repositories.UserRepository;
 import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -15,6 +20,9 @@ import org.springframework.stereotype.Service;
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+
+    @Value("${blog.page.size}")
+    private int PAGE_SIZE;
 
     @Autowired
     public PostService(PostRepository postRepository, UserRepository userRepository) {
@@ -28,7 +36,16 @@ public class PostService {
             throw new BadRequestException("User not authenticated");
         }
 
-        return postRepository.findById(id).orElse(null);
+        return updatePostView(id);
+    }
+
+    private PostModel updatePostView(Long id) throws BadRequestException {
+        PostModel post = postRepository.findById(id).orElse(null);
+        if (post == null) {
+            throw new BadRequestException("Post not found");
+        }
+        post.setViewCount(post.getViewCount() + 1);
+        return postRepository.save(post);
     }
 
     public PostModel publishPost(CreatePostRequest createPostRequest) throws BadRequestException {
@@ -45,6 +62,12 @@ public class PostService {
         post.setTags(createPostRequest.getTags());
         post.setAuthor(currentUser);
         return postRepository.save(post);
+    }
+
+    public Page<PostModel> getLatestPosts() {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(0, PAGE_SIZE, sort);
+        return postRepository.findAll(pageable);
     }
 
     private UserModel getCurrentUser() {

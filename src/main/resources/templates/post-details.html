@@ -9,10 +9,12 @@
     <meta property="og:description" th:content="${post.content}">
     <meta property="og:url" th:content="@{'/post/' + ${post.id}}">
     <meta property="og:type" content="article">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script th:src="@{/js/tag-colors.js}" defer></script>
 </head>
 <body class="bg-gray-50 min-h-screen">
 <!-- Navigation -->
-<nav class="bg-white shadow-sm border-b">
+<nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
             <div class="flex items-center">
@@ -53,7 +55,7 @@
                     <div class="flex flex-wrap items-center gap-4 mb-6">
                         <div class="flex flex-wrap gap-2">
                                 <span th:each="tag : ${post.tags}"
-                                      class="px-3 py-1 bg-indigo-100 text-indigo-700 rounded-full text-sm font-medium"
+                                      class="px-3 py-1 rounded-full text-sm font-medium tag-pill"
                                       th:text="${tag}">Topic</span>
                         </div>
                         <div class="flex items-center space-x-4 text-sm text-gray-500">
@@ -213,7 +215,7 @@
 
         <!-- Table of Contents Sidebar -->
         <div class="lg:col-span-1">
-            <div class="sticky top-8">
+            <div class="sticky top-1/2 -translate-y-1/2">
                 <div class="bg-white rounded-xl shadow-sm p-6">
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Table of Contents</h3>
                     <nav id="table-of-contents" class="space-y-2">

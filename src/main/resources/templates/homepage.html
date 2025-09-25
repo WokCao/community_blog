@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Home - Community Blog</title>
     <link th:href="@{/css/output.css}" rel="stylesheet">
+    <script th:src="@{/js/tag-colors.js}" defer></script>
 </head>
 <body class="bg-gray-50 min-h-screen">
 <!-- Navigation -->
@@ -14,12 +15,14 @@
                 <a th:href="@{/home}" class="text-2xl font-bold text-indigo-600">Community Blog</a>
             </div>
             <div class="flex items-center space-x-4">
-                <a th:href="@{/write-post}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition">
+                <a th:href="@{/write-post}"
+                   class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition">
                     Write Post
                 </a>
                 <div class="relative">
                     <button class="flex items-center space-x-2 text-gray-700 hover:text-gray-900">
-                        <img th:src="${user?.avatarUrl}" th:alt="${user?.fullName}" class="w-8 h-8 rounded-full object-cover">
+                        <img th:src="${user?.avatarUrl}" th:alt="${user?.fullName}"
+                             class="w-8 h-8 rounded-full object-cover">
                         <span th:text="${user?.fullName ?: 'Guest'}"></span>
                     </button>
                 </div>
@@ -38,178 +41,70 @@
     <!-- Posts List -->
     <div class="space-y-6">
         <!-- Sample posts - replace with th:each for dynamic content -->
-        <div th:each="post : ${posts}" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-            <div class="flex items-start justify-between">
-                <div class="flex-1">
-                    <!-- Author and Time -->
-                    <div class="flex items-center space-x-3 mb-3">
-                        <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                            <span class="text-sm font-medium text-gray-600" th:text="${post.author.fullname?.substring(0,1)?.toUpperCase()}">A</span>
+        <div th:each="post : ${posts}"
+             class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+            <a th:href="@{/posts/{id}(id=${post.id})}" class="block cursor-pointer">
+                <div class="flex items-start justify-between">
+                    <div class="flex-1">
+                        <!-- Author and Time -->
+                        <div class="flex items-center space-x-3 mb-3">
+                            <img th:src="${post.author.avatarUrl}" th:alt="${post.author.fullName}" class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900" th:text="${post.author.fullName}"></p>
+                                <p class="text-xs text-gray-500" th:text="${post.timeAgo}"></p>
+                            </div>
                         </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-900" th:text="${post.author.fullname}">Author Name</p>
-                            <p class="text-xs text-gray-500" th:text="${post.timeAgo}">2 hours ago</p>
-                        </div>
-                    </div>
 
-                    <!-- Title and Topics -->
-                    <div class="mb-3">
-                        <div class="flex items-start justify-between">
-                            <h2 class="text-xl font-semibold text-gray-900 hover:text-indigo-600 cursor-pointer flex-1 mr-4"
-                                th:text="${post.title}">
-                                How to Build Better Web Applications with Modern Frameworks
-                            </h2>
-                            <div class="flex flex-wrap gap-2 flex-shrink-0">
-                                    <span th:each="topic : ${post.topics}"
-                                          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800"
-                                          th:text="${topic}">
-                                        Technology
+                        <!-- Title and Topics -->
+                        <div class="mb-3">
+                            <div class="flex items-start justify-between">
+                                <h2 class="text-xl font-semibold text-gray-900 hover:text-indigo-600 cursor-pointer flex-1 mr-4"
+                                    th:text="${post.title}">
+                                </h2>
+                                <div class="flex flex-wrap gap-2 flex-shrink-0">
+                                    <span th:each="tag : ${post.tags}"
+                                          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium tag-pill"
+                                          th:text="${tag}">
                                     </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Post Preview -->
+                        <p class="text-gray-600 text-sm mb-4 line-clamp-2" th:text="${post.plainContent}"></p>
+
+                        <!-- Stats -->
+                        <div class="flex items-center space-x-6 text-sm text-gray-500">
+                            <div class="flex items-center space-x-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                                <span th:text="${post.viewCount}"></span>
+                                <span>views</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                                </svg>
+                                <span th:text="${post.saveCount}"></span>
+                                <span>saved</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                          d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                </svg>
+                                <span th:text="${post.commentCount}"></span>
+                                <span>comments</span>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Post Preview -->
-                    <p class="text-gray-600 text-sm mb-4 line-clamp-2" th:text="${post.excerpt}">
-                        This is a brief preview of the blog post content that gives readers an idea of what they can expect when they click to read more...
-                    </p>
-
-                    <!-- Stats -->
-                    <div class="flex items-center space-x-6 text-sm text-gray-500">
-                        <div class="flex items-center space-x-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                            <span th:text="${post.viewCount}">1.2k</span>
-                            <span>views</span>
-                        </div>
-                        <div class="flex items-center space-x-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
-                            </svg>
-                            <span th:text="${post.saveCount}">89</span>
-                            <span>saved</span>
-                        </div>
-                        <div class="flex items-center space-x-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                            </svg>
-                            <span th:text="${post.commentCount}">23</span>
-                            <span>comments</span>
-                        </div>
-                    </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Static example posts for demonstration -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-            <div class="flex items-start justify-between">
-                <div class="flex-1">
-                    <div class="flex items-center space-x-3 mb-3">
-                        <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                            <span class="text-sm font-medium text-gray-600">J</span>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-900">John Smith</p>
-                            <p class="text-xs text-gray-500">4 hours ago</p>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="flex items-start justify-between">
-                            <h2 class="text-xl font-semibold text-gray-900 hover:text-indigo-600 cursor-pointer flex-1 mr-4">
-                                The Future of Web Development: Trends to Watch in 2024
-                            </h2>
-                            <div class="flex flex-wrap gap-2 flex-shrink-0">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">Web Dev</span>
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">Trends</span>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="text-gray-600 text-sm mb-4 line-clamp-2">
-                        Exploring the latest trends and technologies that are shaping the future of web development, from AI integration to new frameworks...
-                    </p>
-                    <div class="flex items-center space-x-6 text-sm text-gray-500">
-                        <div class="flex items-center space-x-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                            <span>856</span>
-                            <span>views</span>
-                        </div>
-                        <div class="flex items-center space-x-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
-                            </svg>
-                            <span>42</span>
-                            <span>saved</span>
-                        </div>
-                        <div class="flex items-center space-x-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                            </svg>
-                            <span>15</span>
-                            <span>comments</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-            <div class="flex items-start justify-between">
-                <div class="flex-1">
-                    <div class="flex items-center space-x-3 mb-3">
-                        <div class="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
-                            <span class="text-sm font-medium text-gray-600">S</span>
-                        </div>
-                        <div>
-                            <p class="text-sm font-medium text-gray-900">Sarah Johnson</p>
-                            <p class="text-xs text-gray-500">1 day ago</p>
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="flex items-start justify-between">
-                            <h2 class="text-xl font-semibold text-gray-900 hover:text-indigo-600 cursor-pointer flex-1 mr-4">
-                                Building Scalable Applications: Lessons from Production
-                            </h2>
-                            <div class="flex flex-wrap gap-2 flex-shrink-0">
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">Architecture</span>
-                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">Backend</span>
-                            </div>
-                        </div>
-                    </div>
-                    <p class="text-gray-600 text-sm mb-4 line-clamp-2">
-                        Real-world insights and practical tips for building applications that can handle millions of users, based on production experience...
-                    </p>
-                    <div class="flex items-center space-x-6 text-sm text-gray-500">
-                        <div class="flex items-center space-x-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                            </svg>
-                            <span>2.1k</span>
-                            <span>views</span>
-                        </div>
-                        <div class="flex items-center space-x-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
-                            </svg>
-                            <span>156</span>
-                            <span>saved</span>
-                        </div>
-                        <div class="flex items-center space-x-1">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                            </svg>
-                            <span>34</span>
-                            <span>comments</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            </a>
         </div>
     </div>
 
@@ -217,7 +112,8 @@
     <div th:if="${user != null}" class="mt-12 pt-8 border-t border-gray-200">
         <h2 class="text-2xl font-bold text-gray-900 mb-6">Continue Reading</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div th:each="readingPost : ${currentlyReading}" class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
+            <div th:each="readingPost : ${currentlyReading}"
+                 class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 hover:shadow-md transition-shadow">
                 <div class="flex items-start space-x-4">
                     <div class="w-16 h-16 bg-gray-200 rounded-lg flex-shrink-0"></div>
                     <div class="flex-1 min-w-0">
@@ -227,9 +123,11 @@
                         <p class="text-sm text-gray-600 mb-2" th:text="${readingPost.author.fullname}">Mike Chen</p>
                         <div class="flex items-center justify-between">
                             <div class="w-full bg-gray-200 rounded-full h-2">
-                                <div class="bg-indigo-600 h-2 rounded-full" th:style="'width: ' + ${readingPost.readProgress} + '%'" style="width: 65%"></div>
+                                <div class="bg-indigo-600 h-2 rounded-full"
+                                     th:style="'width: ' + ${readingPost.readProgress} + '%'" style="width: 65%"></div>
                             </div>
-                            <span class="text-xs text-gray-500 ml-3" th:text="${readingPost.readProgress} + '%'">65%</span>
+                            <span class="text-xs text-gray-500 ml-3"
+                                  th:text="${readingPost.readProgress} + '%'">65%</span>
                         </div>
                     </div>
                 </div>

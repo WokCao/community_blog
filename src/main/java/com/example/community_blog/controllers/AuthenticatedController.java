@@ -7,6 +7,7 @@ import com.example.community_blog.services.PostService;
 import com.example.community_blog.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +36,9 @@ public class AuthenticatedController {
         if (currentUser != null) {
             model.addAttribute("user", currentUser);
         }
+
+        Page<PostModel> postModelPage = postService.getLatestPosts();
+        model.addAttribute("posts", postModelPage.getContent());
         return "homepage";
     }
 
