@@ -73,7 +73,20 @@ public class AuthenticatedController {
             model.addAttribute("post", postModel);
             model.addAttribute("user", postModel.getAuthor());
             model.addAttribute("notablePosts", notablePosts.getContent());
+
             return "post-details";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "error";
+        }
+
+    }
+
+    @PostMapping("/posts/{id}/comment")
+    public String postComment(Model model, @Valid @PathVariable("id") Long id, String content) {
+        try {
+            postService.addCommentToPost(id, content);
+            return "redirect:/posts/" + id;
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "error";

@@ -1,6 +1,7 @@
 package com.example.community_blog.services;
 
 import com.example.community_blog.dto.CreatePostRequest;
+import com.example.community_blog.models.CommentModel;
 import com.example.community_blog.models.PostModel;
 import com.example.community_blog.models.UserModel;
 import com.example.community_blog.repositories.PostRepository;
@@ -40,7 +41,7 @@ public class PostService {
     }
 
     private PostModel updatePostView(Long id) throws BadRequestException {
-        PostModel post = postRepository.findByIdWithDetails(id).orElse(null);
+        PostModel post = postRepository.findById(id).orElse(null);
         if (post == null) {
             throw new BadRequestException("Post not found");
         }
@@ -76,6 +77,24 @@ public class PostService {
     public Page<PostModel> getNotablePostsExceptFor(Long postId) {
         Pageable pageable = PageRequest.of(0, PAGE_SIZE);
         return postRepository.findNotable(postId, pageable);
+    }
+
+    public void addCommentToPost(Long id, String content) throws BadRequestException {
+        UserModel currentUser = getCurrentUser();
+        if (currentUser == null) {
+            throw new BadRequestException("User not authenticated");
+        }
+
+        PostModel post = postRepository.findById(id).orElse(null);
+        if (post == null) {
+            throw new BadRequestException("Post not found");
+        }
+
+        CommentModel commentModel = new CommentModel();
+        commentModel.setCommenter(currentUser);
+        commentModel.setContent(content);
+        post.addComment(commentModel);
+        postRepository.save(post);
     }
 
     private UserModel getCurrentUser() {
