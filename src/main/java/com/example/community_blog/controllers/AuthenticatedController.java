@@ -1,5 +1,6 @@
 package com.example.community_blog.controllers;
 
+import com.example.community_blog.dto.CommentView;
 import com.example.community_blog.dto.CreatePostRequest;
 import com.example.community_blog.models.PostModel;
 import com.example.community_blog.models.UserModel;
@@ -13,6 +14,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 @Controller
 public class AuthenticatedController {
@@ -63,15 +66,31 @@ public class AuthenticatedController {
                 throw new Exception("Post not found");
             }
 
+            UserModel currentUser = userService.getCurrentUser();
+            if (currentUser != null) {
+                model.addAttribute("user", currentUser);
+            }
+
             Page<PostModel> notablePosts = postService.getNotablePostsExceptFor(postModel.getId());
             Page<PostModel> relatedPosts = postService.searchRelatedPostsByTag(postModel.getId(), postModel.getTags());
+            List<CommentView> comments = postModel.getComments().stream()
+                    .map(c -> new CommentView(
+                            c,
+                            c.getLikedBy().contains(currentUser),
+                            c.getDislikedBy().contains(currentUser)
+                    ))
+                    .toList();
 
             model.addAttribute("post", postModel);
-            model.addAttribute("user", postModel.getAuthor());
             model.addAttribute("notablePosts", notablePosts.getContent());
             model.addAttribute("relatedPosts", relatedPosts.getContent());
+            model.addAttribute("isPostLikedByUser", postModel.isLikedBy(currentUser));
+            model.addAttribute("isPostDislikedByUser", postModel.isDislikedBy(currentUser));
+            model.addAttribute("comments", comments);
+
             return "post-details";
         } catch (Exception e) {
+            e.printStackTrace();
             model.addAttribute("errorMessage", e.getMessage());
             return "error";
         }

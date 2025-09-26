@@ -21,10 +21,10 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
     @Query("update PostModel p set p.viewCount = p.viewCount + 1 where p.id = :id")
     void incrementViewCount(@Param("id") Long id);
 
-    @EntityGraph(attributePaths = {"author", "comments", "tags"})
+    @EntityGraph(attributePaths = {"author", "comments", "tags", "likedBy", "dislikedBy"})
     Optional<PostModel> findById(Long id);
 
-    @Query("SELECT p FROM PostModel p WHERE p.id != :id ORDER BY (p.likeCount * 10 + p.shareCount * 5 + p.saveCount * 2) DESC")
+    @Query("SELECT p FROM PostModel p WHERE p.id != :id ORDER BY (SIZE(p.likedBy) * 10 + p.shareCount * 5 + p.saveCount * 2) DESC")
     Page<PostModel> findNotable(@Param("id") Long id, Pageable pageable);
 
     @Query(

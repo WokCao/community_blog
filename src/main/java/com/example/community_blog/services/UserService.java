@@ -66,6 +66,7 @@ public class UserService {
         user.setEmail(registerRequest.getEmail());
         user.setPassword(passwordEncoder.encode(registerRequest.getPassword()));
         user.setFullName(registerRequest.getFullName());
+        user.setAvatarUrl("bear.png");
         user.setRoles(roleAdmin != null ? Set.of(roleUser, roleAdmin) : Set.of(roleUser));
         return userRepository.save(user);
     }

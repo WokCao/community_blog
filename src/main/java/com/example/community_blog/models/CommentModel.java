@@ -6,6 +6,8 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "comments")
@@ -30,6 +32,18 @@ public class CommentModel {
         return TimeAgoUtil.getTimeAgo(updatedAt);
     }
 
+    @ManyToMany(fetch =  FetchType.EAGER)
+    @JoinTable(name = "comment_likes",
+            joinColumns = @JoinColumn(name = "comment_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<UserModel> likedBy = new HashSet<>();
+
+    @ManyToMany(fetch =  FetchType.EAGER)
+    @JoinTable(name = "comment_dislikes",
+            joinColumns = @JoinColumn(name = "comment_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<UserModel> dislikedBy = new HashSet<>();
+
     @CreationTimestamp
     private Instant createdAt;
 
@@ -46,5 +60,13 @@ public class CommentModel {
     @PreUpdate
     protected void onUpdate() {
         updatedAt = Instant.now();
+    }
+
+    public Long getLikeCount() {
+        return (long) likedBy.size();
+    }
+
+    public Long getDislikeCount() {
+        return (long) dislikedBy.size();
     }
 }

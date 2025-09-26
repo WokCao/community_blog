@@ -51,6 +51,18 @@ public class PostModel {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CommentModel> comments = new ArrayList<>();
 
+    @ManyToMany
+    @JoinTable(name = "post_likes",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<UserModel> likedBy = new HashSet<>();
+
+    @ManyToMany
+    @JoinTable(name = "post_dislikes",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private Set<UserModel> dislikedBy = new HashSet<>();
+
     @CreationTimestamp
     private Instant createdAt;
 
@@ -76,9 +88,6 @@ public class PostModel {
     private Long saveCount = 0L;
 
     @Column(nullable = false)
-    private Long likeCount = 0L;
-
-    @Column(nullable = false)
     private Long shareCount = 0L;
 
     public void addComment(CommentModel comment) {
@@ -93,6 +102,24 @@ public class PostModel {
 
     public Long getCommentCount() {
         return (long) comments.size();
+    }
+
+    public Long getLikeCount() {
+        return (long) likedBy.size();
+    }
+
+    public Long getDislikeCount() {
+        return (long) dislikedBy.size();
+    }
+
+    @Transient
+    public boolean isLikedBy(UserModel user) {
+        return likedBy.contains(user);
+    }
+
+    @Transient
+    public boolean isDislikedBy(UserModel user) {
+        return dislikedBy.contains(user);
     }
 
     @Transient
