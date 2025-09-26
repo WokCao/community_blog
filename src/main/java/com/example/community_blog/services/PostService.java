@@ -17,6 +17,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Set;
+
 @Service
 public class PostService {
     private final PostRepository postRepository;
@@ -77,6 +79,13 @@ public class PostService {
     public Page<PostModel> getNotablePostsExceptFor(Long postId) {
         Pageable pageable = PageRequest.of(0, PAGE_SIZE);
         return postRepository.findNotable(postId, pageable);
+    }
+
+    public Page<PostModel> searchRelatedPostsByTag(Long id, Set<String> tags) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "created_at");
+        Pageable pageable = PageRequest.of(0, PAGE_SIZE, sort);
+        // Convert from a set to a string array
+        return postRepository.searchPostsByTagsFuzzy(id, tags.toArray(new String[]{}), pageable);
     }
 
     public void addCommentToPost(Long id, String content) throws BadRequestException {

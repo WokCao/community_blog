@@ -76,9 +76,6 @@ public class PostModel {
     private Long saveCount = 0L;
 
     @Column(nullable = false)
-    private Long commentCount = 0L;
-
-    @Column(nullable = false)
     private Long likeCount = 0L;
 
     @Column(nullable = false)
@@ -87,13 +84,15 @@ public class PostModel {
     public void addComment(CommentModel comment) {
         comments.add(comment);
         comment.setPost(this);
-        this.commentCount++;
     }
 
     public void removeComment(CommentModel comment) {
         comments.remove(comment);
         comment.setPost(null);
-        this.commentCount = Math.max(0, this.commentCount - 1);
+    }
+
+    public Long getCommentCount() {
+        return (long) comments.size();
     }
 
     @Transient

@@ -9,7 +9,6 @@
     <meta property="og:description" th:content="${post.content}">
     <meta property="og:url" th:content="@{'/post/' + ${post.id}}">
     <meta property="og:type" content="article">
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script th:src="@{/js/tag-colors.js}" defer></script>
 </head>
 <body class="bg-gray-50 min-h-screen">
@@ -181,35 +180,35 @@
             </div>
 
             <!-- Related Posts -->
-            <!--            <div class="bg-white rounded-xl shadow-sm p-8 mb-8">-->
-            <!--                <h2 class="text-2xl font-bold text-gray-900 mb-6">Related Posts</h2>-->
-            <!--                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">-->
-            <!--                    <article th:each="relatedPost : ${relatedPosts}" class="group cursor-pointer">-->
-            <!--                        <a th:href="@{'/post/' + ${relatedPost.id}}" class="block">-->
-            <!--                            <div class="aspect-w-16 aspect-h-9 mb-4">-->
-            <!--                                <img th:src="${relatedPost.thumbnail}" th:alt="${relatedPost.title}"-->
-            <!--                                     class="w-full h-48 object-cover rounded-lg group-hover:opacity-90 transition">-->
-            <!--                            </div>-->
-            <!--                            <h3 class="font-semibold text-gray-900 group-hover:text-indigo-600 transition mb-2" th:text="${relatedPost.title}">Related Post Title</h3>-->
-            <!--                            <p class="text-sm text-gray-600 mb-2" th:text="${relatedPost.excerpt}">Brief excerpt of the related post...</p>-->
-            <!--                            <div class="flex items-center text-sm text-gray-500">-->
-            <!--                                <span th:text="${relatedPost.author.fullname}">Author</span>-->
-            <!--                                <span class="mx-2">•</span>-->
-            <!--                                <span th:text="${relatedPost.timeAgo}">3 days ago</span>-->
-            <!--                            </div>-->
-            <!--                        </a>-->
-            <!--                    </article>-->
-            <!--                </div>-->
-            <!--            </div>-->
+            <div class="bg-white rounded-xl shadow-sm p-8 mb-8" th:if="${relatedPosts.size() > 0}">
+                <h2 class="text-2xl font-bold text-gray-900 mb-6">Related Posts</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <article th:each="relatedPost : ${relatedPosts}" class="group cursor-pointer">
+                        <a th:href="@{'/posts/' + ${relatedPost.id}}" class="block">
+<!--                            <div class="aspect-w-16 aspect-h-9 mb-4">-->
+<!--                                <img th:src="${relatedPost.author.avatarUrl}" th:alt="${relatedPost.title}"-->
+<!--                                     class="w-full h-48 object-cover rounded-lg group-hover:opacity-90 transition">-->
+<!--                            </div>-->
+                            <h3 class="font-semibold text-gray-900 group-hover:text-indigo-600 transition mb-2" th:text="${relatedPost.title}"></h3>
+                            <p class="text-sm text-gray-600 mb-2 line-clamp-2" th:text="${relatedPost.plainContent}"></p>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <span th:text="${relatedPost.author.fullName}"></span>
+                                <span class="mx-2">•</span>
+                                <span th:text="${relatedPost.timeAgo}"></span>
+                            </div>
+                        </a>
+                    </article>
+                </div>
+            </div>
 
             <!--             Author's Notable Posts -->
-            <div class="bg-white rounded-xl shadow-sm p-8">
+            <div class="bg-white rounded-xl shadow-sm p-8" th:if="${notablePosts.size() > 0}">
                 <h2 class="text-2xl font-bold text-gray-900 mb-6">More from <span
                         th:text="${post.author.fullName}"></span>
                 </h2>
                 <div class="space-y-4">
                     <article th:each="notablePost : ${notablePosts}" class="group">
-                        <a th:href="@{'/post/' + ${notablePost.id}}"
+                        <a th:href="@{'/posts/' + ${notablePost.id}}"
                            class="flex space-x-4 p-4 rounded-lg hover:bg-gray-50 transition">
                             <img th:src="${notablePost.author.avatarUrl}" th:alt="${notablePost.title}"
                                  class="w-20 h-20 object-cover rounded-lg flex-shrink-0">

@@ -1,7 +1,7 @@
 (function () {
   function getLetterIndex(ch) {
     if (!ch) return -1;
-    const c = ch.toUpperCase();
+    const c = ch.toUpperCase().toUpperCase();
     const code = c.charCodeAt(0);
     if (code >= 65 && code <= 90) return code - 65; // A-Z
     return -1;

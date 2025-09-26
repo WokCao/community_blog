@@ -69,11 +69,12 @@ public class AuthenticatedController {
             }
 
             Page<PostModel> notablePosts = postService.getNotablePostsExceptFor(postModel.getId());
+            Page<PostModel> relatedPosts = postService.searchRelatedPostsByTag(postModel.getId(), postModel.getTags());
 
             model.addAttribute("post", postModel);
             model.addAttribute("user", postModel.getAuthor());
             model.addAttribute("notablePosts", notablePosts.getContent());
-
+            model.addAttribute("relatedPosts", relatedPosts.getContent());
             return "post-details";
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());

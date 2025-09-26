@@ -26,4 +26,28 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
 
     @Query("SELECT p FROM PostModel p WHERE p.id != :id ORDER BY (p.likeCount * 10 + p.shareCount * 5 + p.saveCount * 2) DESC")
     Page<PostModel> findNotable(@Param("id") Long id, Pageable pageable);
+
+    @Query(
+            value = """
+            SELECT p.*, SUM(SIMILARITY(t.tags, kw)) as relevance
+            FROM posts p
+            JOIN post_tags t ON p.id = t.post_id,
+            unnest(ARRAY[:keywords]) kw
+            WHERE p.id != :id
+            GROUP BY p.id
+            HAVING SUM(SIMILARITY(t.tags, kw)) > 0.3
+            """,
+            countQuery = """
+            SELECT COUNT(*) FROM (
+                SELECT p.id
+                FROM posts p
+                JOIN post_tags t ON p.id = t.post_id,
+                unnest(ARRAY[:keywords]) kw
+                GROUP BY p.id
+                HAVING SUM(SIMILARITY(t.tags, kw)) > 0.3
+            ) AS matching_posts
+            """,
+            nativeQuery = true
+    )
+    Page<PostModel> searchPostsByTagsFuzzy(@Param("id") Long id, @Param("keywords") String[] keywords, Pageable pageable);
 }
