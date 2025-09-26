@@ -107,4 +107,26 @@ public class AuthenticatedController {
             return "error";
         }
     }
+
+    @PostMapping("/posts/{id}/like")
+    public String likePost(Model model, @Valid @PathVariable("id") Long id) {
+        try {
+            postService.likePost(id);
+            return "redirect:/posts/" + id;
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "error";
+        }
+    }
+
+    @PostMapping("/posts/{id}/dislike")
+    public String dislikePost(Model model, @Valid @PathVariable("id") Long id) {
+        try {
+            postService.dislikePost(id);
+            return "redirect:/posts/" + id;
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "error";
+        }
+    }
 }

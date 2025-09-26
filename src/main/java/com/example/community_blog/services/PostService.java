@@ -106,6 +106,36 @@ public class PostService {
         postRepository.save(post);
     }
 
+    public void likePost(Long postId) throws BadRequestException {
+        UserModel currentUser = getCurrentUser();
+        if (currentUser == null) {
+            throw new BadRequestException("User not authenticated");
+        }
+
+        PostModel post = postRepository.findById(postId).orElse(null);
+        if (post == null) {
+            throw new BadRequestException("Post not found");
+        }
+
+        post.addUserWhoLikePost(currentUser);
+        postRepository.save(post);
+    }
+
+    public void dislikePost(Long postId) throws BadRequestException {
+        UserModel currentUser = getCurrentUser();
+        if (currentUser == null) {
+            throw new BadRequestException("User not authenticated");
+        }
+
+        PostModel post = postRepository.findById(postId).orElse(null);
+        if (post == null) {
+            throw new BadRequestException("Post not found");
+        }
+
+        post.addUserWhoDislikePost(currentUser);
+        postRepository.save(post);
+    }
+
     private UserModel getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String email = authentication.getName();

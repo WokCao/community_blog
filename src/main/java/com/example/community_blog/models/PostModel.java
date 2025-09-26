@@ -123,6 +123,26 @@ public class PostModel {
     }
 
     @Transient
+    public void addUserWhoDislikePost(UserModel user) {
+        if (isDislikedBy(user)) {
+            dislikedBy.remove(user);
+        } else {
+            dislikedBy.add(user);
+            likedBy.remove(user);
+        }
+    }
+
+    @Transient
+    public void addUserWhoLikePost(UserModel user) {
+        if (isLikedBy(user)) {
+            likedBy.remove(user);
+        } else {
+            likedBy.add(user);
+            dislikedBy.remove(user);
+        }
+    }
+
+    @Transient
     public String getPlainContent() {
         if (content == null) return "";
         String text = content;
