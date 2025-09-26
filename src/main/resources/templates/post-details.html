@@ -178,9 +178,10 @@
                                 <div class="flex items-center justify-between pt-4">
                                     <div class="flex items-center space-x-1">
                                         <!-- Like Button -->
-                                        <form th:if="${commentView.comment.commenter.id != user.id}" th:action="@{'/comment/' + ${commentView.comment.id} + '/like'}" method="post"
+                                        <form th:action="@{'/comments/' + ${commentView.comment.id} + '/like'}" method="post"
                                               class="inline">
                                             <button type="submit"
+                                                    th:disabled="${commentView.comment.commenter.id == user.id}"
                                                     class="group flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:cursor-pointer"
                                                     th:classappend="${commentView.liked} ? 'bg-emerald-50 text-emerald-700 hover:bg-emerald-100' : 'text-gray-500 hover:bg-emerald-100 hover:text-emerald-600'">
                                                 <svg class="w-4 h-4 transition-transform group-hover:scale-110"
@@ -192,9 +193,10 @@
                                         </form>
 
                                         <!-- Dislike Button -->
-                                        <form th:if="${commentView.comment.commenter.id != user.id}" th:action="@{'/comment/' + ${commentView.comment.id} + '/dislike'}" method="post"
+                                        <form th:action="@{'/comments/' + ${commentView.comment.id} + '/dislike'}" method="post"
                                               class="inline">
                                             <button type="submit"
+                                                    th:disabled="${commentView.comment.commenter.id == user.id}"
                                                     class="group flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-all duration-200 hover:cursor-pointer"
                                                     th:classappend="${commentView.disliked} ? 'bg-red-50 text-red-700 hover:bg-red-100' : 'text-gray-500 hover:bg-red-50 hover:text-red-600'">
                                                 <svg class="w-4 h-4 rotate-180 transition-transform group-hover:scale-110"

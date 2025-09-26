@@ -24,7 +24,7 @@ public class CommentModel {
     @JoinColumn(name = "post_id", nullable = false)
     private PostModel post;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "commenter_id", nullable = false)
     private UserModel commenter;
 
@@ -68,5 +68,25 @@ public class CommentModel {
 
     public Long getDislikeCount() {
         return (long) dislikedBy.size();
+    }
+
+    @Transient
+    public void addUserWhoDislikeComment(UserModel user) {
+        if (dislikedBy.contains(user)) {
+            dislikedBy.remove(user);
+        } else {
+            dislikedBy.add(user);
+            likedBy.remove(user);
+        }
+    }
+
+    @Transient
+    public void addUserWhoLikeComment(UserModel user) {
+        if (likedBy.contains(user)) {
+            likedBy.remove(user);
+        } else {
+            likedBy.add(user);
+            dislikedBy.remove(user);
+        }
     }
 }

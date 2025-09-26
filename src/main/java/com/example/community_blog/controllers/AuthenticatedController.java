@@ -4,6 +4,7 @@ import com.example.community_blog.dto.CommentView;
 import com.example.community_blog.dto.CreatePostRequest;
 import com.example.community_blog.models.PostModel;
 import com.example.community_blog.models.UserModel;
+import com.example.community_blog.services.CommentService;
 import com.example.community_blog.services.PostService;
 import com.example.community_blog.services.UserService;
 import jakarta.validation.Valid;
@@ -21,11 +22,13 @@ import java.util.List;
 public class AuthenticatedController {
     private final PostService postService;
     private final UserService userService;
+    private final CommentService commentService;
 
     @Autowired
-    public AuthenticatedController(PostService postService, UserService userService) {
+    public AuthenticatedController(PostService postService, UserService userService, CommentService commentService) {
         this.postService = postService;
         this.userService = userService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/home")
@@ -124,6 +127,28 @@ public class AuthenticatedController {
         try {
             postService.dislikePost(id);
             return "redirect:/posts/" + id;
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "error";
+        }
+    }
+
+    @PostMapping("/comments/{id}/like")
+    public String likeComment(Model model, @Valid @PathVariable("id") Long id) {
+        try {
+            Long postId = commentService.likeComment(id);
+            return "redirect:/posts/" + postId;
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "error";
+        }
+    }
+
+    @PostMapping("/comments/{id}/dislike")
+    public String dislikeComment(Model model, @Valid @PathVariable("id") Long id) {
+        try {
+            Long postId = commentService.dislikeComment(id);
+            return "redirect:/posts/" + postId;
         } catch (Exception e) {
             model.addAttribute("errorMessage", e.getMessage());
             return "error";
