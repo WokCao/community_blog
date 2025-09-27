@@ -10,32 +10,11 @@
     <meta property="og:url" th:content="@{'/post/' + ${post.id}}">
     <meta property="og:type" content="article">
     <script th:src="@{/js/tag-colors.js}" defer></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50 min-h-screen">
 <!-- Navigation -->
-<nav class="bg-white shadow-sm border-b border-gray-200">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
-            <div class="flex items-center">
-                <a th:href="@{/home}" class="text-2xl font-bold text-indigo-600">Community Blog</a>
-            </div>
-            <div class="flex items-center space-x-4">
-                <a th:href="@{/home}" class="text-gray-600 hover:text-gray-900 transition">Home</a>
-                <div th:if="${user != null}" class="flex items-center space-x-4">
-                    <a th:href="@{/profile}" class="text-gray-600 hover:text-gray-900 transition"
-                       th:text="${user.fullName}">User Name</a>
-                    <a th:href="@{/logout}"
-                       class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition">Logout</a>
-                </div>
-                <div th:unless="${user != null}" class="flex items-center space-x-2">
-                    <a th:href="@{/auth/login}" class="text-indigo-600 hover:text-indigo-700 transition">Login</a>
-                    <a th:href="@{/auth/register}"
-                       class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition">Register</a>
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
@@ -167,7 +146,7 @@
                         <img th:src="${commentView.comment.commenter.avatarUrl}" th:alt="${commentView.comment.commenter.fullName}"
                              class="w-10 h-10 rounded-full object-cover flex-shrink-0">
                         <div class="flex-1">
-                            <div class="bg-gray-50 rounded-lg p-4">
+                            <div class="rounded-lg" th:classappend="${commentView.comment.commenter.id == user.id} ? 'bg-gray-50 p-4' : ''">
                                 <div class="flex items-center space-x-2 mb-2">
                                     <h4 class="font-semibold text-gray-900"
                                         th:text="${commentView.comment.commenter.fullName}"></h4>
@@ -308,6 +287,8 @@
     </div>
 </div>
 
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
 <script>
     // Generate Table of Contents
     document.addEventListener('DOMContentLoaded', function () {

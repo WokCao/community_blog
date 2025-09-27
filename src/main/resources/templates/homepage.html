@@ -6,31 +6,11 @@
     <link th:href="@{/css/output.css}" rel="stylesheet">
     <script th:src="@{/js/tag-colors.js}" defer></script>
     <script th:src="@{/js/tag-overflow.js}" defer></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50 min-h-screen">
 <!-- Navigation -->
-<nav class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-10">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
-            <div class="flex items-center">
-                <a th:href="@{/home}" class="text-2xl font-bold text-indigo-600">Community Blog</a>
-            </div>
-            <div class="flex items-center space-x-4">
-                <a th:href="@{/write-post}"
-                   class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-medium transition">
-                    Write Post
-                </a>
-                <div class="relative">
-                    <button class="flex items-center space-x-2 text-gray-700 hover:text-gray-900">
-                        <img th:src="${user?.avatarUrl}" th:alt="${user?.fullName}"
-                             class="w-8 h-8 rounded-full object-cover">
-                        <span th:text="${user?.fullName ?: 'Guest'}"></span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
+<div th:replace="~{fragments/navbar :: navbar}"></div>
 
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header -->
@@ -117,6 +97,10 @@
             Load More Posts
         </button>
     </div>
+
 </div>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

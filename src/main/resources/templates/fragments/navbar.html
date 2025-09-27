@@ -19,7 +19,11 @@
             <div class="flex items-center space-x-4">
                 <!-- If logged in -->
                 <div th:if="${user != null}" class="flex items-center space-x-4">
-                    <a th:href="@{/users/me}" class="text-sm lg:text-base text-gray-600 hover:text-gray-900 transition">Profile</a>
+                    <div class="flex items-center space-x-2 text-gray-700 hover:text-gray-900 hover:cursor-pointer">
+                        <img th:src="${user.avatarUrl}" th:alt="${user.fullName}"
+                             class="w-8 h-8 rounded-full object-cover">
+                        <a th:href="@{/users/me}" th:text="${user.fullName}"></a>
+                    </div>
                     <a th:href="@{/logout}" class="text-sm lg:text-base bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition">Logout</a>
                 </div>
                 <!-- If not logged in -->

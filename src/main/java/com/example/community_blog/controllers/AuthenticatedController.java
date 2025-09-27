@@ -46,7 +46,21 @@ public class AuthenticatedController {
 
     @GetMapping("/write-post")
     public String writePost(Model model) {
+        UserModel currentUser = userService.getCurrentUser();
+        if (currentUser != null) {
+            model.addAttribute("user", currentUser);
+        }
+
         return "write-post";
+    }
+
+    @GetMapping("/users/me")
+    public String viewProfile(Model model) {
+        UserModel currentUser = userService.getCurrentUser();
+        if (currentUser != null) {
+            model.addAttribute("user", currentUser);
+        }
+        return "profile";
     }
 
     @PostMapping("/posts/create")
