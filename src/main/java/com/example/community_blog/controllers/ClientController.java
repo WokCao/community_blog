@@ -2,7 +2,9 @@ package com.example.community_blog.controllers;
 
 import com.example.community_blog.dto.RegisterRequest;
 import com.example.community_blog.models.UserModel;
+import com.example.community_blog.services.CommentService;
 import com.example.community_blog.services.EmailService;
+import com.example.community_blog.services.PostService;
 import com.example.community_blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,11 +21,15 @@ import java.util.Base64;
 public class ClientController {
     private final UserService userService;
     private final EmailService emailService;
+    private final PostService postService;
+    private final CommentService commentService;
 
     @Autowired
-    public ClientController(UserService userService, EmailService emailService) {
+    public ClientController(UserService userService, EmailService emailService, PostService postService, CommentService commentService) {
         this.userService = userService;
         this.emailService = emailService;
+        this.postService = postService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/")
@@ -33,6 +39,15 @@ public class ClientController {
             if (currentUser != null) {
                 model.addAttribute("user", currentUser);
             }
+
+            Long totalUsers = userService.countUsers();
+            model.addAttribute("totalUsers", totalUsers);
+
+            Long totalPosts = postService.countPosts();
+            model.addAttribute("totalPosts", totalPosts);
+
+            Long totalComments = commentService.countComments();
+            model.addAttribute("totalComments", totalComments);
         } catch (Exception e) {
             // Handle exception if needed
         }

@@ -95,4 +95,8 @@ public class UserService {
         }
         return false;
     }
+
+    public Long countUsers() {
+        return userRepository.count();
+    }
 }

@@ -71,4 +71,8 @@ public class CommentService {
 
         return userRepository.findByEmail(email).orElse(null);
     }
+
+    public Long countComments() {
+        return commentRepository.count();
+    }
 }

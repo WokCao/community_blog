@@ -146,4 +146,8 @@ public class PostService {
 
         return userRepository.findByEmail(email).orElse(null);
     }
+
+    public Long countPosts() {
+        return postRepository.count();
+    }
 }
