@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${user.fullName} + ' - Profile | Community Blog'">Profile | Community Blog</title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <script th:src="@{/js/tag-colors.js}" defer></script>
+    <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+</head>
+<body class="bg-gray-50 text-gray-900 min-h-screen">
+<!-- Navigation -->
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <!-- Sidebar -->
+        <div class="lg:col-span-1">
+            <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 sticky top-8 hover:shadow-md transition-shadow">
+                <!-- Profile Avatar -->
+                <div class="text-center mb-6">
+                    <div class="relative inline-block">
+                        <img th:src="${user.avatarUrl}" th:alt="${user.fullName}"
+                             class="w-24 h-24 rounded-full object-cover border border-gray-200 shadow-sm">
+                        <button onclick="document.getElementById('avatar-upload').click()"
+                                class="absolute bottom-0 right-0 bg-indigo-600 text-white rounded-full p-2 hover:bg-indigo-700 transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                      d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <input type="file" id="avatar-upload" class="hidden" accept="image/*"
+                           onchange="uploadAvatar(this)">
+                </div>
+
+                <!-- Navigation -->
+                <nav class="space-y-2">
+                    <a href="#about"
+                       class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors">About</a>
+                    <a href="#posts"
+                       class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors">Posts</a>
+                    <a href="#stats"
+                       class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-md transition-colors">Statistics</a>
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="lg:col-span-3 space-y-8">
+            <!-- About Section -->
+            <section id="about" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
+                <div class="flex items-center justify-between mb-6">
+                    <button onclick="toggleEditMode()"
+                            class="px-4 py-2 text-sm font-medium text-indigo-600 border border-indigo-600 rounded-md hover:bg-indigo-600 hover:text-white transition-colors">
+                        Edit Profile
+                    </button>
+                </div>
+
+                <!-- View Mode -->
+                <div id="view-mode">
+                    <div class="space-y-4">
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Full Name</h3>
+                            <p class="text-lg" th:text="${user.fullName}">Guest</p>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Email</h3>
+                            <p class="text-lg text-gray-600" th:text="${user.email}">anonymous@example.com</p>
+                        </div>
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Member Since</h3>
+                            <p class="text-lg text-gray-600"
+                               th:text="${#temporals.format(user.createdAt, 'MMMM yyyy')}">January 2024</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edit Mode -->
+                <div id="edit-mode" class="hidden">
+                    <form th:action="@{/profile/update}" method="post" class="space-y-4">
+                        <div>
+                            <label for="fullName" class="block text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Full Name</label>
+                            <input type="text" id="fullName" name="fullName" th:value="${user.fullName}"
+                                   class="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        </div>
+                        <div class="flex space-x-3">
+                            <button type="submit"
+                                    class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors">
+                                Save Changes
+                            </button>
+                            <button type="button" onclick="toggleEditMode()"
+                                    class="px-4 py-2 border border-gray-300 rounded-md hover:bg-gray-100 transition-colors">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Posts Section -->
+            <section id="posts" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h2 class="text-2xl font-bold mb-6">Notable Posts</h2>
+
+                <div class="space-y-6" th:if="${notablePosts != null and !#lists.isEmpty(notablePosts)}">
+                    <div th:each="post : ${notablePosts}"
+                         class="bg-gray-50 border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="flex-1">
+                                <h3 class="text-xl font-semibold mb-2">
+                                    <a th:href="@{/posts/{id}(id=${post.id})}"
+                                       class="text-gray-900 hover:text-indigo-600 transition-colors"
+                                       th:text="${post.title}">Post Title</a>
+                                </h3>
+                                <div class="flex items-center space-x-4 text-sm text-gray-500 mb-3">
+                                    <span th:text="${post.timeAgo}">2 days ago</span>
+                                    <span>•</span>
+                                    <span th:text="${post.viewCount} + ' views'">123 views</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Post Content Preview -->
+                        <p class="text-gray-600 mb-4 line-clamp-3"
+                           th:text="${#strings.abbreviate(post.plainContent, 200)}">
+                            Post content preview...
+                        </p>
+
+                        <!-- Tags -->
+                        <div class="flex flex-wrap gap-2 mb-4" th:if="${!#lists.isEmpty(post.tags)}">
+                            <span th:each="tag : ${post.tags}"
+                                  class="px-2 py-1 rounded-full text-xs font-medium tag-pill"
+                                  th:text="${tag}">tag</span>
+                        </div>
+
+                        <!-- Post Stats -->
+                        <div class="flex items-center justify-between pt-4 border-t border-gray-200">
+                            <div class="flex items-center space-x-6 text-sm text-gray-500">
+                                <div class="flex items-center space-x-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                    </svg>
+                                    <span th:text="${#lists.size(post.likedBy)}">0</span>
+                                </div>
+                                <div class="flex items-center space-x-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                    </svg>
+                                    <span th:text="${#lists.size(post.comments)}">0</span>
+                                </div>
+                                <div class="flex items-center space-x-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                              d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                                    </svg>
+                                    <span th:text="${post.saveCount}">0</span>
+                                </div>
+                            </div>
+                            <span class="text-xs text-gray-500"
+                                  th:text="${#temporals.format(post.createdAt, 'MMM dd, yyyy')}">Jan 15, 2024</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div th:if="${notablePosts == null or #lists.isEmpty(notablePosts)}"
+                     class="bg-gray-50 rounded-lg border border-gray-200 p-12 text-center text-gray-500">
+                    <svg class="w-12 h-12 mx-auto mb-4 opacity-50" fill="none" stroke="currentColor"
+                         viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <p class="text-lg mb-2">No posts yet</p>
+                    <p class="mb-4">Start sharing your thoughts with the community!</p>
+                    <a th:href="@{/write-post}"
+                       class="inline-flex items-center px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors">
+                        Write Your First Post
+                    </a>
+                </div>
+            </section>
+
+            <!-- Statistics Section -->
+            <section id="stats" class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h2 class="text-2xl font-bold mb-6">Statistics</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="text-center p-6 bg-gray-50 rounded-lg hover:shadow transition">
+                        <div class="text-3xl font-bold text-indigo-600 mb-2" th:text="${#lists.size(user.posts)}">0</div>
+                        <div class="text-sm text-gray-600">Total Posts</div>
+                    </div>
+                    <div class="text-center p-6 bg-gray-50 rounded-lg hover:shadow transition">
+                        <div class="text-3xl font-bold text-indigo-600 mb-2" th:text="${totalViews ?: 0}">0</div>
+                        <div class="text-sm text-gray-600">Total Views</div>
+                    </div>
+                    <div class="text-center p-6 bg-gray-50 rounded-lg hover:shadow transition">
+                        <div class="text-3xl font-bold text-indigo-600 mb-2" th:text="${totalLikes ?: 0}">0</div>
+                        <div class="text-sm text-gray-600">Total Likes</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script>
+    function toggleEditMode() {
+        const viewMode = document.getElementById('view-mode');
+        const editMode = document.getElementById('edit-mode');
+
+        if (viewMode.classList.contains('hidden')) {
+            viewMode.classList.remove('hidden');
+            editMode.classList.add('hidden');
+        } else {
+            viewMode.classList.add('hidden');
+            editMode.classList.remove('hidden');
+        }
+    }
+
+    function uploadAvatar(input) {
+        if (input.files && input.files[0]) {
+            const formData = new FormData();
+            formData.append('avatar', input.files[0]);
+
+            fetch('/profile/upload-avatar', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        location.reload();
+                    } else {
+                        alert('Failed to upload avatar');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Failed to upload avatar');
+                });
+        }
+    }
+
+    // Smooth scrolling
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>

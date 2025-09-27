@@ -49,6 +49,8 @@ public class AuthenticatedController {
         UserModel currentUser = userService.getCurrentUser();
         if (currentUser != null) {
             model.addAttribute("user", currentUser);
+        } else {
+            return "redirect:/auth/login";
         }
 
         return "write-post";
@@ -59,6 +61,18 @@ public class AuthenticatedController {
         UserModel currentUser = userService.getCurrentUser();
         if (currentUser != null) {
             model.addAttribute("user", currentUser);
+        } else {
+            return "redirect:/auth/login";
+        }
+
+        try {
+            Page<PostModel> notablePosts = postService.getUserNotablePosts(currentUser.getId());
+            model.addAttribute("notablePosts", notablePosts.getContent());
+            model.addAttribute("totalViews", postService.calculatePostsView());
+            model.addAttribute("totalLikes", postService.calculatePostsLike());
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "error";
         }
         return "profile";
     }
@@ -86,6 +100,8 @@ public class AuthenticatedController {
             UserModel currentUser = userService.getCurrentUser();
             if (currentUser != null) {
                 model.addAttribute("user", currentUser);
+            } else {
+                return "redirect:/auth/login";
             }
 
             Page<PostModel> notablePosts = postService.getNotablePostsExceptFor(postModel.getId());

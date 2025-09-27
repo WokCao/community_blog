@@ -27,6 +27,9 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
     @Query("SELECT p FROM PostModel p WHERE p.id != :id ORDER BY (SIZE(p.likedBy) * 10 + p.shareCount * 5 + p.saveCount * 2) DESC")
     Page<PostModel> findNotable(@Param("id") Long id, Pageable pageable);
 
+    @Query("SELECT p FROM PostModel p WHERE p.author.id = :authorId ORDER BY (SIZE(p.likedBy) * 10 + p.shareCount * 5 + p.saveCount * 2) DESC")
+    Page<PostModel> findAllByAuthorId(@Param("authorId") Long authorId, Pageable pageable);
+
     @Query(
             value = """
             SELECT p.*, SUM(SIMILARITY(t.tags, kw)) as relevance
@@ -50,4 +53,10 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
             nativeQuery = true
     )
     Page<PostModel> searchPostsByTagsFuzzy(@Param("id") Long id, @Param("keywords") String[] keywords, Pageable pageable);
+
+    @Query("SELECT COALESCE(SUM(p.viewCount), 0) FROM PostModel p WHERE p.author.id = :authorId")
+    Long sumViewCountByAuthorId(@Param("authorId") Long authorId);
+
+    @Query("SELECT COALESCE(SUM(SIZE(p.likedBy)), 0) FROM PostModel p WHERE p.author.id = :authorId")
+    Long sumLikeCountByAuthorId(@Param("authorId") Long authorId);
 }

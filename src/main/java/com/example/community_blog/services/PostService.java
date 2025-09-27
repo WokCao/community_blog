@@ -81,11 +81,17 @@ public class PostService {
         return postRepository.findNotable(postId, pageable);
     }
 
-    public Page<PostModel> searchRelatedPostsByTag(Long id, Set<String> tags) {
+    public Page<PostModel> getUserNotablePosts(Long userId) {
+        Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
+        Pageable pageable = PageRequest.of(0, PAGE_SIZE, sort);
+        return postRepository.findAllByAuthorId(userId, pageable);
+    }
+
+    public Page<PostModel> searchRelatedPostsByTag(Long postId, Set<String> tags) {
         Sort sort = Sort.by(Sort.Direction.DESC, "created_at");
         Pageable pageable = PageRequest.of(0, PAGE_SIZE, sort);
         // Convert from a set to a string array
-        return postRepository.searchPostsByTagsFuzzy(id, tags.toArray(new String[]{}), pageable);
+        return postRepository.searchPostsByTagsFuzzy(postId, tags.toArray(new String[]{}), pageable);
     }
 
     public void addCommentToPost(Long id, String content) throws BadRequestException {
@@ -149,5 +155,23 @@ public class PostService {
 
     public Long countPosts() {
         return postRepository.count();
+    }
+
+    public Long calculatePostsView() throws BadRequestException {
+        UserModel currentUser = getCurrentUser();
+        if (currentUser == null) {
+            throw new BadRequestException("User not authenticated");
+        }
+
+        return postRepository.sumViewCountByAuthorId(currentUser.getId());
+    }
+
+    public Long calculatePostsLike() throws BadRequestException {
+        UserModel currentUser = getCurrentUser();
+        if (currentUser == null) {
+            throw new BadRequestException("User not authenticated");
+        }
+
+        return postRepository.sumLikeCountByAuthorId(currentUser.getId());
     }
 }
