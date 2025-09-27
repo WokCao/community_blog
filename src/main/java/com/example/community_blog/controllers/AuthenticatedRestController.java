@@ -34,4 +34,21 @@ public class AuthenticatedRestController {
                     .body(Map.of("success", false, "error", e.getMessage()));
         }
     }
+
+    @PatchMapping("/update-fullname")
+    public ResponseEntity<Map<String, Object>> updateName(
+            @RequestBody Map<String, String> request) {
+        try {
+            boolean updated = userService.updateFullName(request.get("fullName"));
+            System.out.println("Updated: " + updated);
+            if (updated) {
+                return ResponseEntity.ok(Map.of("success", true));
+            } else {
+                return ResponseEntity.badRequest().body(Map.of("success", false));
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("success", false, "error", e.getMessage()));
+        }
+    }
 }

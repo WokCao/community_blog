@@ -110,4 +110,15 @@ public class UserService {
         userRepository.save(currentUser);
         return true;
     }
+
+    public boolean updateFullName(String fullName) throws BadRequestException {
+        UserModel currentUser = getCurrentUser();
+        if (currentUser == null) {
+            throw new BadRequestException("User not authenticated");
+        }
+
+        currentUser.setFullName(fullName);
+        userRepository.save(currentUser);
+        return true;
+    }
 }

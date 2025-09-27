@@ -59,8 +59,9 @@ function selectAvatar(path) {
         body: JSON.stringify({avatarUrl: path}),
         credentials: 'include'
     })
+        .then(response => response.json())
         .then(data => {
-            if (data.ok) {
+            if (data.success) {
                 location.reload();
             } else {
                 alert('Failed to update avatar');

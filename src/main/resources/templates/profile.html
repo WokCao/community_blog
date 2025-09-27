@@ -8,6 +8,7 @@
     <link th:href="@{/css/output.css}" rel="stylesheet">
     <script th:src="@{/js/tag-colors.js}" defer></script>
     <script th:src="@{/js/avatar-picker.js}" defer></script>
+    <script th:src="@{/js/edit-name.js}" defer></script>
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
 <body class="bg-gray-50 text-gray-900 min-h-screen">
@@ -50,8 +51,6 @@
                             </svg>
                         </button>
                     </div>
-                    <input type="file" id="avatar-upload" class="hidden" accept="image/*"
-                           onchange="uploadAvatar(this)">
                 </div>
 
                 <!-- Navigation -->
@@ -98,10 +97,13 @@
 
                 <!-- Edit Mode -->
                 <div id="edit-mode" class="hidden">
-                    <form th:action="@{/profile/update}" method="post" class="space-y-4">
+                    <form id="updateNameForm" class="space-y-4">
                         <div>
-                            <label for="fullName" class="block text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">Full Name</label>
-                            <input type="text" id="fullName" name="fullName" th:value="${user.fullName}"
+                            <label for="fullName" class="block text-sm font-medium text-gray-500 uppercase tracking-wide mb-2">
+                                Full Name
+                            </label>
+                            <input type="text" id="fullName" name="fullName"
+                                   th:value="${user.fullName}"
                                    class="w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         </div>
                         <div class="flex space-x-3">
