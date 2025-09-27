@@ -17,13 +17,25 @@ import java.util.Base64;
 
 @Controller
 public class ClientController {
+    private final UserService userService;
+    private final EmailService emailService;
+
     @Autowired
-    private UserService userService;
-    @Autowired
-    private EmailService emailService;
+    public ClientController(UserService userService, EmailService emailService) {
+        this.userService = userService;
+        this.emailService = emailService;
+    }
 
     @GetMapping("/")
     public String home(Model model) {
+        try {
+            UserModel currentUser = userService.getCurrentUser();
+            if (currentUser != null) {
+                model.addAttribute("user", currentUser);
+            }
+        } catch (Exception e) {
+            // Handle exception if needed
+        }
         return "index";
     }
 
