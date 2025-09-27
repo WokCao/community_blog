@@ -19,7 +19,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/auth/**", "/", "/css/**", "/js/**", "/images/**").permitAll()
+                        auth.requestMatchers("/auth/**", "/", "/css/**", "/js/**", "/img/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                     .maximumSessions(1)
@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(new CorsConfigurationSource() {
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration config = new CorsConfiguration();
-                        config.addAllowedOriginPattern(Collections.singletonList("localhost:3000").toString());
+                        config.addAllowedOriginPattern(Collections.singletonList("localhost:8080").toString());
                         config.setAllowCredentials(true);
                         config.addAllowedHeader("*");
                         config.addAllowedMethod("*");
@@ -50,6 +50,7 @@ public class SecurityConfig {
                         response.sendRedirect("/auth/login?error=true");
                     })
                 )
+                .csrf(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
         return http.build();
     }

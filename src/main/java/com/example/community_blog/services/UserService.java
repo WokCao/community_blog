@@ -99,4 +99,15 @@ public class UserService {
     public Long countUsers() {
         return userRepository.count();
     }
+
+    public boolean updateAvatar(String avatarUrl) throws BadRequestException {
+        UserModel currentUser = getCurrentUser();
+        if (currentUser == null) {
+            throw new BadRequestException("User not authenticated");
+        }
+
+        currentUser.setAvatarUrl(avatarUrl);
+        userRepository.save(currentUser);
+        return true;
+    }
 }
