@@ -10,13 +10,16 @@ import com.example.community_blog.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class AuthenticatedController {
@@ -142,25 +145,56 @@ public class AuthenticatedController {
         }
     }
 
+    @ResponseBody
     @PostMapping("/posts/{id}/like")
-    public String likePost(Model model, @Valid @PathVariable("id") Long id) {
+    public ResponseEntity<Map<String, Object>> likePost(Model model, @Valid @PathVariable("id") Long id) {
         try {
-            postService.likePost(id);
-            return "redirect:/posts/" + id;
+            UserModel currentUser = userService.getCurrentUser();
+
+            if (currentUser == null) {
+                return ResponseEntity.status(401).build();
+            }
+
+            PostModel postModel = postService.likePost(id);
+
+            if (postModel == null) {
+                return ResponseEntity.badRequest().build();
+            }
+
+            return ResponseEntity.ok(Map.of(
+                    "likeCount", postModel.getLikeCount(),
+                    "dislikeCount", postModel.getDislikeCount(),
+                    "isPostLikedByUser", postModel.isLikedBy(currentUser),
+                    "isPostDislikedByUser", postModel.isDislikedBy(currentUser)
+            ));
         } catch (Exception e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "error";
+            return ResponseEntity.badRequest().build();
         }
     }
 
+    @ResponseBody
     @PostMapping("/posts/{id}/dislike")
-    public String dislikePost(Model model, @Valid @PathVariable("id") Long id) {
+    public ResponseEntity<Map<String, Object>> dislikePost(Model model, @Valid @PathVariable("id") Long id) {
         try {
-            postService.dislikePost(id);
-            return "redirect:/posts/" + id;
+            UserModel currentUser = userService.getCurrentUser();
+
+            if (currentUser == null) {
+                return ResponseEntity.status(401).build();
+            }
+
+            PostModel postModel = postService.dislikePost(id);
+
+            if (postModel == null) {
+                return ResponseEntity.badRequest().build();
+            }
+            return ResponseEntity.ok(Map.of(
+                    "likeCount", postModel.getLikeCount(),
+                    "dislikeCount", postModel.getDislikeCount(),
+                    "isPostLikedByUser", postModel.isLikedBy(currentUser),
+                    "isPostDislikedByUser", postModel.isDislikedBy(currentUser)
+            ));
         } catch (Exception e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "error";
+            return ResponseEntity.badRequest().build();
         }
     }
 

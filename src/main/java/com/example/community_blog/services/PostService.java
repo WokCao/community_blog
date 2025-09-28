@@ -112,7 +112,7 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public void likePost(Long postId) throws BadRequestException {
+    public PostModel likePost(Long postId) throws BadRequestException {
         UserModel currentUser = getCurrentUser();
         if (currentUser == null) {
             throw new BadRequestException("User not authenticated");
@@ -124,10 +124,10 @@ public class PostService {
         }
 
         post.addUserWhoLikePost(currentUser);
-        postRepository.save(post);
+        return postRepository.save(post);
     }
 
-    public void dislikePost(Long postId) throws BadRequestException {
+    public PostModel dislikePost(Long postId) throws BadRequestException {
         UserModel currentUser = getCurrentUser();
         if (currentUser == null) {
             throw new BadRequestException("User not authenticated");
@@ -139,7 +139,7 @@ public class PostService {
         }
 
         post.addUserWhoDislikePost(currentUser);
-        postRepository.save(post);
+        return postRepository.save(post);
     }
 
     private UserModel getCurrentUser() {
