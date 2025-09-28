@@ -40,7 +40,6 @@ public class AuthenticatedRestController {
             @RequestBody Map<String, String> request) {
         try {
             boolean updated = userService.updateFullName(request.get("fullName"));
-            System.out.println("Updated: " + updated);
             if (updated) {
                 return ResponseEntity.ok(Map.of("success", true));
             } else {

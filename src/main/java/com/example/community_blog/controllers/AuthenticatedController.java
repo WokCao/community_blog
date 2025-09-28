@@ -36,6 +36,8 @@ public class AuthenticatedController {
         UserModel currentUser = userService.getCurrentUser();
         if (currentUser != null) {
             model.addAttribute("user", currentUser);
+        } else {
+            return "redirect:/auth/login";
         }
 
         Page<PostModel> postModelPage = postService.getLatestPosts();
@@ -123,7 +125,6 @@ public class AuthenticatedController {
 
             return "post-details";
         } catch (Exception e) {
-            e.printStackTrace();
             model.addAttribute("errorMessage", e.getMessage());
             return "error";
         }
