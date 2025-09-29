@@ -94,7 +94,7 @@ public class PostService {
         return postRepository.searchPostsByTagsFuzzy(postId, tags.toArray(new String[]{}), pageable);
     }
 
-    public void addCommentToPost(Long id, String content) throws BadRequestException {
+    public CommentModel addCommentToPost(Long id, String content) throws BadRequestException {
         UserModel currentUser = getCurrentUser();
         if (currentUser == null) {
             throw new BadRequestException("User not authenticated");
@@ -109,7 +109,9 @@ public class PostService {
         commentModel.setCommenter(currentUser);
         commentModel.setContent(content);
         post.addComment(commentModel);
-        postRepository.save(post);
+        PostModel postModel = postRepository.save(post);
+
+        return postModel.getComments().getLast();
     }
 
     public PostModel likePost(Long postId) throws BadRequestException {

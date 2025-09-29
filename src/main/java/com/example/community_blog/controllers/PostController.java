@@ -2,6 +2,7 @@ package com.example.community_blog.controllers;
 
 import com.example.community_blog.dto.CommentView;
 import com.example.community_blog.dto.CreatePostRequest;
+import com.example.community_blog.models.CommentModel;
 import com.example.community_blog.models.PostModel;
 import com.example.community_blog.models.UserModel;
 import com.example.community_blog.services.PostService;
@@ -59,6 +60,7 @@ public class PostController {
             Page<PostModel> notablePosts = postService.getNotablePostsExceptFor(postModel.getId());
             Page<PostModel> relatedPosts = postService.searchRelatedPostsByTag(postModel.getId(), postModel.getTags());
             List<CommentView> comments = postModel.getComments().stream()
+                    .sorted((aComment, bComment) -> bComment.getCreatedAt().compareTo(aComment.getCreatedAt()))
                     .map(c -> new CommentView(
                             c,
                             c.getLikedBy().contains(currentUser),
@@ -81,14 +83,36 @@ public class PostController {
 
     }
 
+    @ResponseBody
     @PostMapping("/{id}/comment")
-    public String postComment(Model model, @Valid @PathVariable("id") Long id, String content) {
+    public ResponseEntity<?> postComment(Model model, @Valid @PathVariable("id") Long id, @RequestBody Map<String, Object> requestBody) {
         try {
-            postService.addCommentToPost(id, content);
-            return "redirect:/posts/" + id;
+            String content = (String) requestBody.get("content");
+            CommentModel commentModel = postService.addCommentToPost(id, content);
+
+            UserModel currentUser = userService.getCurrentUser();
+            if (currentUser == null) {
+                return ResponseEntity.status(401).body(Map.of("error", "User not authenticated"));
+            }
+
+            Map<String, Object> newCommentView = Map.of(
+                    "comment", Map.of(
+                        "id", commentModel.getId(),
+                        "content", commentModel.getContent(),
+                        "timeAgo", commentModel.getTimeAgo(),
+                        "commenter", Map.of(
+                                "id", commentModel.getCommenter().getId(),
+                                "fullName", commentModel.getCommenter().getFullName(),
+                                "avatarUrl", commentModel.getCommenter().getAvatarUrl()
+                            )
+                    ),
+                    "liked", commentModel.getLikedBy().contains(currentUser),
+                    "disliked", commentModel.getDislikedBy().contains(currentUser)
+            );
+
+            return ResponseEntity.ok(Map.of("newCommentView", newCommentView));
         } catch (Exception e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            return "error";
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
         }
     }
 
