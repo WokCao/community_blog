@@ -21,7 +21,7 @@ public class CommentService {
         this.userRepository = userRepository;
     }
 
-    public Long likeComment(Long commentId) throws BadRequestException {
+    public CommentModel likeComment(Long commentId) throws BadRequestException {
         UserModel currentUser = getCurrentUser();
         if (currentUser == null) {
             throw new BadRequestException("User not authenticated");
@@ -32,16 +32,12 @@ public class CommentService {
         if (comment == null) {
             throw new BadRequestException("Post not found");
         }
-
-        Long postId = comment.getPost().getId();
 
         comment.addUserWhoLikeComment(currentUser);
-        commentRepository.save(comment);
-
-        return postId;
+        return commentRepository.save(comment);
     }
 
-    public Long dislikeComment(Long commentId) throws BadRequestException {
+    public CommentModel dislikeComment(Long commentId) throws BadRequestException {
         UserModel currentUser = getCurrentUser();
         if (currentUser == null) {
             throw new BadRequestException("User not authenticated");
@@ -53,12 +49,8 @@ public class CommentService {
             throw new BadRequestException("Post not found");
         }
 
-        Long postId = comment.getPost().getId();
-
         comment.addUserWhoDislikeComment(currentUser);
-        commentRepository.save(comment);
-
-        return postId;
+        return commentRepository.save(comment);
     }
 
     private UserModel getCurrentUser() {
