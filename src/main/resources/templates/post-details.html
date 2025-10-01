@@ -14,6 +14,10 @@
     <script th:src="@{/js/tag-colors.js}" defer></script>
     <script th:src="@{/js/post-action.js}" defer></script>
     <script th:src="@{/js/comment-action.js}" defer></script>
+    <script th:src="@{/js/notification.js}" defer></script>
+    <script th:src="@{/js/follow.js}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-gray-50 min-h-screen">
@@ -34,6 +38,11 @@
                             <h3 class="font-semibold text-gray-900" th:text="${post.author.fullName}">Author Name</h3>
                             <p class="text-sm text-gray-500" th:text="${post.timeAgo}"></p>
                         </div>
+
+                        <!-- Create a button to follow or unfollow the author -->
+                        <button id="follow-btn" class="text-white px-4 py-1 rounded-full  transition hover:cursor-pointer" th:classappend="${isFollowing ? 'bg-gray-500 hover:bg-gray-600' : 'bg-blue-500 hover:bg-blue-600'}" th:data-user-id="${post.author.id}" th:data-action="${isFollowing ? 'unfollow' : 'follow'}">
+                            <span th:text="${isFollowing ? 'Unfollow' : 'Follow'}"></span>
+                        </button>
                     </div>
 
                     <h1 class="text-4xl font-bold text-gray-900 mb-4" th:text="${post.title}">Post Title</h1>

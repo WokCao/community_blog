@@ -5,6 +5,7 @@ import com.example.community_blog.dto.CreatePostRequest;
 import com.example.community_blog.models.CommentModel;
 import com.example.community_blog.models.PostModel;
 import com.example.community_blog.models.UserModel;
+import com.example.community_blog.services.FollowService;
 import com.example.community_blog.services.PostService;
 import com.example.community_blog.services.UserService;
 import jakarta.validation.Valid;
@@ -23,11 +24,13 @@ import java.util.Map;
 public class PostController {
     private final PostService postService;
     private final UserService userService;
+    private final FollowService followService;
 
     @Autowired
-    public PostController(PostService postService, UserService userService) {
+    public PostController(PostService postService, UserService userService, FollowService followService) {
         this.postService = postService;
         this.userService = userService;
+        this.followService = followService;
     }
 
     @PostMapping("/create")
@@ -74,6 +77,7 @@ public class PostController {
             model.addAttribute("isPostLikedByUser", postModel.isLikedBy(currentUser));
             model.addAttribute("isPostDislikedByUser", postModel.isDislikedBy(currentUser));
             model.addAttribute("comments", comments);
+            model.addAttribute("isFollowing", followService.isFollowing(currentUser, postModel.getAuthor().getId()));
 
             return "post-details";
         } catch (Exception e) {
