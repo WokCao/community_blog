@@ -1,5 +1,6 @@
 package com.example.community_blog.services;
 
+import com.example.community_blog.dto.BlogPublishedEvent;
 import com.example.community_blog.dto.CreatePostRequest;
 import com.example.community_blog.models.CommentModel;
 import com.example.community_blog.models.PostModel;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -23,14 +25,16 @@ import java.util.Set;
 public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Value("${blog.page.size}")
     private int PAGE_SIZE;
 
     @Autowired
-    public PostService(PostRepository postRepository, UserRepository userRepository) {
+    public PostService(PostRepository postRepository, UserRepository userRepository, RedisTemplate<String, Object> redisTemplate) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
+        this.redisTemplate = redisTemplate;
     }
 
     public PostModel getPostById(Long id) throws BadRequestException {
@@ -67,7 +71,12 @@ public class PostService {
         post.setAllowComment(createPostRequest.isAllowComment());
         post.setTags(createPostRequest.getTags());
         post.setAuthor(currentUser);
-        return postRepository.save(post);
+        PostModel saved = postRepository.save(post);
+
+        BlogPublishedEvent event = new BlogPublishedEvent(saved.getId(), currentUser.getId(), saved.getTitle());
+        redisTemplate.convertAndSend("blog-published", event);
+
+        return saved;
     }
 
     public Page<PostModel> getLatestPosts() {

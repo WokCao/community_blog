@@ -40,7 +40,7 @@
                         </div>
 
                         <!-- Create a button to follow or unfollow the author -->
-                        <button id="follow-btn" class="text-white px-4 py-1 rounded-full  transition hover:cursor-pointer" th:classappend="${isFollowing ? 'bg-gray-500 hover:bg-gray-600' : 'bg-blue-500 hover:bg-blue-600'}" th:data-user-id="${post.author.id}" th:data-action="${isFollowing ? 'unfollow' : 'follow'}">
+                        <button id="follow-btn" class="text-white px-4 py-1 rounded-full  transition hover:cursor-pointer" th:classappend="${post.author.id == user.id ? 'hidden' : (isFollowing ? 'bg-gray-500 hover:bg-gray-600' : 'bg-blue-500 hover:bg-blue-600')}" th:data-user-id="${post.author.id}" th:data-action="${isFollowing ? 'unfollow' : 'follow'}">
                             <span th:text="${isFollowing ? 'Unfollow' : 'Follow'}"></span>
                         </button>
                     </div>
