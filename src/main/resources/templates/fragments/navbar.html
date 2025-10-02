@@ -30,13 +30,12 @@
                         <!-- Dropdown -->
                         <div id="notif-list"
                              class="absolute right-0 mt-2 w-80 bg-white border border-gray-200 shadow-lg rounded-lg hidden z-50">
-                            <div class="px-4 py-2 font-semibold text-gray-700 border-b">Notifications</div>
+                            <div class="px-4 py-2 font-semibold text-gray-700 border-b border-b-gray-300">Notifications</div>
                             <ul id="notif-items" class="max-h-80 overflow-y-auto divide-y divide-gray-100">
-                                <!-- Example -->
-                                <!-- <li class="p-3 text-sm text-gray-700 hover:bg-gray-50">New post by John Doe</li> -->
+
                             </ul>
-                            <div class="px-4 py-2 text-center">
-                                <a th:href="@{/users/me/notifications}" class="text-sm text-indigo-600 hover:underline">View all</a>
+                            <div class="px-4 py-2 text-center" id="view-all-btn">
+                                <a th:href="@{/notifications}" class="text-sm text-indigo-600 hover:underline">View all</a>
                             </div>
                         </div>
                     </div>

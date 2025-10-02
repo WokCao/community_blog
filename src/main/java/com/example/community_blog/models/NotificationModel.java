@@ -16,9 +16,14 @@ public class NotificationModel {
     @ManyToOne(optional = false)
     @JoinColumn(name = "recipient_id")
     private UserModel recipient;
+
     @ManyToOne(optional = false)
     @JoinColumn(name = "actor_id")
     private UserModel actor;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id")
+    private PostModel post;
 
     private String message;
     private boolean isRead = false;

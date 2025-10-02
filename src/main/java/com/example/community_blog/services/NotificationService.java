@@ -1,6 +1,7 @@
 package com.example.community_blog.services;
 
 import com.example.community_blog.models.NotificationModel;
+import com.example.community_blog.models.PostModel;
 import com.example.community_blog.models.UserModel;
 import com.example.community_blog.repositories.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +19,14 @@ public class NotificationService {
         this.notificationRepository = notificationRepository;
     }
 
-    public void createNotification(UserModel recipient, UserModel actor, String message) {
+    public NotificationModel createNotification(UserModel recipient, UserModel actor, String message, PostModel post) {
         NotificationModel notif = new NotificationModel();
         notif.setRecipient(recipient);
         notif.setActor(actor);
         notif.setMessage(message);
         notif.setRead(false);
-        notificationRepository.save(notif);
+        notif.setPost(post);
+        return notificationRepository.save(notif);
     }
 
     public List<NotificationModel> getUnreadNotifications(UserModel recipient) {

@@ -407,11 +407,6 @@ document.getElementById('saveBtn').addEventListener('click', () => {
     alert('Draft saved!');
 });
 
-document.getElementById('publishBtn').addEventListener('click', () => {
-    document.getElementById('visibility').value = 'public';
-    document.querySelector('form').submit();
-});
-
 // Placeholder functionality
 editor.addEventListener('focus', function() {
     if (this.innerHTML.trim() === '') {
