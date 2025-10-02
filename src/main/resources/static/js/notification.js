@@ -14,7 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (!notifList.classList.contains("hidden")) {
             // Load persisted notifications on page load
-            fetch("/notifications")
+            fetch("/notifications?size=6&sortDir=desc")
                 .then(res => res.json())
                 .then(data => {
                     notifItems.innerHTML = "";

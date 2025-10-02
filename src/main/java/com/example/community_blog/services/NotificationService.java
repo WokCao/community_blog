@@ -5,6 +5,8 @@ import com.example.community_blog.models.PostModel;
 import com.example.community_blog.models.UserModel;
 import com.example.community_blog.repositories.NotificationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,8 +35,12 @@ public class NotificationService {
         return notificationRepository.findByRecipientAndIsReadFalseOrderByCreatedAtDesc(recipient);
     }
 
-    public List<NotificationModel> getAllNotifications(UserModel recipient) {
-        return notificationRepository.findByRecipientOrderByCreatedAtDesc(recipient);
+    public Page<NotificationModel> getAllNotifications(UserModel recipient, Boolean isRead, Pageable pageable) {
+        if (isRead == null) {
+            return notificationRepository.findByRecipient(recipient, pageable);
+        } else {
+            return notificationRepository.findByRecipientAndIsRead(recipient, isRead, pageable);
+        }
     }
 
     public void markAsRead(Long notificationId) {

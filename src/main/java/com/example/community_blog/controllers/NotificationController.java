@@ -6,6 +6,10 @@ import com.example.community_blog.services.NotificationService;
 import com.example.community_blog.services.UserService;
 import com.example.community_blog.utils.TimeAgoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -29,15 +33,37 @@ public class NotificationController {
 
     @GetMapping
     @ResponseBody
-    public ResponseEntity<?> getNotifications() {
+    public ResponseEntity<?> getNotifications(
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "10") int size,
+            @RequestParam(value = "sortBy", defaultValue = "createdAt") String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = "desc") String sortDir,
+            @RequestParam(value = "read", required = false) Boolean read
+    ) {
         UserModel currentUser = userService.getCurrentUser();
         if (currentUser == null) {
             return ResponseEntity.status(401).body(Map.of("error", "User not authenticated"));
         }
 
-        List<NotificationModel> notificationModelList = notificationService.getAllNotifications(currentUser);
+        if (size < 6) size = 6;
+        if (size > 100) size = 100;
 
-        List<Map<String, Object>> notifications = notificationModelList.stream()
+        Sort sort;
+        if ("author".equalsIgnoreCase(sortBy)) {
+            sort = sortDir.equalsIgnoreCase("asc")
+                    ? Sort.by("post.author.fullName").ascending()
+                    : Sort.by("post.author.fullName").descending();
+        } else {
+            sort = sortDir.equalsIgnoreCase("asc")
+                    ? Sort.by("createdAt").ascending()
+                    : Sort.by("createdAt").descending();
+        }
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        Page<NotificationModel> notificationModelPage = notificationService.getAllNotifications(currentUser, read, pageable);
+
+        List<Map<String, Object>> notifications = notificationModelPage.getContent().stream()
                 .map(notificationModel -> {
                     Map<String, Object> map = new HashMap<>();
                     map.put("postId", notificationModel.getPost() != null ? notificationModel.getPost().getId() : null);
