@@ -98,9 +98,9 @@
 
     <!-- Load More Button -->
     <div th:if="${totalElements > 6}" class="text-center mt-8">
-        <button class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-6 rounded-lg transition">
+        <a th:href="@{/posts}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-6 rounded-lg transition">
             Load More Posts
-        </button>
+        </a>
     </div>
 
 </div>

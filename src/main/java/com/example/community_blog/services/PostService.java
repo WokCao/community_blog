@@ -85,6 +85,37 @@ public class PostService {
         return postRepository.findAll(pageable);
     }
 
+    public Page<PostModel> getPosts(int page, String query, String sortBy, String sortDir) {
+        if (page < 0) {
+            page = 0;
+        }
+
+        Pageable pageable;
+        // Sorting by createdAt and highPoint (most popular)
+        // Query by tags, title and author's name
+
+        if ("createdAt".equalsIgnoreCase(sortBy)) {
+            Sort sort;
+            sort = sortDir.equalsIgnoreCase("asc")
+                    ? Sort.by("createdAt").ascending()
+                    : Sort.by("createdAt").descending();
+
+            pageable = PageRequest.of(page, PAGE_SIZE, sort);
+
+            return postRepository.searchPostsByTitleOrTagsOrAuthorOrderByCreatedAt(query, pageable);
+        } else if ("highPoint".equalsIgnoreCase(sortBy)) {
+            pageable = PageRequest.of(page, PAGE_SIZE);
+
+            if (sortDir.equalsIgnoreCase("asc")) {
+                return postRepository.searchPostsByTitleOrTagsOrAuthorOrderByHighPointAsc(query, pageable);
+            } else {
+                return postRepository.searchPostsByTitleOrTagsOrAuthorOrderByHighPointDesc(query, pageable);
+            }
+        } else {
+            return null;
+        }
+    }
+
     public Page<PostModel> getNotablePostsExceptFor(Long postId) {
         Pageable pageable = PageRequest.of(0, PAGE_SIZE);
         return postRepository.findNotable(postId, pageable);

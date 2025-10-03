@@ -187,6 +187,13 @@
                                   th:text="${#temporals.format(post.createdAt, 'MMM dd, yyyy')}">Jan 15, 2024</span>
                         </div>
                     </div>
+
+                    <div th:if="${totalNotablePosts > 6}" class="flex justify-center">
+                        <a th:href="@{/users/{id}/posts(id=${user.id})}"
+                                class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors">
+                            See More
+                        </a>
+                    </div>
                 </div>
 
                 <!-- Empty State -->

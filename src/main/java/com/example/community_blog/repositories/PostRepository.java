@@ -30,26 +30,59 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
     @Query("SELECT p FROM PostModel p WHERE p.author.id = :authorId ORDER BY (SIZE(p.likedBy) * 10 + p.shareCount * 5 + p.saveCount * 2) DESC")
     Page<PostModel> findAllByAuthorId(@Param("authorId") Long authorId, Pageable pageable);
 
+    @Query("""
+                SELECT p FROM PostModel p
+                WHERE (:query IS NULL OR :query = ''
+                    OR LOWER(p.title) LIKE LOWER(CONCAT('%', :query, '%'))
+                    OR LOWER(p.content) LIKE LOWER(CONCAT('%', :query, '%'))
+                    OR LOWER(p.author.fullName) LIKE LOWER(CONCAT('%', :query, '%'))
+                    OR EXISTS (SELECT 1 FROM p.tags t WHERE LOWER(t) LIKE LOWER(CONCAT('%', :query, '%')))
+                )
+            """)
+    Page<PostModel> searchPostsByTitleOrTagsOrAuthorOrderByCreatedAt(@Param("query") String query, Pageable pageable);
+
+    @Query("""
+                SELECT p FROM PostModel p
+                WHERE (:query IS NULL OR :query = ''
+                    OR LOWER(p.title) LIKE LOWER(CONCAT('%', :query, '%'))
+                    OR LOWER(p.author.fullName) LIKE LOWER(CONCAT('%', :query, '%'))
+                    OR EXISTS (SELECT 1 FROM p.tags t WHERE LOWER(t) LIKE LOWER(CONCAT('%', :query, '%')))
+                )
+                ORDER BY (SIZE(p.likedBy) * 10 + p.shareCount * 5 + p.saveCount * 2) DESC
+            """)
+    Page<PostModel> searchPostsByTitleOrTagsOrAuthorOrderByHighPointDesc(@Param("query") String query, Pageable pageable);
+
+    @Query("""
+                SELECT p FROM PostModel p
+                WHERE (:query IS NULL OR :query = ''
+                    OR LOWER(p.title) LIKE LOWER(CONCAT('%', :query, '%'))
+                    OR LOWER(p.author.fullName) LIKE LOWER(CONCAT('%', :query, '%'))
+                    OR EXISTS (SELECT 1 FROM p.tags t WHERE LOWER(t) LIKE LOWER(CONCAT('%', :query, '%')))
+                )
+                ORDER BY (SIZE(p.likedBy) * 10 + p.shareCount * 5 + p.saveCount * 2) ASC
+            """)
+    Page<PostModel> searchPostsByTitleOrTagsOrAuthorOrderByHighPointAsc(@Param("query") String query, Pageable pageable);
+
     @Query(
             value = """
-            SELECT p.*, SUM(SIMILARITY(t.tags, kw)) as relevance
-            FROM posts p
-            JOIN post_tags t ON p.id = t.post_id,
-            unnest(ARRAY[:keywords]) kw
-            WHERE p.id != :id
-            GROUP BY p.id
-            HAVING SUM(SIMILARITY(t.tags, kw)) > 0.3
-            """,
+                    SELECT p.*, SUM(SIMILARITY(t.tags, kw)) as relevance
+                    FROM posts p
+                    JOIN post_tags t ON p.id = t.post_id,
+                    unnest(ARRAY[:keywords]) kw
+                    WHERE p.id != :id
+                    GROUP BY p.id
+                    HAVING SUM(SIMILARITY(t.tags, kw)) > 0.3
+                    """,
             countQuery = """
-            SELECT COUNT(*) FROM (
-                SELECT p.id
-                FROM posts p
-                JOIN post_tags t ON p.id = t.post_id,
-                unnest(ARRAY[:keywords]) kw
-                GROUP BY p.id
-                HAVING SUM(SIMILARITY(t.tags, kw)) > 0.3
-            ) AS matching_posts
-            """,
+                    SELECT COUNT(*) FROM (
+                        SELECT p.id
+                        FROM posts p
+                        JOIN post_tags t ON p.id = t.post_id,
+                        unnest(ARRAY[:keywords]) kw
+                        GROUP BY p.id
+                        HAVING SUM(SIMILARITY(t.tags, kw)) > 0.3
+                    ) AS matching_posts
+                    """,
             nativeQuery = true
     )
     Page<PostModel> searchPostsByTagsFuzzy(@Param("id") Long id, @Param("keywords") String[] keywords, Pageable pageable);

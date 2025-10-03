@@ -33,6 +33,36 @@ public class PostController {
         this.followService = followService;
     }
 
+    @GetMapping
+    public String viewPosts(Model model,
+                            @RequestParam(value = "page", defaultValue = "0") int page,
+                            @RequestParam(value = "search", defaultValue = "") String search,
+                            @RequestParam(value = "sortBy", defaultValue = "createdAt") String sortBy,
+                            @RequestParam(value = "sortDir", defaultValue = "desc") String sortDir
+    ) {
+        try {
+            UserModel currentUser = userService.getCurrentUser();
+            if (currentUser != null) {
+                model.addAttribute("user", currentUser);
+            } else {
+                return "redirect:/auth/login";
+            }
+
+            Page<PostModel> postModelPage = postService.getPosts(page, search, sortBy, sortDir);
+            model.addAttribute("posts", postModelPage.getContent());
+            model.addAttribute("totalPosts", postModelPage.getTotalElements());
+            model.addAttribute("search", search);
+            model.addAttribute("sortBy", sortBy);
+            model.addAttribute("sortDir", sortDir);
+            model.addAttribute("totalPages", postModelPage.getTotalPages());
+            model.addAttribute("currentPage", postModelPage.getNumber());
+            return "posts";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "error";
+        }
+    }
+
     @PostMapping("/create")
     public String processWritePost(Model model, @Valid CreatePostRequest createPostRequest) {
         try {

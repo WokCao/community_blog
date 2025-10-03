@@ -38,6 +38,7 @@ public class UserController {
         try {
             Page<PostModel> notablePosts = postService.getUserNotablePosts(currentUser.getId());
             model.addAttribute("notablePosts", notablePosts.getContent());
+            model.addAttribute("totalNotablePosts", notablePosts.getTotalElements());
             model.addAttribute("totalViews", postService.calculatePostsView());
             model.addAttribute("totalLikes", postService.calculatePostsLike());
         } catch (Exception e) {
