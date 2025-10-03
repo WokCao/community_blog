@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <title>Posts - Community Blog</title>
     <link th:href="@{/css/output.css}" rel="stylesheet">
     <script th:src="@{/js/tag-colors.js}" defer></script>
@@ -180,7 +182,7 @@
         <div class="flex space-x-2">
             <a th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                th:href="@{/posts(page=${i}, search=${search}, sortBy=${sortBy}, sortDir=${sortDir})}"
-               th:classappend="${i == currentPage} ? 'bg-indigo-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
+               th:classappend="${i == currentPage} ? 'pointer-events-none bg-indigo-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
                class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium transition-colors"
                th:text="${i + 1}">
             </a>
