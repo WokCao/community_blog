@@ -1,3 +1,12 @@
+document.getElementById("textColorWrapper").addEventListener("click", function () {
+    document.getElementById("textColor").click();
+});
+
+document.getElementById("backgroundColorWrapper").addEventListener("click", function () {
+    document.getElementById("backgroundColor").click();
+});
+
+
 // Rich Text Editor JavaScript
 const editor = document.getElementById('editor');
 const contentHidden = document.getElementById('contentHidden');
@@ -9,6 +18,8 @@ const underlineBtn = document.getElementById('underlineBtn');
 const fontFamily = document.getElementById('fontFamily');
 const fontSize = document.getElementById('fontSize');
 const heading = document.getElementById('heading');
+const textColor = document.getElementById('textColor');
+const backgroundColor = document.getElementById('backgroundColor');
 
 // Alignment buttons
 const alignLeftBtn = document.getElementById('alignLeftBtn');
@@ -93,7 +104,7 @@ function surroundSelection(tagName, attrs = {}) {
 }
 
 function applyInlineStyle(styleName, value) {
-    surroundSelection('span', { style: { [styleName]: value } });
+    surroundSelection('span', {style: {[styleName]: value}});
 }
 
 function unwrapElement(el) {
@@ -308,26 +319,64 @@ document.addEventListener('selectionchange', () => {
 });
 
 // Event listeners for formatting
-document.getElementById('boldBtn').addEventListener('click', () => { toggleInlineTag('strong'); });
-document.getElementById('italicBtn').addEventListener('click', () => { toggleInlineTag('em'); });
-document.getElementById('underlineBtn').addEventListener('click', () => { toggleInlineTag('u'); });
+document.getElementById('boldBtn').addEventListener('click', () => {
+    toggleInlineTag('strong');
+});
+document.getElementById('italicBtn').addEventListener('click', () => {
+    toggleInlineTag('em');
+});
+document.getElementById('underlineBtn').addEventListener('click', () => {
+    toggleInlineTag('u');
+});
 
-fontFamily.addEventListener('change', (e) => { applyInlineStyle('fontFamily', e.target.value); updateToolbarState(); });
-fontSize.addEventListener('change', (e) => { applyInlineStyle('fontSize', e.target.value); updateToolbarState(); });
+fontFamily.addEventListener('change', (e) => {
+    applyInlineStyle('fontFamily', e.target.value);
+    updateToolbarState();
+});
+fontSize.addEventListener('change', (e) => {
+    applyInlineStyle('fontSize', e.target.value);
+    updateToolbarState();
+});
 
 heading.addEventListener('change', (e) => {
     setBlockTag(e.target.value || 'div');
     updateToolbarState();
 });
 
+textColor.addEventListener('change', (e) => {
+    applyInlineStyle('color', e.target.value);
+    updateToolbarState();
+});
+
+backgroundColor.addEventListener('change', (e) => {
+    applyInlineStyle('backgroundColor', e.target.value);
+    updateToolbarState();
+});
+
+
 // Alignment
-alignLeftBtn.addEventListener('click', () => { setAlignment('left'); updateToolbarState(); });
-alignCenterBtn.addEventListener('click', () => { setAlignment('center'); updateToolbarState(); });
-alignRightBtn.addEventListener('click', () => { setAlignment('right'); updateToolbarState(); });
+alignLeftBtn.addEventListener('click', () => {
+    setAlignment('left');
+    updateToolbarState();
+});
+alignCenterBtn.addEventListener('click', () => {
+    setAlignment('center');
+    updateToolbarState();
+});
+alignRightBtn.addEventListener('click', () => {
+    setAlignment('right');
+    updateToolbarState();
+});
 
 // Lists
-bulletListBtn.addEventListener('click', () => { toggleList('ul'); updateToolbarState(); });
-numberListBtn.addEventListener('click', () => { toggleList('ol'); updateToolbarState(); });
+bulletListBtn.addEventListener('click', () => {
+    toggleList('ul');
+    updateToolbarState();
+});
+numberListBtn.addEventListener('click', () => {
+    toggleList('ol');
+    updateToolbarState();
+});
 
 // Media insertion
 imageBtn.addEventListener('click', () => imageInput.click());
@@ -363,7 +412,10 @@ function updateContent() {
     contentHidden.value = editor.innerHTML;
 }
 
-editor.addEventListener('input', () => { updateContent(); updateToolbarState(); });
+editor.addEventListener('input', () => {
+    updateContent();
+    updateToolbarState();
+});
 
 // Tags functionality
 tagInput.addEventListener('keypress', (e) => {
@@ -395,7 +447,7 @@ function updateTagsDisplay() {
 }
 
 // Global function to remove tags
-window.removeTag = function(index) {
+window.removeTag = function (index) {
     tags.splice(index, 1);
     updateTagsDisplay();
 };
@@ -408,13 +460,13 @@ document.getElementById('saveBtn').addEventListener('click', () => {
 });
 
 // Placeholder functionality
-editor.addEventListener('focus', function() {
+editor.addEventListener('focus', function () {
     if (this.innerHTML.trim() === '') {
         this.innerHTML = '';
     }
 });
 
-editor.addEventListener('blur', function() {
+editor.addEventListener('blur', function () {
     if (this.innerHTML.trim() === '') {
         this.setAttribute('data-placeholder', 'Start writing your amazing post...');
     }

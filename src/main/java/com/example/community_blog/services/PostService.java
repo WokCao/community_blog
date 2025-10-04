@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Service
@@ -37,25 +38,35 @@ public class PostService {
         this.redisTemplate = redisTemplate;
     }
 
-    public PostModel getPostById(Long id) throws BadRequestException {
+    public PostModel getPostById(Long postId) throws BadRequestException {
         UserModel currentUser = getCurrentUser();
         if (currentUser == null) {
             throw new BadRequestException("User not authenticated");
         }
 
-        return updatePostView(id);
+        return updatePostView(postId);
     }
 
-    private PostModel updatePostView(Long id) throws BadRequestException {
-        PostModel post = postRepository.findById(id).orElse(null);
+    private PostModel updatePostView(Long postId) throws BadRequestException {
+        PostModel post = postRepository.findById(postId).orElse(null);
         if (post == null) {
             throw new BadRequestException("Post not found");
         }
-        // Increment view count via bulk update to avoid triggering @PreUpdate (and thus not touch updatedAt)
-        postRepository.incrementViewCount(id);
-        // Reflect the increment locally for the returned object without persisting it again
-        post.setViewCount(post.getViewCount() + 1);
-        return post;
+
+        LocalDateTime now = LocalDateTime.now();
+        if (post.getAutoPublishAt() == null || post.getAutoPublishAt().isBefore(now)) {
+            // Increment view count via bulk update to avoid triggering @PreUpdate (and thus not touch updatedAt)
+            postRepository.incrementViewCount(postId);
+            // Reflect the increment locally for the returned object without persisting it again
+            post.setViewCount(post.getViewCount() + 1);
+            return post;
+        } else {
+            UserModel currentUser = getCurrentUser();
+            if (currentUser != null && post.getAuthor().getId().equals(currentUser.getId())) {
+                return post;
+            }
+            throw new BadRequestException("Post not found");
+        }
     }
 
     public PostModel publishPost(CreatePostRequest createPostRequest) throws BadRequestException {
@@ -71,10 +82,16 @@ public class PostService {
         post.setAllowComment(createPostRequest.isAllowComment());
         post.setTags(createPostRequest.getTags());
         post.setAuthor(currentUser);
+
+        if (createPostRequest.getAutoPublishAt() != null) {
+            post.setAutoPublishAt(createPostRequest.getAutoPublishAt());
+        }
         PostModel saved = postRepository.save(post);
 
-        BlogPublishedEvent event = new BlogPublishedEvent(saved.getId(), currentUser.getId(), saved.getTitle());
-        redisTemplate.convertAndSend("blog-published", event);
+        if (saved.getAutoPublishAt() == null) {
+            BlogPublishedEvent event = new BlogPublishedEvent(saved.getId(), currentUser.getId(), saved.getTitle());
+            redisTemplate.convertAndSend("blog-published", event);
+        }
 
         return saved;
     }
@@ -82,15 +99,17 @@ public class PostService {
     public Page<PostModel> getLatestPosts() {
         Sort sort = Sort.by(Sort.Direction.DESC, "createdAt");
         Pageable pageable = PageRequest.of(0, PAGE_SIZE, sort);
-        return postRepository.findAll(pageable);
+        LocalDateTime now = LocalDateTime.now();
+        return postRepository.findLatestVisiblePosts(now, pageable);
     }
 
-    public Page<PostModel> getPosts(int page, String query, String sortBy, String sortDir) {
+    public Page<PostModel> getPosts(int page, String query, String sortBy, String sortDir) throws IllegalArgumentException {
         if (page < 0) {
             page = 0;
         }
 
         Pageable pageable;
+        LocalDateTime now = LocalDateTime.now();
         // Sorting by createdAt and highPoint (most popular)
         // Query by tags, title and author's name
 
@@ -102,23 +121,24 @@ public class PostService {
 
             pageable = PageRequest.of(page, PAGE_SIZE, sort);
 
-            return postRepository.searchPostsByTitleOrTagsOrAuthorOrderByCreatedAt(query, pageable);
+            return postRepository.searchPostsByTitleOrTagsOrAuthorOrderByCreatedAt(query, now, pageable);
         } else if ("highPoint".equalsIgnoreCase(sortBy)) {
             pageable = PageRequest.of(page, PAGE_SIZE);
 
             if (sortDir.equalsIgnoreCase("asc")) {
-                return postRepository.searchPostsByTitleOrTagsOrAuthorOrderByHighPointAsc(query, pageable);
+                return postRepository.searchPostsByTitleOrTagsOrAuthorOrderByHighPointAsc(query, now, pageable);
             } else {
-                return postRepository.searchPostsByTitleOrTagsOrAuthorOrderByHighPointDesc(query, pageable);
+                return postRepository.searchPostsByTitleOrTagsOrAuthorOrderByHighPointDesc(query, now, pageable);
             }
         } else {
-            return null;
+            throw new IllegalArgumentException("Invalid sort parameter");
         }
     }
 
     public Page<PostModel> getNotablePostsExceptFor(Long postId) {
         Pageable pageable = PageRequest.of(0, PAGE_SIZE);
-        return postRepository.findNotable(postId, pageable);
+        LocalDateTime now = LocalDateTime.now();
+        return postRepository.findNotableVisiblePost(postId, now, pageable);
     }
 
     public Page<PostModel> getUserNotablePosts(Long userId) {
@@ -130,8 +150,9 @@ public class PostService {
     public Page<PostModel> searchRelatedPostsByTag(Long postId, Set<String> tags) {
         Sort sort = Sort.by(Sort.Direction.DESC, "created_at");
         Pageable pageable = PageRequest.of(0, PAGE_SIZE, sort);
+        LocalDateTime now = LocalDateTime.now();
         // Convert from a set to a string array
-        return postRepository.searchPostsByTagsFuzzy(postId, tags.toArray(new String[]{}), pageable);
+        return postRepository.searchPostsByTagsFuzzy(postId, tags.toArray(new String[]{}), now, pageable);
     }
 
     public CommentModel addCommentToPost(Long id, String content) throws BadRequestException {

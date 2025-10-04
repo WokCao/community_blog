@@ -2,10 +2,15 @@ package com.example.community_blog.models;
 
 import com.example.community_blog.utils.TimeAgoUtil;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -62,6 +67,16 @@ public class PostModel {
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id"))
     private Set<UserModel> dislikedBy = new HashSet<>();
+
+    @Column
+    private LocalDateTime autoPublishAt;
+
+    @Transient
+    public String getStringAutoPublishAt() {
+        // Format: 01-01-2021 00:00:00
+        if (autoPublishAt == null) return "";
+        return autoPublishAt.format(DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss"));
+    }
 
     @CreationTimestamp
     private Instant createdAt;

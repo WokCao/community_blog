@@ -34,7 +34,7 @@
                     <div class="flex items-center space-x-4 mb-4">
                         <img th:src="${post.author.avatarUrl}" th:alt="${post.author.fullName}"
                              class="w-12 h-12 rounded-full object-cover">
-                        <div>
+                        <div class="flex-1">
                             <h3 class="font-semibold text-gray-900" th:text="${post.author.fullName}">Author Name</h3>
                             <p class="text-sm text-gray-500" th:text="${post.timeAgo}"></p>
                         </div>
@@ -43,6 +43,8 @@
                         <button id="follow-btn" class="text-white px-4 py-1 rounded-full  transition hover:cursor-pointer" th:classappend="${post.author.id == user.id ? 'hidden' : (isFollowing ? 'bg-gray-500 hover:bg-gray-600' : 'bg-blue-500 hover:bg-blue-600')}" th:data-user-id="${post.author.id}" th:data-action="${isFollowing ? 'unfollow' : 'follow'}">
                             <span th:text="${isFollowing ? 'Unfollow' : 'Follow'}"></span>
                         </button>
+
+                        <span class="text-gray-500" th:utext="'The post will be publish at: <b>' + ${post.stringAutoPublishAt} + '</b>'" th:if="${post.autoPublishAt != null}"></span>
                     </div>
 
                     <h1 class="text-4xl font-bold text-gray-900 mb-4" th:text="${post.title}">Post Title</h1>

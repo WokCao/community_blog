@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,4 +30,6 @@ public class CreatePostRequest {
 
     @NotNull(message = "Post visibility cannot be null")
     private Visibility visibility;
+
+    private LocalDateTime autoPublishAt;
 }
