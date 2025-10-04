@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -97,4 +98,7 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
 
     @Query("SELECT p FROM PostModel p WHERE p.autoPublishAt IS NULL OR p.autoPublishAt <= :now")
     Page<PostModel> findLatestVisiblePosts(@Param("now") LocalDateTime now, Pageable pageable);
+
+    @Query("SELECT p FROM PostModel p WHERE p.autoPublishAt IS NOT NULL")
+    List<PostModel> findReadyToPublish();
 }
