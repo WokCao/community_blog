@@ -39,11 +39,6 @@ public class PostService {
     }
 
     public PostModel getPostById(Long postId) throws BadRequestException {
-        UserModel currentUser = getCurrentUser();
-        if (currentUser == null) {
-            throw new BadRequestException("User not authenticated");
-        }
-
         return updatePostView(postId);
     }
 

@@ -40,7 +40,7 @@
                         </div>
 
                         <!-- Create a button to follow or unfollow the author -->
-                        <button id="follow-btn" class="text-white px-4 py-1 rounded-full  transition hover:cursor-pointer" th:classappend="${post.author.id == user.id ? 'hidden' : (isFollowing ? 'bg-gray-500 hover:bg-gray-600' : 'bg-blue-500 hover:bg-blue-600')}" th:data-user-id="${post.author.id}" th:data-action="${isFollowing ? 'unfollow' : 'follow'}">
+                        <button id="follow-btn" class="text-white px-4 py-1 rounded-full  transition hover:cursor-pointer" th:classappend="${post.author.id == user?.id ? 'hidden' : (isFollowing ? 'bg-gray-500 hover:bg-gray-600' : 'bg-blue-500 hover:bg-blue-600')}" th:data-user-id="${post.author.id}" th:data-action="${isFollowing ? 'unfollow' : 'follow'}">
                             <span th:text="${isFollowing ? 'Unfollow' : 'Follow'}"></span>
                         </button>
 
@@ -89,7 +89,7 @@
                     <div class="flex items-center justify-between border-t border-b border-gray-200 py-4">
                         <div class="flex items-center space-x-4">
                             <!-- Like/Dislike for authenticated users -->
-                            <div th:if="${user != null}" class="flex items-center space-x-2">
+                            <div class="flex items-center space-x-2">
                                 <form class="like-post-form inline" th:data-post-id="${post.id}">
                                     <button type="submit"
                                             class="flex items-center space-x-1 px-4 py-2 rounded-lg transition hover:cursor-pointer"
@@ -247,6 +247,12 @@
                         </a>
                     </article>
                 </div>
+                <!-- Load More Button -->
+                <div th:if="${totalRelatedPosts > 4}" class="text-center mt-8">
+                    <a th:href="@{/posts}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-6 rounded-lg transition">
+                        Load More Posts
+                    </a>
+                </div>
             </div>
 
             <!--             Author's Notable Posts -->
@@ -288,6 +294,12 @@
                             </div>
                         </a>
                     </article>
+                </div>
+                <!-- Load More Button -->
+                <div th:if="${totalNotablePosts > 4}" class="text-center mt-8">
+                    <a th:href="@{/users/{authorName}-{id}/notable-posts(authorName=${post.author.fullName}, id=${post.author.id})}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-6 rounded-lg transition">
+                        Load More Posts
+                    </a>
                 </div>
             </div>
         </div>

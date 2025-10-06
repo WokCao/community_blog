@@ -44,8 +44,6 @@ public class PostController {
             UserModel currentUser = userService.getCurrentUser();
             if (currentUser != null) {
                 model.addAttribute("user", currentUser);
-            } else {
-                return "redirect:/auth/login";
             }
 
             Page<PostModel> postModelPage = postService.getPosts(page, search, sortBy, sortDir);
@@ -66,6 +64,11 @@ public class PostController {
     @PostMapping("/create")
     public String processWritePost(Model model, @Valid CreatePostRequest createPostRequest) {
         try {
+            UserModel currentUser = userService.getCurrentUser();
+            if (currentUser == null) {
+                return "redirect:/auth/login";
+            }
+
             PostModel postModel = postService.publishPost(createPostRequest);
             return "redirect:/posts/" + postModel.getId();
         } catch (Exception e) {
@@ -86,10 +89,7 @@ public class PostController {
             UserModel currentUser = userService.getCurrentUser();
             if (currentUser != null) {
                 model.addAttribute("user", currentUser);
-            } else {
-                return "redirect:/auth/login";
             }
-
             Page<PostModel> notablePosts = postService.getNotablePostsExceptFor(postModel.getId());
             Page<PostModel> relatedPosts = postService.searchRelatedPostsByTag(postModel.getId(), postModel.getTags());
             List<CommentView> comments = postModel.getComments().stream()
@@ -102,12 +102,14 @@ public class PostController {
                     .toList();
 
             model.addAttribute("post", postModel);
-            model.addAttribute("notablePosts", notablePosts.getContent());
-            model.addAttribute("relatedPosts", relatedPosts.getContent());
+            model.addAttribute("notablePosts", notablePosts.getContent().stream().limit(4).toList());
+            model.addAttribute("relatedPosts", relatedPosts.getContent().stream().limit(4).toList());
+            model.addAttribute("totalNotablePosts", notablePosts.getTotalElements());
+            model.addAttribute("totalRelatedPosts", relatedPosts.getTotalElements());
             model.addAttribute("isPostLikedByUser", postModel.isLikedBy(currentUser));
             model.addAttribute("isPostDislikedByUser", postModel.isDislikedBy(currentUser));
             model.addAttribute("comments", comments);
-            model.addAttribute("isFollowing", followService.isFollowing(currentUser, postModel.getAuthor().getId()));
+            model.addAttribute("isFollowing", currentUser != null && followService.isFollowing(currentUser, postModel.getAuthor().getId()));
 
             return "post-details";
         } catch (Exception e) {

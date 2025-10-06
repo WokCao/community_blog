@@ -9,10 +9,10 @@
                 <div class="flex-shrink-0">
                     <a th:href="@{/}" class="text-base lg:text-2xl font-bold text-indigo-600">Community Blog</a>
                 </div>
-                <div class="flex space-x-6" th:if="${user != null}">
-                    <a th:href="@{/home}" class="text-sm lg:text-base text-muted-foreground hover:text-foreground transition-colors hover:bg-gray-200 hover:rounded-lg hover:text-sky-700 p-1">Home</a>
-                    <a th:href="@{/write-post}" class="hidden lg:block text-sm lg:text-base text-muted-foreground hover:text-foreground transition-colors hover:bg-gray-200 hover:rounded-lg hover:text-sky-700 p-1">Publish</a>
-                    <a th:href="@{/posts}" class="hidden lg:block text-sm lg:text-base text-muted-foreground hover:text-foreground transition-colors hover:bg-gray-200 hover:rounded-lg hover:text-sky-700 p-1">Post</a>
+                <div class="flex space-x-6">
+                    <a th:if="${user != null}" th:href="@{/home}" class="text-sm lg:text-base text-muted-foreground hover:text-foreground transition-colors hover:bg-gray-200 rounded-lg hover:text-sky-700 py-1 px-3">Home</a>
+                    <a th:if="${user != null}" th:href="@{/write-post}" class="hidden lg:block text-sm lg:text-base text-muted-foreground hover:text-foreground transition-colors hover:bg-gray-200 rounded-lg hover:text-sky-700 py-1 px-3">Publish</a>
+                    <a th:href="@{/posts}" class="hidden lg:block text-sm lg:text-base text-muted-foreground hover:text-foreground transition-colors hover:bg-gray-200 rounded-lg hover:text-sky-700 py-1 px-3">Post</a>
                 </div>
             </div>
 

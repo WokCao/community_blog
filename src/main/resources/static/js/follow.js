@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         followBtn.classList.add("bg-blue-500", "hover:bg-blue-600");
                     }
                 } else {
-                    console.error("Error:", await res.text());
+                    window.location.href = "/auth/login";
                 }
             } catch (err) {
                 console.error("Fetch error:", err);

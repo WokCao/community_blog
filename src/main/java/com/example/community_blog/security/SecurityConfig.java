@@ -19,7 +19,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/auth/**", "/", "/css/**", "/js/**", "/img/**").permitAll()
+                        auth.requestMatchers("/auth/**", "/", "/css/**", "/js/**", "/img/**", "/posts", "/posts/*").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session
                     .maximumSessions(1)
