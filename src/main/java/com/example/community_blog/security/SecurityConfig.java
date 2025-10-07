@@ -30,8 +30,8 @@ public class SecurityConfig {
                                         "default-src 'self'; " +
                                                 "img-src 'self' data: https://lh3.googleusercontent.com https://platform-lookaside.fbsbx.com; " +
                                                 "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; " +
-                                                "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; " +
-                                                "font-src 'self' https://cdnjs.cloudflare.com data:; " +
+                                                "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; " +
+                                                "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; " +
                                                 "connect-src 'self' https://cdn.jsdelivr.net;"
                                 )
                         )
