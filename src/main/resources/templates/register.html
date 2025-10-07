@@ -93,7 +93,7 @@
                 </div>
 
                 <!-- Terms and Conditions -->
-                <div class="flex items-start">
+                <div class="flex items-center">
                     <input
                             id="terms"
                             name="terms"
@@ -116,6 +116,24 @@
                 >
                     Create account
                 </button>
+
+                <!-- Button to make a request (send another link to the email to confirm the account) -->
+                <div class="mt-4 text-center w-3/4 mx-auto hover:cursor-pointer hover:text-blue-500 text-black transition-colors">
+                    <a id="" class="text-sm font-medium ">
+                        Send another link to confirm your account
+                    </a>
+                </div>
+
+                <!-- Social Login Options -->
+                <div class="mt-4 flex flex-col space-y-1">
+                    <p class="text-sm text-gray-600">
+                        Or continue with:
+                    </p>
+                    <a th:href="@{/oauth2/authorization/google}"
+                       class="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition">
+                        <i class="fa-brands fa-google"></i> Continue with Google
+                    </a>
+                </div>
             </div>
         </div>
 

@@ -417,6 +417,23 @@ editor.addEventListener('input', () => {
     updateToolbarState();
 });
 
+editor.addEventListener('paste', (e) => {
+    e.preventDefault();
+
+    // Get plain text from the clipboard
+    const text = e.clipboardData.getData('text/plain');
+
+    // Insert the text at the current cursor position
+    const selection = window.getSelection();
+    if (!selection.rangeCount) return;
+
+    selection.deleteFromDocument(); // remove any selected text
+    selection.getRangeAt(0).insertNode(document.createTextNode(text));
+
+    // Move the cursor to the end of inserted text
+    selection.collapseToEnd();
+})
+
 // Tags functionality
 tagInput.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') {
