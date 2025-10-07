@@ -38,7 +38,15 @@ public class UserService {
 
     public UserModel getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getName();
+        String email = null;
+
+        if (authentication.getPrincipal() instanceof org.springframework.security.oauth2.core.user.OAuth2User oAuth2User) {
+            email = oAuth2User.getAttribute("email");
+        } else if (authentication.getPrincipal() instanceof org.springframework.security.core.userdetails.UserDetails userDetails) {
+            email = userDetails.getUsername();
+        } else {
+            email = authentication.getName();
+        }
 
         if (email == null) {
             return null;

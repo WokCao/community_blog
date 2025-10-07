@@ -46,7 +46,12 @@
                              class="w-8 h-8 rounded-full object-cover">
                         <a th:href="@{/users/me}" th:text="${user.fullName}"></a>
                     </div>
-                    <a th:href="@{/logout}" class="text-sm lg:text-base bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition">Logout</a>
+                    <form th:action="@{/logout}" method="post" style="display: inline;">
+                        <button type="submit"
+                                class="text-sm lg:text-base bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition">
+                            Logout
+                        </button>
+                    </form>
                 </div>
                 <!-- If not logged in -->
                 <div th:unless="${user != null}" class="flex items-center space-x-2">

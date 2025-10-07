@@ -39,8 +39,16 @@ public class UserModel {
     public String getAvatarUrl() {
         if (avatarUrl == null) {
             return "/img/bear.png";
+        } else if (avatarUrl.startsWith("https") || isTrustedAvatarUrl(avatarUrl)) {
+            return avatarUrl;
         }
         return "/img/" + avatarUrl;
+    }
+
+    @Transient
+    private boolean isTrustedAvatarUrl(String url) {
+        return url.startsWith("https://lh3.googleusercontent.com") ||
+                url.startsWith("https://platform-lookaside.fbsbx.com");
     }
 
     @ManyToMany(fetch = FetchType.EAGER)

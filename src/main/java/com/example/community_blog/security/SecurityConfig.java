@@ -1,6 +1,7 @@
 package com.example.community_blog.security;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -11,25 +12,51 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import java.util.Collections;
-
 @Configuration
 public class SecurityConfig {
+    private final CustomizedOAuth2UserService customizedOAuth2UserService;
+
+    @Autowired
+    public SecurityConfig(CustomizedOAuth2UserService customizedOAuth2UserService) {
+        this.customizedOAuth2UserService = customizedOAuth2UserService;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .headers(headers -> headers
+                        .contentSecurityPolicy(policy -> policy
+                                .policyDirectives(
+                                        "default-src 'self'; " +
+                                                "img-src 'self' data: https://lh3.googleusercontent.com https://platform-lookaside.fbsbx.com; " +
+                                                "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; " +
+                                                "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; " +
+                                                "font-src 'self' https://cdnjs.cloudflare.com data:; " +
+                                                "connect-src 'self' https://cdn.jsdelivr.net;"
+                                )
+                        )
+                )
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/auth/**", "/", "/css/**", "/js/**", "/img/**", "/posts", "/posts/*").permitAll()
-                        .anyRequest().authenticated())
+                        auth.requestMatchers("/auth/**", "/", "/css/**", "/js/**", "/img/**", "/posts", "/posts/*", "/oauth2/**", "/login/oauth2/**").permitAll()
+                                .anyRequest().authenticated())
                 .sessionManagement(session -> session
-                    .maximumSessions(1)
-                    .maxSessionsPreventsLogin(false)
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(false)
                         .expiredUrl("/auth/login?expired=true")
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/auth/login")
+                        .userInfoEndpoint(userInfo -> {
+                            userInfo.userService(customizedOAuth2UserService);
+                        })
+                        .defaultSuccessUrl("/home", true)
+                        .failureUrl("/auth/login?error=true")
                 )
                 .cors(cors -> cors.configurationSource(new CorsConfigurationSource() {
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration config = new CorsConfiguration();
-                        config.addAllowedOriginPattern(Collections.singletonList("localhost:8080").toString());
+                        config.addAllowedOriginPattern("http://localhost:8080");
+                        config.addAllowedOriginPattern("https://localhost:8080");
                         config.setAllowCredentials(true);
                         config.addAllowedHeader("*");
                         config.addAllowedMethod("*");
@@ -38,19 +65,27 @@ public class SecurityConfig {
                     }
                 }))
                 .formLogin(form -> form
-                    .loginPage("/auth/login")
+                        .loginPage("/auth/login")
                         .usernameParameter("email")
                         .passwordParameter("password")
-                    .permitAll()
-                    .successHandler((request, response, authentication) -> {
+                        .permitAll()
+                        .successHandler((request, response, authentication) -> {
 
-                        response.sendRedirect("/home");
-                    })
-                    .failureHandler((request, response, authentication) -> {
-                        response.sendRedirect("/auth/login?error=true");
-                    })
+                            response.sendRedirect("/home");
+                        })
+                        .failureHandler((request, response, authentication) -> {
+                            response.sendRedirect("/auth/login?error=true");
+                        })
                 )
-                .csrf(Customizer.withDefaults())
+                .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .deleteCookies("JSESSIONID")
+                .permitAll()
+        )
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/login/oauth2/code/google"))
                 .httpBasic(Customizer.withDefaults());
         return http.build();
     }
