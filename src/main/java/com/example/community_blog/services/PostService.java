@@ -130,10 +130,11 @@ public class PostService {
         }
     }
 
-    public Page<PostModel> getNotablePostsExceptFor(Long postId) {
+    public Page<PostModel> getUserNotablePostsExceptFor(Long userId, Long postId) {
         Pageable pageable = PageRequest.of(0, PAGE_SIZE);
         LocalDateTime now = LocalDateTime.now();
-        return postRepository.findNotableVisiblePost(postId, now, pageable);
+        System.out.println(userId + " " + postId);
+        return postRepository.findNotableVisiblePost(postId, userId, now, pageable);
     }
 
     public Page<PostModel> getUserNotablePosts(Long userId) {

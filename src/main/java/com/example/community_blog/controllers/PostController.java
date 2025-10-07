@@ -90,7 +90,7 @@ public class PostController {
             if (currentUser != null) {
                 model.addAttribute("user", currentUser);
             }
-            Page<PostModel> notablePosts = postService.getNotablePostsExceptFor(postModel.getId());
+            Page<PostModel> notablePosts = postService.getUserNotablePostsExceptFor(postModel.getAuthor().getId(), postModel.getId());
             Page<PostModel> relatedPosts = postService.searchRelatedPostsByTag(postModel.getId(), postModel.getTags());
             List<CommentView> comments = postModel.getComments().stream()
                     .sorted((aComment, bComment) -> bComment.getCreatedAt().compareTo(aComment.getCreatedAt()))

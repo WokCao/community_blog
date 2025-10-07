@@ -26,8 +26,8 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
     @EntityGraph(attributePaths = {"author", "comments", "tags", "likedBy", "dislikedBy"})
     Optional<PostModel> findById(Long id);
 
-    @Query("SELECT p FROM PostModel p WHERE p.id != :id AND (p.autoPublishAt IS NULL OR p.autoPublishAt <= :now) ORDER BY (SIZE(p.likedBy) * 10 + p.shareCount * 5 + p.saveCount * 2) DESC")
-    Page<PostModel> findNotableVisiblePost(@Param("id") Long id, @Param("now") LocalDateTime now, Pageable pageable);
+    @Query("SELECT p FROM PostModel p WHERE p.id != :postId AND p.author.id = :authorId AND (p.autoPublishAt IS NULL OR p.autoPublishAt <= :now) ORDER BY (SIZE(p.likedBy) * 10 + p.shareCount * 5 + p.saveCount * 2) DESC")
+    Page<PostModel> findNotableVisiblePost(@Param("postId") Long postId, @Param("authorId") Long authorId, @Param("now") LocalDateTime now, Pageable pageable);
 
     @Query("SELECT p FROM PostModel p WHERE p.author.id = :authorId ORDER BY (SIZE(p.likedBy) * 10 + p.shareCount * 5 + p.saveCount * 2) DESC")
     Page<PostModel> findAllByAuthorId(@Param("authorId") Long authorId, Pageable pageable);
