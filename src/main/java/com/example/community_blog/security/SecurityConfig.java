@@ -91,7 +91,6 @@ public class SecurityConfig {
                         .permitAll()
                 )
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/login/oauth2/code/google"))
-                .redirectToHttps(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
         return http.build();
     }
