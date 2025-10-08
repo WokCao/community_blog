@@ -2,7 +2,6 @@ package com.example.community_blog.controllers;
 
 import com.example.community_blog.models.PostModel;
 import com.example.community_blog.models.UserModel;
-import com.example.community_blog.services.CommentService;
 import com.example.community_blog.services.PostService;
 import com.example.community_blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +14,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class AuthenticatedController {
     private final PostService postService;
     private final UserService userService;
-    private final CommentService commentService;
 
     @Autowired
-    public AuthenticatedController(PostService postService, UserService userService, CommentService commentService) {
+    public AuthenticatedController(PostService postService, UserService userService) {
         this.postService = postService;
         this.userService = userService;
-        this.commentService = commentService;
     }
 
     @GetMapping("/home")

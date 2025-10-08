@@ -1,0 +1,110 @@
+<div th:fragment="post-form" class="space-y-8">
+    <!-- Post Title -->
+    <div class="mb-8">
+        <label for="postTitle" class="block text-lg font-semibold text-gray-800 mb-2">Post Title</label>
+        <input type="text" name="title" id="postTitle"
+               th:value="${post != null ? post.title : ''}"
+               placeholder="Enter your post title..."
+               class="w-full px-4 py-3 text-xl border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition shadow-sm"
+               required>
+    </div>
+
+    <!-- Post Topics/Tags -->
+    <div class="mb-8">
+        <label for="tagInput" class="block text-lg font-semibold text-gray-800 mb-2">Topics / Tags</label>
+        <div class="flex flex-wrap gap-2 mb-3 min-h-8" id="tagsContainer">
+            <!-- Tags will be added dynamically -->
+        </div>
+        <input type="text" id="tagInput"
+               placeholder="Add topics (press Enter to add)..."
+               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition shadow-sm">
+        <input type="hidden" name="tags" id="topicsHidden" th:value="${post != null ? post.tags : ''}">
+    </div>
+
+    <!-- Editor Container -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <!-- Rich Text Editor Toolbar (fragment) -->
+        <div th:replace="~{fragments/editor-toolbar :: toolbar}"></div>
+
+        <!-- Editor -->
+        <div id="editor"
+             th:utext="${post != null ? post.content : ''}"
+             contenteditable="true"
+             class="min-h-[400px] p-6 bg-white focus:outline-none focus:ring-1 focus:ring-indigo-500 prose max-w-none"
+             style="font-family: Georgia, serif; font-size: 18px; line-height: 1.8;"
+             placeholder="Start writing your amazing post..."></div>
+
+        <!-- Hidden textarea to store content -->
+        <label for="contentHidden"></label><textarea name="content" id="contentHidden"
+                                                     style="display: none;"></textarea>
+    </div>
+
+    <!-- File inputs for media upload -->
+    <input type="file" id="imageInput" name="images" accept="image/*" style="display: none;" multiple>
+    <input type="file" id="videoInput" name="video" accept="video/*" style="display: none;">
+
+    <!-- Post Settings -->
+    <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm mt-8">
+        <h3 class="text-lg font-semibold text-gray-800 mb-4">Post Settings</h3>
+
+        <div class="flex flex-col w-3/4 space-y-4">
+            <div class="hidden">
+                <label for="visibility" class="block text-sm font-medium text-gray-700 mb-2">Visibility</label>
+                <select id="visibility" name="visibility"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    <option value="PUBLIC" selected>Public</option>
+                    <option value="PRIVATE">Private</option>
+                </select>
+            </div>
+
+            <!-- Select an available thumbnail image -->
+            <div>
+                <label for="thumbnailUrl" class="block text-sm font-medium text-gray-700 mb-2">Thumbnail</label>
+                <img id="thumbnailPreview" th:value="${post != null ? post.thumbnailUrl : ''}" alt="Thumbnail Preview"
+                     class="mb-2 max-h-40 w-auto rounded-lg border border-gray-300 object-cover" src="">
+                <select id="thumbnailUrl" name="thumbnailUrl"
+                        th:value="${post != null ? post.thumbnailUrl : ''}"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                    <!-- Options will be populated dynamically -->
+                </select>
+
+            </div>
+
+            <!-- Select a specific time to publish the post automatically -->
+            <div>
+                <label for="autoPublishAt" class="block text-sm font-medium text-gray-700 mb-2">Auto
+                    Publish</label>
+                <input type="datetime-local" id="autoPublishAt" name="autoPublishAt"
+                       th:value="${post != null ? post.autoPublishAt : ''}"
+                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+            </div>
+
+            <div>
+                <label for="allowComment" class="block text-sm font-medium text-gray-700 mb-2">Comment</label>
+                <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="allowComment" name="allowComment" class="sr-only peer"
+                           th:checked="${post != null ? post.allowComment : true}">
+                    <span class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-indigo-600 transition-colors"></span>
+                    <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-5"></span>
+                    <span class="ml-3 text-sm text-gray-700">Allow comments on this post</span>
+                </label>
+            </div>
+
+        </div>
+
+        <div class="mt-6 flex justify-end space-x-4">
+            <button id="saveBtn"
+                    type="button"
+                    class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2 rounded-lg transition flex items-center hover:cursor-pointer">
+                <i class="fas fa-save mr-2"></i>
+                <span>Save Draft</span>
+            </button>
+            <button id="publishBtn"
+                    type="button"
+                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg shadow-sm transition flex items-center hover:cursor-pointer">
+                <i class="fas fa-paper-plane mr-2"></i>
+                <span>Publish</span>
+            </button>
+        </div>
+    </div>
+</div>

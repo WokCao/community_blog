@@ -574,3 +574,29 @@ editor.addEventListener('blur', function () {
 // Initial content update
 updateContent();
 updateToolbarState();
+
+// Detect edit mode
+const isEditMode = window.location.pathname.includes("/edit");
+if (isEditMode) {
+    let existingTags = tagsHidden.value;
+    existingTags = existingTags.replace(/^\[|]$/g, '').trim();
+
+    // Load existing tags
+    if (existingTags) {
+        tags = existingTags.split(',').map(t => t.trim());
+        updateTagsDisplay();
+    }
+
+    // Set a thumbnail preview if it exists
+    const selected = thumbnailWrapper.getAttribute('value') || thumbnailWrapper.value;
+    const pathArray = selected.split(thumbnailBasePath);
+    if (pathArray.length > 1) {
+        const thumbnail = pathArray[1];
+        preview.src = thumbnailBasePath + thumbnail;
+        preview.alt = thumbnail;
+        thumbnailWrapper.value = thumbnail;
+    }
+
+    // Update the hidden content field
+    contentHidden.value = editor.innerHTML;
+}

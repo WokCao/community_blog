@@ -116,7 +116,40 @@ public class PostController {
             model.addAttribute("errorMessage", e.getMessage());
             return "error";
         }
+    }
 
+    @GetMapping("{id}/edit")
+    public String editPost(Model model, @Valid @PathVariable("id") Long postId) {
+        try {
+            PostModel postModel = postService.getPostById(postId);
+
+            if (postModel == null) {
+                model.addAttribute("errorMessage", "Post not found");
+                return "error";
+            }
+
+            UserModel currentUser = userService.getCurrentUser();
+            if (currentUser != null) {
+                model.addAttribute("user", currentUser);
+            }
+
+            model.addAttribute("post", postModel);
+            return "write-post";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "error";
+        }
+    }
+
+    @PostMapping("{id}/edit")
+    public String processEditPost(Model model, @Valid @PathVariable("id") Long postId, @Valid CreatePostRequest createPostRequest) {
+        try {
+            PostModel post = postService.updatePost(postId, createPostRequest);
+            return "redirect:/posts/" + post.getId();
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "error";
+        }
     }
 
     @ResponseBody

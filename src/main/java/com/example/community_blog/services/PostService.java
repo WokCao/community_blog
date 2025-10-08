@@ -84,6 +84,34 @@ public class PostService {
         return saved;
     }
 
+    public PostModel updatePost(Long id, CreatePostRequest createPostRequest) throws BadRequestException {
+        UserModel currentUser = getCurrentUser();
+        if (currentUser == null) {
+            throw new BadRequestException("User not authenticated");
+        }
+
+        PostModel post = postRepository.findById(id).orElse(null);
+        if (post == null) {
+            throw new BadRequestException("Post not found");
+        }
+
+        if (!post.getAuthor().getId().equals(currentUser.getId())) {
+            throw new BadRequestException("You are not allowed to edit this post");
+        }
+
+        post.setTitle(createPostRequest.getTitle());
+        post.setContent(createPostRequest.getContent());
+        post.setAllowComment(createPostRequest.isAllowComment());
+        post.setTags(createPostRequest.getTags());
+        post.setVisibility(createPostRequest.getVisibility());
+        post.setThumbnailUrl(createPostRequest.getThumbnailUrl());
+        if (createPostRequest.getAutoPublishAt() != null) {
+            post.setAutoPublishAt(createPostRequest.getAutoPublishAt());
+        }
+
+        return postRepository.save(post);
+    }
+
     private static PostModel getPostModel(CreatePostRequest createPostRequest, UserModel currentUser) {
         PostModel post = new PostModel();
         post.setTitle(createPostRequest.getTitle());
