@@ -2,6 +2,7 @@ package com.example.community_blog.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
@@ -15,6 +16,9 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @Configuration
 public class SecurityConfig {
     private final CustomizedOAuth2UserService customizedOAuth2UserService;
+
+    @Value("${blog.base.url}")
+    private String BASE_URL;
 
     @Autowired
     public SecurityConfig(CustomizedOAuth2UserService customizedOAuth2UserService) {
@@ -57,6 +61,7 @@ public class SecurityConfig {
                         CorsConfiguration config = new CorsConfiguration();
                         config.addAllowedOriginPattern("http://localhost:8080");
                         config.addAllowedOriginPattern("https://localhost:8080");
+                        config.addAllowedOriginPattern(BASE_URL);
                         config.setAllowCredentials(true);
                         config.addAllowedHeader("*");
                         config.addAllowedMethod("*");

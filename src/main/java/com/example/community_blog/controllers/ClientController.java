@@ -7,6 +7,7 @@ import com.example.community_blog.services.EmailService;
 import com.example.community_blog.services.PostService;
 import com.example.community_blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +24,9 @@ public class ClientController {
     private final EmailService emailService;
     private final PostService postService;
     private final CommentService commentService;
+
+    @Value("${blog.base.url}")
+    private String BASE_URL = "http://localhost:8080";
 
     @Autowired
     public ClientController(UserService userService, EmailService emailService, PostService postService, CommentService commentService) {
@@ -74,7 +78,7 @@ public class ClientController {
             String encodedEmail = Base64.getUrlEncoder()
                     .encodeToString(savedUser.getEmail().getBytes(StandardCharsets.UTF_8));
 
-            String verificationUrl = "http://localhost:8080/auth/verify?token=" + token + "&email=" + encodedEmail;
+            String verificationUrl = BASE_URL + "/auth/verify?token=" + token + "&email=" + encodedEmail;
 
             emailService.sendVerificationEmail(savedUser.getEmail(), verificationUrl);
 
