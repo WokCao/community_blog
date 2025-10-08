@@ -83,14 +83,15 @@ public class SecurityConfig {
                         })
                 )
                 .logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
-                .invalidateHttpSession(true)
-                .clearAuthentication(true)
-                .deleteCookies("JSESSIONID")
-                .permitAll()
-        )
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .deleteCookies("JSESSIONID")
+                        .permitAll()
+                )
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/login/oauth2/code/google"))
+                .redirectToHttps(Customizer.withDefaults())
                 .httpBasic(Customizer.withDefaults());
         return http.build();
     }
