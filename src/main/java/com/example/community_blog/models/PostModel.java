@@ -71,6 +71,19 @@ public class PostModel {
     @Column
     private LocalDateTime autoPublishAt;
 
+    @Column
+    private String thumbnailUrl;
+
+    @Transient
+    public String getThumbnailUrl() {
+        if (thumbnailUrl == null) {
+            return "/img/thumbnail_1.jpg";
+        } else if (thumbnailUrl.startsWith("https")) {
+            return thumbnailUrl;
+        }
+        return "/img/" + thumbnailUrl;
+    }
+
     @Transient
     public String getStringAutoPublishAt() {
         // Format: 01-01-2021 00:00:00

@@ -472,9 +472,53 @@ window.removeTag = function (index) {
 // Save and publish functionality
 document.getElementById('saveBtn').addEventListener('click', () => {
     updateContent();
-    // Add save draft logic here
-    alert('Draft saved!');
+
+    const form = document.getElementById('postForm');
+    const visibilitySelect = document.getElementById('visibility');
+    const postTitle = document.getElementById('postTitle');
+
+    visibilitySelect.value = 'PRIVATE';
+    if (postTitle.value.trim() === '') {
+        postTitle.value = 'Untitled Post';
+    }
+
+    if (Number(tags.length) === 0) {
+        tagInput.focus();
+        return;
+    }
+
+    if (contentHidden.value.trim() === '') {
+        editor.focus();
+        return;
+    }
+
+    form.submit();
 });
+
+document.getElementById('publishBtn').addEventListener('click', () => {
+    updateContent();
+
+    const form = document.getElementById('postForm');
+    const visibilitySelect = document.getElementById('visibility');
+    const postTitle = document.getElementById('postTitle');
+
+    visibilitySelect.value = 'PUBLIC';
+    if (postTitle.value.trim() === '') {
+        postTitle.value = 'Untitled Post';
+    }
+
+    if (Number(tags.length) === 0) {
+        tagInput.focus();
+        return;
+    }
+
+    if (contentHidden.value.trim() === '') {
+        editor.focus();
+        return;
+    }
+
+    form.submit();
+})
 
 // Placeholder functionality
 editor.addEventListener('focus', function () {
