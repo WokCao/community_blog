@@ -32,4 +32,8 @@ public class CreatePostRequest {
     private Visibility visibility;
 
     private LocalDateTime autoPublishAt;
+
+    @NotNull(message = "Post thumbnail url cannot be null")
+    @NotEmpty(message = "Thumbnail url cannot be empty")
+    private String thumbnailUrl;
 }

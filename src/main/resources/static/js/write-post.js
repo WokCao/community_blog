@@ -6,6 +6,44 @@ document.getElementById("backgroundColorWrapper").addEventListener("click", func
     document.getElementById("backgroundColor").click();
 });
 
+const thumbnailBasePath = '/img/';
+const thumbnailData = [
+    ['thumbnail_1.jpg', 'Clean, modern style'],
+    ['thumbnail_2.jpg', 'Organic, hand-drawn style'],
+    ['thumbnail_3.jpg', 'Vibrant, colorful abstract style'],
+    ['thumbnail_4.jpg', 'Minimalist, subtle textures style'],
+    ['thumbnail_5.jpg', 'Digital, tech-focused style'],
+    ['thumbnail_6.jpg', 'Artistic, painted style'],
+    ['thumbnail_7.jpg', 'Vintage, retro aesthetic'],
+    ['thumbnail_8.jpg', 'Playful, cartoon-like style'],
+    ['thumbnail_9.jpg', 'Elegant, sophisticated style'],
+    ['thumbnail_10.jpg', 'Cozy, community-focused style'],
+]
+
+// Thumbnail options
+const thumbnailWrapper = document.getElementById('thumbnailUrl');
+const preview = document.getElementById('thumbnailPreview');
+thumbnailWrapper.innerHTML = '';
+
+// Add options dynamically
+thumbnailData.forEach(([filename, description]) => {
+    const option = document.createElement('option');
+    option.value = filename;
+    option.textContent = description;
+    thumbnailWrapper.appendChild(option);
+});
+
+// Function to update preview image
+function updatePreview() {
+    const selectedFile = thumbnailWrapper.value;
+    preview.src = thumbnailBasePath + selectedFile;
+    preview.alt = selectedFile;
+}
+
+// Show preview when selection changes
+thumbnailWrapper.addEventListener('change', updatePreview);
+thumbnailWrapper.value = 'thumbnail_1.jpg';
+updatePreview();
 
 // Rich Text Editor JavaScript
 const editor = document.getElementById('editor');

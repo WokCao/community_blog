@@ -92,6 +92,7 @@ public class PostService {
         post.setTags(createPostRequest.getTags());
         post.setAuthor(currentUser);
         post.setVisibility(createPostRequest.getVisibility());
+        post.setThumbnailUrl(createPostRequest.getThumbnailUrl());
 
         if (createPostRequest.getAutoPublishAt() != null) {
             post.setAutoPublishAt(createPostRequest.getAutoPublishAt());
