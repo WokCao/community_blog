@@ -5,6 +5,7 @@ import com.example.community_blog.dto.CreatePostRequest;
 import com.example.community_blog.models.CommentModel;
 import com.example.community_blog.models.PostModel;
 import com.example.community_blog.models.UserModel;
+import com.example.community_blog.models.Visibility;
 import com.example.community_blog.repositories.PostRepository;
 import com.example.community_blog.repositories.UserRepository;
 import org.apache.coyote.BadRequestException;
@@ -20,6 +21,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 
 @Service
@@ -49,7 +51,7 @@ public class PostService {
         }
 
         LocalDateTime now = LocalDateTime.now();
-        if (post.getAutoPublishAt() == null || post.getAutoPublishAt().isBefore(now)) {
+        if ((post.getAutoPublishAt() == null || post.getAutoPublishAt().isBefore(now)) && Objects.equals(post.getVisibility(), Visibility.PUBLIC)) {
             // Increment view count via bulk update to avoid triggering @PreUpdate (and thus not touch updatedAt)
             postRepository.incrementViewCount(postId);
             // Reflect the increment locally for the returned object without persisting it again
@@ -71,24 +73,30 @@ public class PostService {
             throw new BadRequestException("User not authenticated");
         }
 
+        PostModel post = getPostModel(createPostRequest, currentUser);
+        PostModel saved = postRepository.save(post);
+
+        if (saved.getAutoPublishAt() == null && saved.getVisibility() == Visibility.PUBLIC) {
+            BlogPublishedEvent event = new BlogPublishedEvent(saved.getId(), currentUser.getId(), saved.getTitle());
+            redisTemplate.convertAndSend("blog-published", event);
+        }
+
+        return saved;
+    }
+
+    private static PostModel getPostModel(CreatePostRequest createPostRequest, UserModel currentUser) {
         PostModel post = new PostModel();
         post.setTitle(createPostRequest.getTitle());
         post.setContent(createPostRequest.getContent());
         post.setAllowComment(createPostRequest.isAllowComment());
         post.setTags(createPostRequest.getTags());
         post.setAuthor(currentUser);
+        post.setVisibility(createPostRequest.getVisibility());
 
         if (createPostRequest.getAutoPublishAt() != null) {
             post.setAutoPublishAt(createPostRequest.getAutoPublishAt());
         }
-        PostModel saved = postRepository.save(post);
-
-        if (saved.getAutoPublishAt() == null) {
-            BlogPublishedEvent event = new BlogPublishedEvent(saved.getId(), currentUser.getId(), saved.getTitle());
-            redisTemplate.convertAndSend("blog-published", event);
-        }
-
-        return saved;
+        return post;
     }
 
     public Page<PostModel> getLatestPosts() {
@@ -133,7 +141,6 @@ public class PostService {
     public Page<PostModel> getUserNotablePostsExceptFor(Long userId, Long postId) {
         Pageable pageable = PageRequest.of(0, PAGE_SIZE);
         LocalDateTime now = LocalDateTime.now();
-        System.out.println(userId + " " + postId);
         return postRepository.findNotableVisiblePost(postId, userId, now, pageable);
     }
 

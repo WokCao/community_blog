@@ -26,7 +26,7 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
     @EntityGraph(attributePaths = {"author", "comments", "tags", "likedBy", "dislikedBy"})
     Optional<PostModel> findById(Long id);
 
-    @Query("SELECT p FROM PostModel p WHERE p.id != :postId AND p.author.id = :authorId AND (p.autoPublishAt IS NULL OR p.autoPublishAt <= :now) ORDER BY (SIZE(p.likedBy) * 10 + p.shareCount * 5 + p.saveCount * 2) DESC")
+    @Query("SELECT p FROM PostModel p WHERE p.id != :postId AND p.author.id = :authorId AND p.visibility = 'PUBLIC' AND (p.autoPublishAt IS NULL OR p.autoPublishAt <= :now) ORDER BY (SIZE(p.likedBy) * 10 + p.shareCount * 5 + p.saveCount * 2) DESC")
     Page<PostModel> findNotableVisiblePost(@Param("postId") Long postId, @Param("authorId") Long authorId, @Param("now") LocalDateTime now, Pageable pageable);
 
     @Query("SELECT p FROM PostModel p WHERE p.author.id = :authorId ORDER BY (SIZE(p.likedBy) * 10 + p.shareCount * 5 + p.saveCount * 2) DESC")
@@ -34,7 +34,7 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
 
     @Query("""
                 SELECT p FROM PostModel p
-                WHERE (p.autoPublishAt IS NULL OR p.autoPublishAt <= :now) AND (:query IS NULL OR :query = ''
+                WHERE p.visibility = 'PUBLIC' AND (p.autoPublishAt IS NULL OR p.autoPublishAt <= :now) AND (:query IS NULL OR :query = ''
                     OR LOWER(p.title) LIKE LOWER(CONCAT('%', :query, '%'))
                     OR LOWER(p.content) LIKE LOWER(CONCAT('%', :query, '%'))
                     OR LOWER(p.author.fullName) LIKE LOWER(CONCAT('%', :query, '%'))
@@ -45,7 +45,7 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
 
     @Query("""
                 SELECT p FROM PostModel p
-                WHERE (p.autoPublishAt IS NULL OR p.autoPublishAt <= :now) AND (:query IS NULL OR :query = ''
+                WHERE p.visibility = 'PUBLIC' AND (p.autoPublishAt IS NULL OR p.autoPublishAt <= :now) AND (:query IS NULL OR :query = ''
                     OR LOWER(p.title) LIKE LOWER(CONCAT('%', :query, '%'))
                     OR LOWER(p.author.fullName) LIKE LOWER(CONCAT('%', :query, '%'))
                     OR EXISTS (SELECT 1 FROM p.tags t WHERE LOWER(t) LIKE LOWER(CONCAT('%', :query, '%')))
@@ -56,7 +56,7 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
 
     @Query("""
                 SELECT p FROM PostModel p
-                WHERE (p.autoPublishAt IS NULL OR p.autoPublishAt <= :now) AND (:query IS NULL OR :query = ''
+                WHERE p.visibility = 'PUBLIC' AND (p.autoPublishAt IS NULL OR p.autoPublishAt <= :now) AND (:query IS NULL OR :query = ''
                     OR LOWER(p.title) LIKE LOWER(CONCAT('%', :query, '%'))
                     OR LOWER(p.author.fullName) LIKE LOWER(CONCAT('%', :query, '%'))
                     OR EXISTS (SELECT 1 FROM p.tags t WHERE LOWER(t) LIKE LOWER(CONCAT('%', :query, '%')))
@@ -71,7 +71,7 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
                     FROM posts p
                     JOIN post_tags t ON p.id = t.post_id,
                     unnest(ARRAY[:keywords]) kw
-                    WHERE p.id != :id AND (p.auto_publish_at IS NULL OR p.auto_publish_at <= :now)
+                    WHERE p.id != :id AND (p.auto_publish_at IS NULL OR p.auto_publish_at <= :now) AND p.visibility = 'PUBLIC'
                     GROUP BY p.id
                     HAVING SUM(SIMILARITY(t.tags, kw)) > 0.3
                     """,
@@ -81,7 +81,7 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
                         FROM posts p
                         JOIN post_tags t ON p.id = t.post_id,
                         unnest(ARRAY[:keywords]) kw
-                        WHERE p.id != :id AND (p.auto_publish_at IS NULL OR p.auto_publish_at <= :now)
+                        WHERE p.id != :id AND (p.auto_publish_at IS NULL OR p.auto_publish_at <= :now) AND p.visibility = 'PUBLIC'
                         GROUP BY p.id
                         HAVING SUM(SIMILARITY(t.tags, kw)) > 0.3
                     ) AS matching_posts
@@ -96,7 +96,7 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
     @Query("SELECT COALESCE(SUM(SIZE(p.likedBy)), 0) FROM PostModel p WHERE p.author.id = :authorId")
     Long sumLikeCountByAuthorId(@Param("authorId") Long authorId);
 
-    @Query("SELECT p FROM PostModel p WHERE p.autoPublishAt IS NULL OR p.autoPublishAt <= :now")
+    @Query("SELECT p FROM PostModel p WHERE p.visibility = 'PUBLIC' AND (p.autoPublishAt IS NULL OR p.autoPublishAt <= :now)")
     Page<PostModel> findLatestVisiblePosts(@Param("now") LocalDateTime now, Pageable pageable);
 
     @Query("SELECT p FROM PostModel p WHERE p.autoPublishAt IS NOT NULL")
