@@ -111,7 +111,7 @@
                                               th:text="${post.dislikeCount}"></span>
                                     </button>
                                 </form>
-                                <a th:if="${user.id == post.author.id}" th:href="@{/posts/{id}/edit(id=${post.id})}" class="px-4 py-2 rounded-lg transition hover:cursor-pointer bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-700">
+                                <a th:if="${user != null && user.id == post.author.id}" th:href="@{/posts/{id}/edit(id=${post.id})}" class="px-4 py-2 rounded-lg transition hover:cursor-pointer bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-700">
                                     <i class="fa-solid fa-pencil"></i>
                                 </a>
                             </div>

@@ -101,4 +101,6 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
 
     @Query("SELECT p FROM PostModel p WHERE p.autoPublishAt IS NOT NULL")
     List<PostModel> findReadyToPublish();
+
+    boolean existsByTitle(String title);
 }
