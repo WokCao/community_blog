@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         a.innerHTML = `
           <div class="flex-shrink-0 w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center mr-3">
-              <img src="${notif.avatarUrl}" alt="Avatar" class="w-6 h-6 rounded-full object-cover">
+              <img src="${notif.avatarUrl}" alt="Avatar" loading="lazy" class="w-6 h-6 rounded-full object-cover">
           </div>
           <div class="flex-1 line-clamp-3">
               <span class="font-semibold text-indigo-700">${notif.author}</span>

@@ -32,7 +32,7 @@
             <article class="bg-white rounded-xl shadow-sm p-8 mb-8">
                 <div class="mb-6">
                     <div class="flex items-center space-x-4 mb-4">
-                        <img th:src="${post.author.avatarUrl}" th:alt="${post.author.fullName}"
+                        <img th:src="${post.author.avatarUrl}" th:alt="${post.author.fullName}" loading="lazy"
                              class="w-12 h-12 rounded-full object-cover">
                         <div class="flex-1">
                             <h3 class="font-semibold text-gray-900" th:text="${post.author.fullName}">Author Name</h3>
@@ -142,7 +142,7 @@
                 <!-- Add Comment Form -->
                 <form class="add-comment-form mb-8" th:data-post-id="${post.id}">
                     <div class="flex space-x-4">
-                        <img th:src="${user.avatarUrl}" th:alt="${user.fullName}"
+                        <img th:src="${user.avatarUrl}" th:alt="${user.fullName}" loading="lazy"
                              class="w-10 h-10 rounded-full object-cover flex-shrink-0">
                         <div class="flex-1">
                             <label>
@@ -165,6 +165,7 @@
                         <div class="m-0 p-0 w-full flex space-x-4">
                             <img th:src="${commentView.comment.commenter.avatarUrl}"
                                  th:alt="${commentView.comment.commenter.fullName}"
+                                 loading="lazy"
                                  class="w-10 h-10 rounded-full object-cover flex-shrink-0">
                             <div class="flex-1">
                                 <div class="rounded-lg"
@@ -235,7 +236,7 @@
                 <h2 class="text-2xl font-bold text-gray-900 mb-6">Related Posts</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <article th:each="relatedPost : ${relatedPosts}" class="group cursor-pointer">
-                        <img th:src="${relatedPost.thumbnailUrl}" th:alt="${relatedPost.title}"
+                        <img th:src="${relatedPost.thumbnailUrl}" th:alt="${relatedPost.title}" loading="lazy"
                              class="w-full h-20 object-cover rounded-lg mb-4">
                         <a th:href="@{'/posts/' + ${relatedPost.id}}" class="block">
                             <h3 class="font-semibold text-gray-900 group-hover:text-indigo-600 transition mb-2"
@@ -267,7 +268,7 @@
                     <article th:each="notablePost : ${notablePosts}" class="group">
                         <a th:href="@{'/posts/' + ${notablePost.id}}"
                            class="flex space-x-4 p-4 rounded-lg hover:bg-gray-50 transition">
-                            <img th:src="${notablePost.thumbnailUrl}" th:alt="${notablePost.title}"
+                            <img th:src="${notablePost.thumbnailUrl}" th:alt="${notablePost.title}" loading="lazy"
                                  class="w-20 h-20 object-cover rounded-lg flex-shrink-0">
                             <div class="flex-1">
                                 <h3 class="font-semibold text-gray-900 group-hover:text-indigo-600 transition mb-1"

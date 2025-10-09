@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const template = `
                 <div class="m-0 p-0 w-full flex space-x-4">
-                    <img src="${commentView.comment.commenter.avatarUrl}" alt="${commentView.comment.commenter.fullName}"
+                    <img src="${commentView.comment.commenter.avatarUrl}" alt="${commentView.comment.commenter.fullName}" loading="lazy"
                          class="w-10 h-10 rounded-full object-cover flex-shrink-0">
                     <div class="flex-1">
                         <div class="rounded-lg bg-gray-50 p-4">

@@ -60,7 +60,7 @@
             <!-- Select an available thumbnail image -->
             <div>
                 <label for="thumbnailUrl" class="block text-sm font-medium text-gray-700 mb-2">Thumbnail</label>
-                <img id="thumbnailPreview" th:value="${post != null ? post.thumbnailUrl : ''}" alt="Thumbnail Preview"
+                <img id="thumbnailPreview" th:value="${post != null ? post.thumbnailUrl : ''}" alt="Thumbnail Preview" loading="lazy"
                      class="mb-2 max-h-40 w-auto rounded-lg border border-gray-300 object-cover" src="">
                 <select id="thumbnailUrl" name="thumbnailUrl"
                         th:value="${post != null ? post.thumbnailUrl : ''}"

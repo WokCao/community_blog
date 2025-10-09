@@ -98,7 +98,7 @@
                     <div class="flex-1">
 <!--                        Author and Time-->
                         <div class="flex items-center space-x-3 mb-3">
-                            <img th:src="${post.author.avatarUrl}" th:alt="${post.author.fullName}"
+                            <img th:src="${post.author.avatarUrl}" th:alt="${post.author.fullName}" loading="lazy"
                                  class="w-10 h-10 rounded-full object-cover">
                             <div>
                                 <p class="text-sm font-medium text-gray-900" th:text="${post.author.fullName}"></p>
@@ -109,7 +109,7 @@
                         <div class="w-full flex space-x-4">
                             <!-- Thumbnail -->
                             <div class="w-1/12">
-                                <img th:src="${post.thumbnailUrl}" th:alt="${post.title}"
+                                <img th:src="${post.thumbnailUrl}" th:alt="${post.title}" loading="lazy"
                                      class="w-auto h-full object-cover rounded-lg">
                             </div>
 

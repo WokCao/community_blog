@@ -42,7 +42,7 @@
                 <!-- Profile Avatar -->
                 <div class="text-center mb-6">
                     <div class="relative inline-block">
-                        <img th:src="${user.avatarUrl}" th:alt="${user.fullName}"
+                        <img th:src="${user.avatarUrl}" th:alt="${user.fullName}" loading="lazy"
                              class="w-24 h-24 rounded-full object-cover border border-gray-200 shadow-sm">
                         <button onclick="openAvatarPicker()"
                                 type="button"
