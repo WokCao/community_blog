@@ -11,8 +11,8 @@
                 </div>
                 <div class="flex space-x-6">
                     <a th:if="${user != null}" th:href="@{/home}" class="text-sm lg:text-base text-muted-foreground hover:text-foreground transition-colors hover:bg-gray-200 rounded-lg hover:text-sky-700 py-1 px-3">Home</a>
-                    <a th:if="${user != null}" th:href="@{/write-post}" class="hidden lg:block text-sm lg:text-base text-muted-foreground hover:text-foreground transition-colors hover:bg-gray-200 rounded-lg hover:text-sky-700 py-1 px-3">Publish</a>
-                    <a th:href="@{/posts}" class="hidden lg:block text-sm lg:text-base text-muted-foreground hover:text-foreground transition-colors hover:bg-gray-200 rounded-lg hover:text-sky-700 py-1 px-3">Post</a>
+                    <a th:if="${user != null}" th:href="@{/write-post}" class="block text-sm lg:text-base text-muted-foreground hover:text-foreground transition-colors hover:bg-gray-200 rounded-lg hover:text-sky-700 py-1 px-3">Publish</a>
+                    <a th:href="@{/posts}" class="block text-sm lg:text-base text-muted-foreground hover:text-foreground transition-colors hover:bg-gray-200 rounded-lg hover:text-sky-700 py-1 px-3">Post</a>
                 </div>
             </div>
 
