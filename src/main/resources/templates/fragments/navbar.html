@@ -75,8 +75,8 @@
             </button>
         </div>
         <div class="p-4 space-y-3">
-            <a th:href="@{/home}" class="block py-2 px-3 rounded-lg hover:bg-gray-100">Home</a>
-            <a th:href="@{/write-post}" class="block py-2 px-3 rounded-lg hover:bg-gray-100">Publish</a>
+            <a th:if="${user != null}" th:href="@{/home}" class="block py-2 px-3 rounded-lg hover:bg-gray-100">Home</a>
+            <a th:if="${user != null}" th:href="@{/write-post}" class="block py-2 px-3 rounded-lg hover:bg-gray-100">Publish</a>
             <a th:href="@{/posts}" class="block py-2 px-3 rounded-lg hover:bg-gray-100">Posts</a>
 
             <div th:if="${user != null}" class="pt-4 border-t border-gray-200">
