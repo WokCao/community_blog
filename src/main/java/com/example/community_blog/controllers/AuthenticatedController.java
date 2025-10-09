@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 @Controller
@@ -57,7 +58,7 @@ public class AuthenticatedController {
         return "write-post";
     }
 
-    @GetMapping("/bot/fetch")
+    @PostMapping("/bot/fetch")
     public ResponseEntity<String> triggerBot(@RequestHeader("X-BOT-KEY") String headerSecret) {
         if (!headerBotSecret.equals(headerSecret)) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Forbidden");

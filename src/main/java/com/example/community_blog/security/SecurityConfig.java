@@ -41,7 +41,7 @@ public class SecurityConfig {
                         )
                 )
                 .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/auth/**", "/", "/css/**", "/js/**", "/img/**", "/posts", "/posts/*", "/oauth2/**", "/login/oauth2/**").permitAll()
+                        auth.requestMatchers("/auth/**", "/", "/css/**", "/js/**", "/img/**", "/posts", "/posts/*", "/oauth2/**", "/login/oauth2/**", "/bot/fetch").permitAll()
                                 .anyRequest().authenticated())
                 .sessionManagement(session -> session
                         .maximumSessions(1)
@@ -90,7 +90,7 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/login/oauth2/code/google"))
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/login/oauth2/code/google", "/bot/fetch"))
                 .httpBasic(Customizer.withDefaults());
         return http.build();
     }
