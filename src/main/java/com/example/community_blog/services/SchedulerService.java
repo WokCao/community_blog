@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -122,17 +121,8 @@ public class SchedulerService {
     }
 
     private Set<String> generateTags(String title, String content) {
-        Set<String> tags = new HashSet<>();
-        String text = (title + " " + content).toLowerCase();
-        if (text.contains("java")) tags.add("Java");
-        if (text.contains("python")) tags.add("Python");
-        if (text.contains("spring")) tags.add("Spring");
-        if (text.contains("typescript") || text.contains("javascript")) tags.add("JavaScript");
-        if (text.contains("ai") || text.contains("machine learning")) tags.add("AI");
-        if (text.contains("data structure")) tags.add("Data Structure");
-        if (text.contains("algorithm")) tags.add("Algorithm");
-        if (tags.isEmpty()) tags.add("Programming");
-        return tags;
+        AIService ai = new AIService();
+        return ai.extractTags(title, content);
     }
 
     private UserModel getBotUser() {
