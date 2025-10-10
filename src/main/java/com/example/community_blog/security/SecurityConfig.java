@@ -36,7 +36,7 @@ public class SecurityConfig {
                                                 "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; " +
                                                 "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; " +
                                                 "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; " +
-                                                "connect-src 'self' https://cdn.jsdelivr.net;"
+                                                "connect-src 'self' ws://localhost:8080 wss://localhost:8080 https://cdn.jsdelivr.net;"
                                 )
                         )
                 )
