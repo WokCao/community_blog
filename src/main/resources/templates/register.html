@@ -10,15 +10,15 @@
 <div class="max-w-md w-full space-y-8">
     <!-- Header -->
     <div class="text-center">
-        <h2 class="mt-6 text-3xl font-bold text-gray-900">Join our community</h2>
-        <p class="mt-2 text-sm text-gray-600">
+        <h2 class="mt-6 text-lg lg:text-3xl font-bold text-gray-900">Join our community</h2>
+        <p class="mt-2 text-xs lg:text-sm text-gray-600">
             Create your Community Blog account and start sharing
         </p>
     </div>
 
     <!-- Register Form -->
     <form class="mt-8 space-y-6" th:action="@{/auth/register}" method="post">
-        <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100">
+        <div class="bg-white p-4 lg:p-8 rounded-xl shadow-lg border border-gray-100">
             <div class="space-y-6">
                 <!-- Display error or successful message if present -->
                 <div th:if="${errorMessage}" class="text-center text-red-500">
@@ -38,7 +38,7 @@
                             name="fullName"
                             type="text"
                             required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                            class="text-xs lg:text-base w-full px-4 py-2 lg:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                             placeholder="Enter your full name"
                     >
                 </div>
@@ -53,7 +53,7 @@
                             name="email"
                             type="email"
                             required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                            class="text-xs lg:text-base w-full px-4 py-2 lg:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                             placeholder="Enter your email"
                     >
                 </div>
@@ -69,7 +69,7 @@
                             type="password"
                             required
                             minlength="8"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                            class="text-xs lg:text-base w-full px-4 py-2 lg:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                             placeholder="Create a password (min. 8 characters)"
                     >
                     <p class="mt-1 text-xs text-gray-500">
@@ -87,7 +87,7 @@
                             name="confirmPassword"
                             type="password"
                             required
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
+                            class="text-xs lg:text-base w-full px-4 py-2 lg:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
                             placeholder="Confirm your password"
                     >
                 </div>
@@ -99,9 +99,9 @@
                             name="terms"
                             type="checkbox"
                             required
-                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded mt-1"
+                            class="h-3 lg:h-4 w-3 lg:w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded mt-1"
                     >
-                    <label for="terms" class="ml-2 block text-sm text-gray-700">
+                    <label for="terms" class="ml-2 block text-xs text-gray-700">
                         I agree to the
                         <a href="#" class="text-indigo-600 hover:text-indigo-500 transition-colors">Terms of Service</a>
                         and
@@ -112,25 +112,25 @@
                 <!-- Submit Button -->
                 <button
                         type="submit"
-                        class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+                        class="w-full flex justify-center py-2 lg:py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
                 >
                     Create account
                 </button>
 
                 <!-- Button to make a request (send another link to the email to confirm the account) -->
-                <div class="mt-4 text-center w-3/4 mx-auto hover:cursor-pointer hover:text-blue-500 text-black transition-colors">
-                    <a id="" class="text-sm font-medium ">
+                <div th:if="${errorMessage != null}" class="mt-4 text-center w-3/4 mx-auto hover:cursor-pointer hover:text-blue-500 text-black transition-colors">
+                    <a id="" class="text-xs lg:text-sm font-medium ">
                         Send another link to confirm your account
                     </a>
                 </div>
 
                 <!-- Social Login Options -->
                 <div class="mt-4 flex flex-col space-y-1">
-                    <p class="text-sm text-gray-600">
+                    <p class="text-xs lg:text-sm text-gray-600">
                         Or continue with:
                     </p>
                     <a th:href="@{/oauth2/authorization/google}"
-                       class="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition">
+                       class="flex items-center justify-center gap-2 bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition text-sm lg:text-base">
                         <i class="fa-brands fa-google"></i> Continue with Google
                     </a>
                 </div>

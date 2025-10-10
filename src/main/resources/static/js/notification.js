@@ -7,6 +7,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const token = document.querySelector('meta[name="_csrf"]').getAttribute("content");
     const header = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
 
+    // WebSocket setup
+    const socket = new SockJS('/ws');
+    const stompClient = Stomp.over(socket);
+    stompClient.connect({}, () => {
+        stompClient.subscribe("/user/queue/notifications", (message) => {
+            const notif = JSON.parse(message.body);
+            addNotificationItem(notif);
+            notifDot.classList.remove("hidden");
+            notifList.classList.remove("hidden");
+        });
+    });
+
     if (notifBtn === null || notifList === null || notifItems === null || notifDot === null || viewAllBtn === null) {
         return;
     }
@@ -46,19 +58,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 });
         }
-    });
-
-
-    // WebSocket setup
-    const socket = new SockJS('/ws');
-    const stompClient = Stomp.over(socket);
-    stompClient.connect({}, () => {
-        stompClient.subscribe("/user/queue/notifications", (message) => {
-            const notif = JSON.parse(message.body);
-            addNotificationItem(notif);
-            notifDot.classList.remove("hidden");
-            notifList.classList.remove("hidden");
-        });
     });
 
     // Helper to add notification item

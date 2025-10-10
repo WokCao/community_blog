@@ -39,7 +39,9 @@
             </div>
         </div>
         <div class="border-t border-gray-200 mt-8 pt-8 text-center col-span-2">
-            <p class="text-sm lg:text-base text-gray-600">&copy; 2024 Community Blog. All rights reserved.</p>
+            <p class="text-sm lg:text-base text-gray-600">
+                &copy; <span th:text="${#dates.format(#dates.createNow(), 'yyyy')}"></span> Community Blog. All rights reserved.
+            </p>
         </div>
     </div>
 </footer>

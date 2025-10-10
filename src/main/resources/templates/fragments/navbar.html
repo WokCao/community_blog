@@ -38,12 +38,23 @@
                             <span id="notif-dot"
                                   class="absolute bottom-0 -right-1 w-2 h-2 bg-red-600 rounded-full hidden"></span>
                         </button>
+
+                        <div id="notif-list"
+                             class="absolute right-0 mt-2 w-80 bg-white border border-gray-200 shadow-lg rounded-lg hidden z-50">
+                            <div class="px-4 py-2 font-semibold text-gray-700 border-b border-b-gray-300">Notifications</div>
+                            <ul id="notif-items" class="max-h-80 overflow-y-auto divide-y divide-gray-100">
+
+                            </ul>
+                            <div class="px-4 py-2 text-center" id="view-all-btn">
+                                <a th:href="@{/notifications}" class="text-sm text-indigo-600 hover:underline">View all</a>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="hidden lg:flex items-center space-x-2 text-gray-700 hover:text-gray-900 hover:cursor-pointer">
                         <img th:src="${user.avatarUrl}" th:alt="${user.fullName}" loading="lazy"
                              class="w-8 h-8 rounded-full object-cover">
-                        <a th:href="@{/users/me}" th:text="${user.fullName}"></a>
+                        <a th:href="@{/users/me}" th:text="${user.fullName}" class="text-sm lg:text-base"></a>
                     </div>
 
                     <form th:action="@{/logout}" method="post" class="hidden lg:block">
@@ -75,21 +86,21 @@
             </button>
         </div>
         <div class="p-4 space-y-3">
-            <a th:if="${user != null}" th:href="@{/home}" class="block py-2 px-3 rounded-lg hover:bg-gray-100">Home</a>
-            <a th:if="${user != null}" th:href="@{/write-post}" class="block py-2 px-3 rounded-lg hover:bg-gray-100">Publish</a>
-            <a th:href="@{/posts}" class="block py-2 px-3 rounded-lg hover:bg-gray-100">Posts</a>
+            <a th:if="${user != null}" th:href="@{/home}" class="block py-2 px-3 rounded-lg hover:bg-gray-100 text-sm lg:text-base">Home</a>
+            <a th:if="${user != null}" th:href="@{/write-post}" class="block py-2 px-3 rounded-lg hover:bg-gray-100 text-sm lg:text-base">Publish</a>
+            <a th:href="@{/posts}" class="block py-2 px-3 rounded-lg hover:bg-gray-100 text-sm lg:text-base">Posts</a>
 
             <div th:if="${user != null}" class="pt-4 border-t border-gray-200">
-                <a th:href="@{/users/me}" class="block py-2 px-3 rounded-lg hover:bg-gray-100">Profile</a>
+                <a th:href="@{/users/me}" class="block py-2 px-3 rounded-lg hover:bg-gray-100 text-sm lg:text-base">Profile</a>
                 <form th:action="@{/logout}" method="post">
-                    <button type="submit" class="w-full text-left py-2 px-3 rounded-lg hover:bg-gray-100">Logout
+                    <button type="submit" class="w-full text-left py-2 px-3 rounded-lg hover:bg-gray-100 text-sm lg:text-base">Logout
                     </button>
                 </form>
             </div>
 
             <div th:unless="${user != null}" class="pt-4 border-t border-gray-200">
-                <a th:href="@{/auth/login}" class="block py-2 px-3 rounded-lg hover:bg-gray-100">Login</a>
-                <a th:href="@{/auth/register}" class="block py-2 px-3 rounded-lg hover:bg-gray-100">Register</a>
+                <a th:href="@{/auth/login}" class="block py-2 px-3 rounded-lg hover:bg-gray-100 text-sm lg:text-base">Login</a>
+                <a th:href="@{/auth/register}" class="block py-2 px-3 rounded-lg hover:bg-gray-100 text-sm lg:text-base">Register</a>
             </div>
         </div>
     </div>
