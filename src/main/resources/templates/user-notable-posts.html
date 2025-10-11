@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <title th:text="${postUserId} + ' - User Posts - Community Blog'"></title>
+    <link th:href="@{/css/output.css}" rel="stylesheet">
+    <script th:src="@{/js/tag-colors.js}" defer></script>
+    <script th:src="@{/js/tag-overflow.js}" defer></script>
+    <script th:src="@{/js/notification.js}" defer></script>
+    <script th:src="@{/js/sidebar.js}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+
+<!--Main Content-->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!--    Search and Filter Section-->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 mb-8">
+        <form th:action="@{/users/{userId}/notable-posts(userId=${postUserId})}" method="get" class="space-y-4">
+            <!--            Search Bar-->
+            <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </div>
+                <label>
+                    <input type="text" name="search" th:value="${search}"
+                           placeholder="Search by tags, post's title, author ..."
+                           class="text-xs lg:text-base block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900 placeholder-gray-400">
+                </label>
+            </div>
+
+            <!--            Filter Options-->
+            <div class="flex flex-col sm:flex-row gap-4">
+                <!--                Sort By-->
+                <div class="flex-1">
+                    <label for="sortBy" class="block text-xs lg:text-sm font-medium text-gray-700 mb-2">Sort By</label>
+                    <select id="sortBy" name="sortBy" th:value="${sortBy}"
+                            class="text-xs lg:text-base block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900">
+                        <option value="createdAt" th:selected="${sortBy == 'createdAt' or sortBy == null}">
+                            Latest Posts
+                        </option>
+                        <option value="highPoint" th:selected="${sortBy == 'highPoint'}">
+                            High Point (Most Popular)
+                        </option>
+                    </select>
+                </div>
+
+                <!--                Sort Direction-->
+                <div class="flex-1">
+                    <label for="sortDir" class="block text-xs lg:text-sm font-medium text-gray-700 mb-2">Sort
+                        Direction</label>
+                    <select id="sortDir" name="sortDir" th:value="${sortDir}"
+                            class="text-xs lg:text-base block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-gray-900">
+                        <option value="desc" th:selected="${sortDir == 'desc' or sortDir == null}">
+                            Descending
+                        </option>
+                        <option value="asc" th:selected="${sortDir == 'asc'}">
+                            Ascending
+                        </option>
+                    </select>
+                </div>
+
+                <!--                Search Button-->
+                <div class="flex items-end">
+                    <button type="submit"
+                            class="text-sm lg:text-base w-full sm:w-auto px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium hover:cursor-pointer">
+                        Search
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--    Results Info-->
+    <div class="mb-6">
+        <p class="text-gray-600 text-sm lg:text-base">
+                <span th:if="${search != null and search != ''}" class="font-medium">
+                    Search results for "<span th:text="${search}"></span>" -
+                </span>
+            Showing <span class="font-medium" th:text="${posts.size()}"></span> posts
+        </p>
+    </div>
+
+    <!--    Posts Grid-->
+    <div class="space-y-6">
+        <!--        Post Card-->
+        <div th:each="post : ${posts}"
+             class="bg-white rounded-lg shadow-sm border border-gray-200 p-3 lg:p-6 hover:shadow-md transition-shadow">
+            <a th:href="@{/posts/{id}(id=${post.id})}" class="block cursor-pointer">
+                <div class="flex items-start justify-between">
+                    <div class="flex-1">
+                        <!--                        Author and Time-->
+                        <div class="flex items-center space-x-3 mb-3">
+                            <img th:src="${post.author.avatarUrl}" th:alt="${post.author.fullName}" loading="lazy"
+                                 class="w-10 h-10 rounded-full object-cover">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900" th:text="${post.author.fullName}"></p>
+                                <p class="text-xs text-gray-500" th:text="${post.timeAgo}"></p>
+                            </div>
+                        </div>
+
+                        <div class="w-full flex space-x-4">
+                            <!-- Thumbnail -->
+                            <img th:src="${post.thumbnailUrl}" th:alt="${post.title}" loading="lazy"
+                                 class="w-1/5 lg:w-1/12 h-auto object-contain rounded-lg">
+
+                            <div class="flex-1">
+                                <!--                        Title and Topics-->
+                                <div class="mb-3">
+                                    <div class="flex items-center justify-between">
+                                        <h2 class="text-sm lg:text-xl font-semibold text-gray-900 hover:text-indigo-600 cursor-pointer flex-1 mr-4 line-clamp-1"
+                                            th:text="${post.title}">
+                                        </h2>
+                                        <div class="flex items-center gap-2 overflow-hidden tag-row"
+                                             style="max-width: 40%; white-space: nowrap;">
+                                        <span th:each="tag : ${post.tags}"
+                                              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium tag-pill"
+                                              th:text="${tag}">
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--                        Post Preview-->
+                                <p class="text-gray-600 text-xs lg:text-sm mb-4 line-clamp-1"
+                                   th:text="${post.plainContent}"></p>
+
+                                <!--                        Stats-->
+                                <div class="flex items-center space-x-3 lg:space-x-6 text-gray-500 text-xs lg:text-sm">
+                                    <div class="flex items-center space-x-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                  d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                        <span th:text="${post.viewCount}"></span>
+                                        <span>views</span>
+                                    </div>
+                                    <div class="flex items-center space-x-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                  d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
+                                        </svg>
+                                        <span th:text="${post.saveCount}"></span>
+                                        <span>saved</span>
+                                    </div>
+                                    <div class="hidden sm:flex items-center space-x-1">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                  d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                        </svg>
+                                        <span th:text="${post.commentCount}"></span>
+                                        <span>comments</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <!--        Empty State-->
+        <div th:if="${posts.isEmpty()}" class="text-center py-12">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">No posts found</h3>
+            <p class="mt-1 text-sm text-gray-500">Try adjusting your search or filter criteria.</p>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div th:if="${totalPages > 1}" class="mt-8 flex items-center justify-center space-x-2">
+
+        <!-- Previous Button -->
+        <a th:href="@{/posts(page=${currentPage - 1}, search=${search}, sortBy=${sortBy}, sortDir=${sortDir}, userId=${postUserId})}"
+           th:classappend="${currentPage == 0} ? 'pointer-events-none opacity-50' : ''"
+           class="px-2 lg:px-4 py-1 lg:py-2 border border-gray-300 rounded-lg text-xs lg:text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+            Previous
+        </a>
+
+        <!-- Page Numbers -->
+        <div class="flex space-x-2">
+            <!-- First Page -->
+            <a th:href="@{/posts(page=0, search=${search}, sortBy=${sortBy}, sortDir=${sortDir}, userId=${postUserId})}"
+               th:classappend="${currentPage == 0} ? 'pointer-events-none bg-indigo-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
+               class="px-2 lg:px-4 py-1 lg:py-2 border border-gray-300 rounded-lg text-xs lg:text-sm font-medium transition-colors"
+               th:text="1"></a>
+
+            <!-- Left Ellipsis -->
+            <span th:if="${currentPage > 2}" class="px-2 text-gray-500">...</span>
+
+            <!-- Middle Pages -->
+            <a th:each="i : ${#numbers.sequence(currentPage - 1, currentPage + 1)}"
+               th:if="${i > 0 and i < totalPages - 1}"
+               th:href="@{/posts(page=${i}, search=${search}, sortBy=${sortBy}, sortDir=${sortDir}, userId=${postUserId})}"
+               th:classappend="${i == currentPage} ? 'pointer-events-none bg-indigo-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
+               class="px-2 lg:px-4 py-1 lg:py-2 border border-gray-300 rounded-lg text-xs lg:text-sm font-medium transition-colors"
+               th:text="${i + 1}"></a>
+
+            <!-- Right Ellipsis -->
+            <span th:if="${currentPage < totalPages - 3}" class="px-2 text-gray-500">...</span>
+
+            <!-- Last Page -->
+            <a th:href="@{/posts(page=${totalPages - 1}, search=${search}, sortBy=${sortBy}, sortDir=${sortDir}, userId=${postUserId})}"
+               th:classappend="${currentPage == totalPages - 1} ? 'pointer-events-none bg-indigo-600 text-white' : 'bg-white text-gray-700 hover:bg-gray-50'"
+               class="px-2 lg:px-4 py-1 lg:py-2 border border-gray-300 rounded-lg text-xs lg:text-sm font-medium transition-colors"
+               th:text="${totalPages}"></a>
+        </div>
+
+        <!-- Next Button -->
+        <a th:href="@{/posts(page=${currentPage + 1}, search=${search}, sortBy=${sortBy}, sortDir=${sortDir}, userId=${postUserId})}"
+           th:classappend="${currentPage == totalPages - 1} ? 'pointer-events-none opacity-50' : ''"
+           class="px-2 lg:px-4 py-1 lg:py-2 border border-gray-300 rounded-lg text-xs lg:text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+            Next
+        </a>
+    </div>
+</div>
+
+<div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+</html>

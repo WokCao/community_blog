@@ -36,12 +36,20 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
                 SELECT p FROM PostModel p
                 WHERE p.visibility = 'PUBLIC' AND (p.autoPublishAt IS NULL OR p.autoPublishAt <= :now) AND (:query IS NULL OR :query = ''
                     OR LOWER(p.title) LIKE LOWER(CONCAT('%', :query, '%'))
-                    OR LOWER(p.content) LIKE LOWER(CONCAT('%', :query, '%'))
                     OR LOWER(p.author.fullName) LIKE LOWER(CONCAT('%', :query, '%'))
                     OR EXISTS (SELECT 1 FROM p.tags t WHERE LOWER(t) LIKE LOWER(CONCAT('%', :query, '%')))
                 )
             """)
     Page<PostModel> searchPostsByTitleOrTagsOrAuthorOrderByCreatedAt(@Param("query") String query, @Param("now") LocalDateTime now, Pageable pageable);
+
+    @Query("""
+                SELECT p FROM PostModel p
+                WHERE p.author.id = :userId AND p.visibility = 'PUBLIC' AND (p.autoPublishAt IS NULL OR p.autoPublishAt <= :now) AND (:query IS NULL OR :query = ''
+                    OR LOWER(p.title) LIKE LOWER(CONCAT('%', :query, '%'))
+                    OR EXISTS (SELECT 1 FROM p.tags t WHERE LOWER(t) LIKE LOWER(CONCAT('%', :query, '%')))
+                )
+            """)
+    Page<PostModel> searchPostsByTitleOrTagsOrderByCreatedAt(@Param("query") String query, @Param("now") LocalDateTime now, @Param("userId") Long userId, Pageable pageable);
 
     @Query("""
                 SELECT p FROM PostModel p
@@ -56,6 +64,16 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
 
     @Query("""
                 SELECT p FROM PostModel p
+                WHERE p.author.id = :userId AND p.visibility = 'PUBLIC' AND (p.autoPublishAt IS NULL OR p.autoPublishAt <= :now) AND (:query IS NULL OR :query = ''
+                    OR LOWER(p.title) LIKE LOWER(CONCAT('%', :query, '%'))
+                    OR EXISTS (SELECT 1 FROM p.tags t WHERE LOWER(t) LIKE LOWER(CONCAT('%', :query, '%')))
+                )
+                ORDER BY (SIZE(p.likedBy) * 10 + p.shareCount * 5 + p.saveCount * 2) DESC
+            """)
+    Page<PostModel> searchPostsByTitleOrTagsOrderByHighPointDesc(@Param("query") String query, @Param("now") LocalDateTime now, @Param("userId") Long userId, Pageable pageable);
+
+    @Query("""
+                SELECT p FROM PostModel p
                 WHERE p.visibility = 'PUBLIC' AND (p.autoPublishAt IS NULL OR p.autoPublishAt <= :now) AND (:query IS NULL OR :query = ''
                     OR LOWER(p.title) LIKE LOWER(CONCAT('%', :query, '%'))
                     OR LOWER(p.author.fullName) LIKE LOWER(CONCAT('%', :query, '%'))
@@ -64,6 +82,16 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
                 ORDER BY (SIZE(p.likedBy) * 10 + p.shareCount * 5 + p.saveCount * 2) ASC
             """)
     Page<PostModel> searchPostsByTitleOrTagsOrAuthorOrderByHighPointAsc(@Param("query") String query, @Param("now") LocalDateTime now, Pageable pageable);
+
+    @Query("""
+                SELECT p FROM PostModel p
+                WHERE p.visibility = 'PUBLIC' AND p.visibility = 'PUBLIC' AND (p.autoPublishAt IS NULL OR p.autoPublishAt <= :now) AND (:query IS NULL OR :query = ''
+                    OR LOWER(p.title) LIKE LOWER(CONCAT('%', :query, '%'))
+                    OR EXISTS (SELECT 1 FROM p.tags t WHERE LOWER(t) LIKE LOWER(CONCAT('%', :query, '%')))
+                )
+                ORDER BY (SIZE(p.likedBy) * 10 + p.shareCount * 5 + p.saveCount * 2) ASC
+            """)
+    Page<PostModel> searchPostsByTitleOrTagsOrderByHighPointAsc(@Param("query") String query, @Param("now") LocalDateTime now, @Param("userId") Long userId, Pageable pageable);
 
     @Query(
             value = """

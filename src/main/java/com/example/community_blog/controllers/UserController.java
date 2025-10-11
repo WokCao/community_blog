@@ -81,4 +81,33 @@ public class UserController {
                     .body(Map.of("success", false, "error", e.getMessage()));
         }
     }
+
+    @GetMapping("/{userId}/notable-posts")
+    public String getNotablePosts(@PathVariable("userId") Long userId, Model model,
+                                  @RequestParam(value = "page", defaultValue = "0") int page,
+                                  @RequestParam(value = "search", defaultValue = "") String search,
+                                  @RequestParam(value = "sortBy", defaultValue = "createdAt") String sortBy,
+                                  @RequestParam(value = "sortDir", defaultValue = "desc") String sortDir
+    ) {
+        try {
+            UserModel currentUser = userService.getCurrentUser();
+            if (currentUser != null) {
+                model.addAttribute("user", currentUser);
+            }
+
+            Page<PostModel> postModelPage = postService.getPostsOfUser(page, search, sortBy, sortDir, userId);
+            model.addAttribute("posts", postModelPage.getContent());
+            model.addAttribute("totalPosts", postModelPage.getTotalElements());
+            model.addAttribute("search", search);
+            model.addAttribute("sortBy", sortBy);
+            model.addAttribute("sortDir", sortDir);
+            model.addAttribute("totalPages", postModelPage.getTotalPages());
+            model.addAttribute("currentPage", postModelPage.getNumber());
+            model.addAttribute("postUserId", userId);
+            return "user-notable-posts";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", e.getMessage());
+            return "error";
+        }
+    }
 }

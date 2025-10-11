@@ -167,6 +167,38 @@ public class PostService {
         }
     }
 
+    public Page<PostModel> getPostsOfUser(int page, String query, String sortBy, String sortDir, Long userId) throws IllegalArgumentException {
+        if (page < 0) {
+            page = 0;
+        }
+
+        Pageable pageable;
+        LocalDateTime now = LocalDateTime.now();
+        // Sorting by createdAt and highPoint (most popular)
+        // Query by tags, title
+
+        if ("createdAt".equalsIgnoreCase(sortBy)) {
+            Sort sort;
+            sort = sortDir.equalsIgnoreCase("asc")
+                    ? Sort.by("createdAt").ascending()
+                    : Sort.by("createdAt").descending();
+
+            pageable = PageRequest.of(page, PAGE_SIZE, sort);
+
+            return postRepository.searchPostsByTitleOrTagsOrderByCreatedAt(query, now, userId, pageable);
+        } else if ("highPoint".equalsIgnoreCase(sortBy)) {
+            pageable = PageRequest.of(page, PAGE_SIZE);
+
+            if (sortDir.equalsIgnoreCase("asc")) {
+                return postRepository.searchPostsByTitleOrTagsOrderByHighPointAsc(query, now, userId, pageable);
+            } else {
+                return postRepository.searchPostsByTitleOrTagsOrderByHighPointDesc(query, now, userId, pageable);
+            }
+        } else {
+            throw new IllegalArgumentException("Invalid sort parameter");
+        }
+    }
+
     public Page<PostModel> getUserNotablePostsExceptFor(Long userId, Long postId) {
         Pageable pageable = PageRequest.of(0, PAGE_SIZE);
         LocalDateTime now = LocalDateTime.now();

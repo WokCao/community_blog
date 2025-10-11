@@ -30,6 +30,7 @@ public class SchedulerService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final RestTemplate restTemplate = new RestTemplate();
     private final PasswordEncoder passwordEncoder;
+    private final AIService aiService;
 
     @Value("${newsapi.key}")
     private String newsApiKey;
@@ -45,12 +46,13 @@ public class SchedulerService {
     private String botSecret;
 
     @Autowired
-    public SchedulerService(PostRepository postRepository, UserRepository userRepository, RoleRepository roleRepository,RedisTemplate<String, Object> redisTemplate, PasswordEncoder passwordEncoder) {
+    public SchedulerService(PostRepository postRepository, UserRepository userRepository, RoleRepository roleRepository,RedisTemplate<String, Object> redisTemplate, PasswordEncoder passwordEncoder, AIService aiService) {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.redisTemplate = redisTemplate;
         this.passwordEncoder = passwordEncoder;
+        this.aiService = aiService;
     }
 
     @Scheduled(cron = "0 * * * * *")
@@ -121,8 +123,7 @@ public class SchedulerService {
     }
 
     private Set<String> generateTags(String title, String content) {
-        AIService ai = new AIService();
-        return ai.extractTags(title, content);
+        return aiService.extractTags(title, content);
     }
 
     private UserModel getBotUser() {
