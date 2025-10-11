@@ -52,6 +52,9 @@ public class ClientController {
 
             Long totalComments = commentService.countComments();
             model.addAttribute("totalComments", totalComments);
+
+            Long totalViews = postService.calculateAllPostsView();
+            model.addAttribute("totalViews", totalViews);
         } catch (Exception e) {
             // Handle exception if needed
         }

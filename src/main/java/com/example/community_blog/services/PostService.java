@@ -293,6 +293,10 @@ public class PostService {
         return postRepository.sumViewCountByAuthorId(currentUser.getId());
     }
 
+    public Long calculateAllPostsView() {
+        return postRepository.sumView();
+    }
+
     public Long calculatePostsLike() throws BadRequestException {
         UserModel currentUser = getCurrentUser();
         if (currentUser == null) {

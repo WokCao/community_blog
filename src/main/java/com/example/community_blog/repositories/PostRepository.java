@@ -121,6 +121,9 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
     @Query("SELECT COALESCE(SUM(p.viewCount), 0) FROM PostModel p WHERE p.author.id = :authorId")
     Long sumViewCountByAuthorId(@Param("authorId") Long authorId);
 
+    @Query("SELECT COALESCE(SUM(p.viewCount), 0) FROM PostModel p")
+    Long sumView();
+
     @Query("SELECT COALESCE(SUM(SIZE(p.likedBy)), 0) FROM PostModel p WHERE p.author.id = :authorId")
     Long sumLikeCountByAuthorId(@Param("authorId") Long authorId);
 
