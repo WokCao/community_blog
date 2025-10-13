@@ -1,5 +1,6 @@
 package com.example.community_blog.models;
 
+import com.example.community_blog.utils.FormatNumberUtil;
 import com.example.community_blog.utils.TimeAgoUtil;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
@@ -111,6 +112,11 @@ public class PostModel {
 
     @Column(nullable = false)
     private Long viewCount = 0L;
+
+    @Transient
+    public String getFormattedViewCount() {
+        return FormatNumberUtil.formatNumber(viewCount);
+    }
 
     @Column(nullable = false)
     private Long saveCount = 0L;

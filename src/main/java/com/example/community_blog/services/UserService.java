@@ -3,6 +3,7 @@ package com.example.community_blog.services;
 import com.example.community_blog.dto.RegisterRequest;
 import com.example.community_blog.models.Role;
 import com.example.community_blog.models.UserModel;
+import com.example.community_blog.repositories.PostRepository;
 import com.example.community_blog.repositories.RoleRepository;
 import com.example.community_blog.repositories.UserRepository;
 import org.apache.coyote.BadRequestException;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
@@ -35,6 +37,8 @@ public class UserService {
 
     @Value("${blog.control.email.account}")
     private String controlEmail;
+    @Autowired
+    private PostRepository postRepository;
 
     public UserModel getCurrentUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -105,7 +109,8 @@ public class UserService {
     }
 
     public Long countUsers() {
-        return userRepository.count();
+        LocalDateTime now = LocalDateTime.now();
+        return postRepository.countAllActiveAuthors(now);
     }
 
     public boolean updateAvatar(String avatarUrl) throws BadRequestException {
