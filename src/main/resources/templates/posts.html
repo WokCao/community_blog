@@ -108,10 +108,10 @@
                             </div>
                         </div>
 
-                        <div class="w-full flex space-x-4">
+                        <div class="w-full flex items-center space-x-4">
                             <!-- Thumbnail -->
                             <img th:src="${post.thumbnailUrl}" th:alt="${post.title}" loading="lazy"
-                                 class="w-1/5 lg:w-1/12 h-auto object-contain rounded-lg">
+                                 class="w-1/5 lg:w-1/12 h-auto object-cover rounded-lg">
 
                             <div class="flex-1">
                                 <!--                        Title and Topics-->
@@ -125,7 +125,7 @@
                                         <div class="relative flex flex-wrap items-center gap-2 tag-row max-w-[45%] sm:max-w-[50%] lg:max-w-[60%] overflow-hidden">
                                             <div class="absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-white pointer-events-none"></div>
                                             <span th:each="tag : ${post.tags}"
-                                                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium tag-pill bg-gray-100 text-gray-700 border border-gray-200"
+                                                  class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium tag-pill bg-gray-100 text-gray-700 border border-gray-200 text-nowrap"
                                                   th:text="${tag}">
                                             </span>
                                         </div>

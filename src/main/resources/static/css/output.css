@@ -961,6 +961,12 @@
   .object-cover {
     object-fit: cover;
   }
+  .object-fill {
+    object-fit: fill;
+  }
+  .object-scale-down {
+    object-fit: scale-down;
+  }
   .p-0 {
     padding: calc(var(--spacing) * 0);
   }
@@ -1131,6 +1137,9 @@
   }
   .text-balance {
     text-wrap: balance;
+  }
+  .text-nowrap {
+    text-wrap: nowrap;
   }
   .text-pretty {
     text-wrap: pretty;

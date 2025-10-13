@@ -55,12 +55,14 @@
                                        <h2 class="text-xl font-semibold text-gray-900 hover:text-indigo-600 cursor-pointer flex-1 mr-4"
                                            th:text="${post.title}">
                                        </h2>
-                                       <div class="flex items-center gap-2 overflow-hidden tag-row"
-                                            style="max-width: 40%; white-space: nowrap;">
-                                    <span th:each="tag : ${post.tags}"
-                                          class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium tag-pill"
-                                          th:text="${tag}">
-                                    </span>
+
+                                       <!-- Improved tag container -->
+                                       <div class="relative flex flex-wrap items-center gap-2 tag-row max-w-[45%] sm:max-w-[50%] lg:max-w-[60%] overflow-hidden">
+                                           <div class="absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-white pointer-events-none"></div>
+                                           <span th:each="tag : ${post.tags}"
+                                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium tag-pill bg-gray-100 text-gray-700 border border-gray-200 text-nowrap"
+                                                 th:text="${tag}">
+                                            </span>
                                        </div>
                                    </div>
                                </div>
