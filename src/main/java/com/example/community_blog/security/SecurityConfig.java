@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -28,34 +28,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .headers(headers -> headers
-                        .contentSecurityPolicy(policy -> policy
-                                .policyDirectives(
-                                        "default-src 'self'; " +
-                                                "img-src 'self' data: https://lh3.googleusercontent.com https://platform-lookaside.fbsbx.com; " +
-                                                "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; " +
-                                                "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; " +
-                                                "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; " +
-                                                "connect-src 'self' ws://localhost:8080 wss://localhost:8080 https://cdn.jsdelivr.net;"
-                                )
-                        )
-                )
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/auth/**", "/", "/css/**", "/js/**", "/img/**", "/posts", "/posts/*", "/oauth2/**", "/login/oauth2/**", "/bot/fetch").permitAll()
-                                .anyRequest().authenticated())
-                .sessionManagement(session -> session
-                        .maximumSessions(1)
-                        .maxSessionsPreventsLogin(false)
-                        .expiredUrl("/auth/login?expired=true")
-                )
-                .oauth2Login(oauth2 -> oauth2
-                        .loginPage("/auth/login")
-                        .userInfoEndpoint(userInfo -> {
-                            userInfo.userService(customizedOAuth2UserService);
-                        })
-                        .defaultSuccessUrl("/home", true)
-                        .failureUrl("/auth/login?error=true")
-                )
                 .cors(cors -> cors.configurationSource(new CorsConfigurationSource() {
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration config = new CorsConfiguration();
@@ -69,6 +41,35 @@ public class SecurityConfig {
                         return config;
                     }
                 }))
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/login/oauth2/code/google", "/bot/fetch"))
+                .headers(headers -> headers
+                        .contentSecurityPolicy(policy -> policy
+                                .policyDirectives(
+                                        "default-src 'self'; " +
+                                                "img-src 'self' data: https://lh3.googleusercontent.com https://platform-lookaside.fbsbx.com; " +
+                                                "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; " +
+                                                "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; " +
+                                                "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; " +
+                                                "connect-src 'self' ws://localhost:8080 wss://localhost:8080 https://cdn.jsdelivr.net;"
+                                )
+                        )
+                )
+                .sessionManagement(session -> session
+                        .maximumSessions(1)
+                        .maxSessionsPreventsLogin(false)
+                        .expiredUrl("/auth/login?expired=true")
+                )
+                .authorizeHttpRequests(auth ->
+                        auth.requestMatchers("/auth/**", "/", "/css/**", "/js/**", "/img/**", "/posts", "/posts/*", "/oauth2/**", "/login/oauth2/**", "/bot/fetch").permitAll()
+                                .anyRequest().authenticated())
+                .oauth2Login(oauth2 -> oauth2
+                        .loginPage("/auth/login")
+                        .userInfoEndpoint(userInfo -> {
+                            userInfo.userService(customizedOAuth2UserService);
+                        })
+                        .defaultSuccessUrl("/home", true)
+                        .failureUrl("/auth/login?error=true")
+                )
                 .formLogin(form -> form
                         .loginPage("/auth/login")
                         .usernameParameter("email")
@@ -90,8 +91,7 @@ public class SecurityConfig {
                         .deleteCookies("JSESSIONID")
                         .permitAll()
                 )
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/login/oauth2/code/google", "/bot/fetch"))
-                .httpBasic(Customizer.withDefaults());
+                .httpBasic(AbstractHttpConfigurer::disable);
         return http.build();
     }
 
