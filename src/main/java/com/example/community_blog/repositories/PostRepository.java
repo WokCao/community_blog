@@ -133,5 +133,8 @@ public interface PostRepository extends JpaRepository<PostModel, Long> {
     @Query("SELECT p FROM PostModel p WHERE p.autoPublishAt IS NOT NULL")
     List<PostModel> findReadyToPublish();
 
+    @Query("SELECT COUNT(DISTINCT p.author.id) FROM PostModel p WHERE p.visibility = 'PUBLIC' AND (p.autoPublishAt IS NULL OR p.autoPublishAt <= :now)")
+    Long countAllActiveAuthors(@Param("now") LocalDateTime now);
+
     boolean existsByTitle(String title);
 }

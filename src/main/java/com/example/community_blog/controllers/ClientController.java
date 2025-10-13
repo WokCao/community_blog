@@ -6,6 +6,7 @@ import com.example.community_blog.services.CommentService;
 import com.example.community_blog.services.EmailService;
 import com.example.community_blog.services.PostService;
 import com.example.community_blog.services.UserService;
+import com.example.community_blog.utils.FormatNumberUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -45,18 +46,19 @@ public class ClientController {
             }
 
             Long totalUsers = userService.countUsers();
-            model.addAttribute("totalUsers", totalUsers);
+            model.addAttribute("totalUsers", FormatNumberUtil.formatNumber(totalUsers));
 
             Long totalPosts = postService.countPosts();
-            model.addAttribute("totalPosts", totalPosts);
+            model.addAttribute("totalPosts", FormatNumberUtil.formatNumber(totalPosts));
 
             Long totalComments = commentService.countComments();
-            model.addAttribute("totalComments", totalComments);
+            model.addAttribute("totalComments", FormatNumberUtil.formatNumber(totalComments));
 
             Long totalViews = postService.calculateAllPostsView();
-            model.addAttribute("totalViews", totalViews);
+            model.addAttribute("totalViews", FormatNumberUtil.formatNumber(totalViews));
         } catch (Exception e) {
             // Handle exception if needed
+            e.printStackTrace();
         }
         return "index";
     }
