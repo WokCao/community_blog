@@ -1,11 +1,3 @@
-document.getElementById("textColorWrapper").addEventListener("click", function () {
-    document.getElementById("textColor").click();
-});
-
-document.getElementById("backgroundColorWrapper").addEventListener("click", function () {
-    document.getElementById("backgroundColor").click();
-});
-
 const thumbnailBasePath = '/img/';
 const thumbnailData = [
     ['thumbnail_1.jpg', 'Clean, modern style'],
@@ -31,6 +23,7 @@ thumbnailData.forEach(([filename, description]) => {
     option.value = filename;
     option.textContent = description;
     thumbnailWrapper.appendChild(option);
+    console.log(thumbnailWrapper)
 });
 
 // Function to update preview image
