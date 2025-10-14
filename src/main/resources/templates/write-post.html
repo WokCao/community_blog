@@ -14,13 +14,21 @@
     <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<body class="bg-gradient-to-br from-slate-50 to-indigo-50 min-h-screen">
 
 <!-- Navigation -->
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<main class="flex-grow py-6 max-w-7xl mx-auto">
-    <div class="px-4 sm:px-6 lg:px-8">
+<main class="container mx-auto px-4 py-8">
+    <div class="mb-8 animate-fade-in-up">
+        <h1 class="text-4xl font-bold text-gray-800 mb-2">
+            <span th:if="${post != null && post.id != null}">Edit Post</span>
+            <span th:if="${post == null}">Create New Post</span>
+        </h1>
+        <p class="text-gray-600">Share your thoughts with the community</p>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-2xl p-8 animate-fade-in-up delay-100">
         <form th:id="postForm" th:action="@{/posts/create}" th:if="${post == null}"
               method="post" enctype="multipart/form-data" class="space-y-8">
             <div th:replace="~{fragments/post-form :: post-form}"></div>
