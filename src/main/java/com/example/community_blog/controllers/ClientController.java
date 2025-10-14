@@ -56,20 +56,26 @@ public class ClientController {
 
             Long totalViews = postService.calculateAllPostsView();
             model.addAttribute("totalViews", FormatNumberUtil.formatNumber(totalViews));
+
+            return "index";
         } catch (Exception e) {
-            // Handle exception if needed
-            e.printStackTrace();
+            model.addAttribute("status", 500);
+            model.addAttribute("error", "An error occurred while loading the homepage.");
+            model.addAttribute("message", e.getMessage());
+
+            return "error";
         }
-        return "index";
     }
 
     @GetMapping("/auth/login")
     public String login(Model model) {
+        model.addAttribute("user", null);
         return "login";
     }
 
     @GetMapping("/auth/register")
     public String register(Model model) {
+        model.addAttribute("user", new RegisterRequest());
         return "register";
     }
 
@@ -87,10 +93,10 @@ public class ClientController {
 
             emailService.sendVerificationEmail(savedUser.getEmail(), verificationUrl);
 
-            model.addAttribute("successMessage", "Registration successful! Please check your email to verify your account.");
+            model.addAttribute("success", "Registration successful! Please check your email to verify your account.");
             return "register";
         } catch (Exception e) {
-            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("error", e.getMessage());
             return "register";
         }
     }

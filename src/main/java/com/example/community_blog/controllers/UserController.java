@@ -42,7 +42,10 @@ public class UserController {
             model.addAttribute("totalViews", postService.calculatePostsView());
             model.addAttribute("totalLikes", postService.calculatePostsLike());
         } catch (Exception e) {
-            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("status", 500);
+            model.addAttribute("error", "An error occurred while loading the homepage.");
+            model.addAttribute("message", e.getMessage());
+
             return "error";
         }
         return "profile";
@@ -106,7 +109,10 @@ public class UserController {
             model.addAttribute("postUserId", userId);
             return "user-notable-posts";
         } catch (Exception e) {
-            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("status", 500);
+            model.addAttribute("error", "An error occurred while loading the homepage.");
+            model.addAttribute("message", e.getMessage());
+
             return "error";
         }
     }

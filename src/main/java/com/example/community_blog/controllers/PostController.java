@@ -56,7 +56,10 @@ public class PostController {
             model.addAttribute("currentPage", postModelPage.getNumber());
             return "posts";
         } catch (Exception e) {
-            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("status", 500);
+            model.addAttribute("error", "An error occurred while loading the homepage.");
+            model.addAttribute("message", e.getMessage());
+
             return "error";
         }
     }
@@ -113,7 +116,10 @@ public class PostController {
 
             return "post-details";
         } catch (Exception e) {
-            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("status", 500);
+            model.addAttribute("error", "An error occurred while loading the homepage.");
+            model.addAttribute("message", e.getMessage());
+
             return "error";
         }
     }
@@ -136,7 +142,10 @@ public class PostController {
             model.addAttribute("post", postModel);
             return "write-post";
         } catch (Exception e) {
-            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("status", 500);
+            model.addAttribute("error", "An error occurred while loading the homepage.");
+            model.addAttribute("message", e.getMessage());
+
             return "error";
         }
     }
@@ -147,7 +156,10 @@ public class PostController {
             PostModel post = postService.updatePost(postId, createPostRequest);
             return "redirect:/posts/" + post.getId();
         } catch (Exception e) {
-            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("status", 500);
+            model.addAttribute("error", "An error occurred while loading the homepage.");
+            model.addAttribute("message", e.getMessage());
+
             return "error";
         }
     }
