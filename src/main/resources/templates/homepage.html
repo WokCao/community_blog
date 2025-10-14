@@ -14,110 +14,122 @@
     <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 </head>
-<body class="bg-gray-50">
+<body class="bg-gradient-to-br from-slate-50 to-indigo-50 min-h-screen">
 <!-- Navigation -->
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="container mx-auto px-4 py-8">
     <!-- Header -->
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2">Latest Posts</h1>
-        <p class="text-gray-600">Discover the newest stories from our community</p>
+    <div class="bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-8 mb-8 text-white shadow-xl animate-fade-in-up">
+        <h1 class="text-3xl md:text-4xl font-bold mb-2">Welcome back, <span th:text="${user.fullName}">User</span>!</h1>
+        <p class="text-indigo-100">Discover the latest stories from our community</p>
     </div>
 
     <!-- Posts List -->
-    <div class="space-y-6">
-        <!-- Sample posts - replace with th:each for dynamic content -->
-        <div th:each="post : ${posts}"
-             class="bg-white rounded-lg shadow-sm border border-gray-200 p-6 hover:shadow-md transition-shadow">
-            <a th:href="@{/posts/{id}(id=${post.id})}" class="block cursor-pointer">
-                <div class="flex items-center justify-between">
-                    <div class="flex-1">
-                        <!-- Author and Time -->
-                        <div class="flex items-center space-x-3 mb-3">
-                            <img th:src="${post.author.avatarUrl}" th:alt="${post.author.fullName}" loading="lazy"
-                                 class="w-10 h-10 rounded-full object-cover">
-                            <div>
-                                <p class="text-sm font-medium text-gray-900" th:text="${post.author.fullName}"></p>
-                                <p class="text-xs text-gray-500" th:text="${post.timeAgo}"></p>
-                            </div>
-                        </div>
-
-                        <div class="w-full flex space-x-4">
-                            <!-- Thumbnail -->
-                            <img th:src="${post.thumbnailUrl}" th:alt="${post.title}" loading="lazy"
-                                 class="w-1/6 lg:w-1/12 h-auto object-contain rounded-lg">
-
-                           <div class="flex-1">
-                               <!-- Title and Topics -->
-                               <div class="mb-3">
-                                   <div class="flex items-center justify-between">
-                                       <h2 class="text-xl font-semibold text-gray-900 hover:text-indigo-600 cursor-pointer flex-1 mr-4"
-                                           th:text="${post.title}">
-                                       </h2>
-
-                                       <!-- Improved tag container -->
-                                       <div class="relative flex flex-wrap items-center gap-2 tag-row max-w-[45%] sm:max-w-[50%] lg:max-w-[60%] overflow-hidden">
-                                           <div class="absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-white pointer-events-none"></div>
-                                           <span th:each="tag : ${post.tags}"
-                                                 class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium tag-pill bg-gray-100 text-gray-700 border border-gray-200 text-nowrap"
-                                                 th:text="${tag}">
-                                            </span>
-                                       </div>
-                                   </div>
-                               </div>
-
-                               <!-- Post Preview -->
-                               <p class="text-gray-600 text-sm mb-4 line-clamp-1" th:text="${post.plainContent}"></p>
-
-                               <!-- Stats -->
-                               <div class="flex items-center space-x-6 text-sm text-gray-500">
-                                   <div class="flex items-center space-x-1">
-                                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                 d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                 d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                       </svg>
-                                       <span th:text="${post.formattedViewCount}"></span>
-                                       <span>views</span>
-                                   </div>
-                                   <div class="flex items-center space-x-1">
-                                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                 d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"></path>
-                                       </svg>
-                                       <span th:text="${post.saveCount}"></span>
-                                       <span>saved</span>
-                                   </div>
-                                   <div class="flex items-center space-x-1">
-                                       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                 d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                                       </svg>
-                                       <span th:text="${post.commentCount}"></span>
-                                       <span>comments</span>
-                                   </div>
-                               </div>
-                           </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="mb-8">
+        <div class="flex items-center justify-between mb-6 animate-fade-in-up delay-100">
+            <h2 class="text-2xl font-bold text-gray-800">
+                <i class="fas fa-fire text-orange-500 mr-2"></i>Latest Posts
+            </h2>
+            <a th:href="@{/posts}"
+               class="text-indigo-600 hover:text-indigo-700 font-semibold hover:underline transition-all">
+                View All <i class="fas fa-arrow-right ml-1"></i>
             </a>
         </div>
 
-        <div th:if="${#lists.size(posts) == 0}" class="flex flex-col items-center justify-center py-16">
-            <i class="fa-solid fa-face-frown-open text-gray-400 text-2xl"></i>
-            <h2 class="text-lg font-semibold text-gray-400 mb-2">There is no post currently.</h2>
-            <p class="text-gray-500 mb-6">Be the first one to share your story with the community!</p>
-            <a th:href="@{/write-post}" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg shadow-sm transition font-medium">Write a Post</a>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div th:each="post, iterStat : ${posts}"
+                 th:class="'bg-white rounded-2xl shadow-lg overflow-hidden hover-lift animate-fade-in-up delay-' + ${(iterStat.index + 2) * 100}">
+                <div class="relative h-48 bg-gradient-to-br from-indigo-400 to-purple-500 overflow-hidden">
+                    <img th:if="${post.thumbnailUrl}" th:src="@{${post.thumbnailUrl}}" alt="Post thumbnail"
+                         class="w-full h-full object-cover">
+                    <div th:unless="${post.thumbnailUrl}" class="w-full h-full flex items-center justify-center">
+                        <i class="fas fa-image text-white text-6xl opacity-50"></i>
+                    </div>
+                    <div class="absolute top-4 right-4">
+                            <span class="bg-white text-indigo-600 px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+                                <i class="fas fa-tag mr-1"></i><span>Topic</span>
+                            </span>
+                    </div>
+                </div>
+
+                <div class="p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-3 hover:text-indigo-600 transition-colors line-clamp-1">
+                        <a th:href="@{/posts/{id}(id=${post.id})}" th:text="${post.title}">Post Title</a>
+                    </h3>
+
+                    <p class="text-gray-600 mb-4 line-clamp-3" th:text="${post.plainContent}"></p>
+
+                    <div class="relative flex flex-wrap items-center gap-2 tag-row max-w-full overflow-hidden mb-4">
+                        <div class="absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-white pointer-events-none"></div>
+                        <span th:each="tag : ${post.tags}"
+                              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium tag-pill bg-gray-100 text-gray-700 border border-gray-200 text-nowrap"
+                              th:text="${tag}">
+                        </span>
+                    </div>
+
+                    <div class="flex items-center justify-between pt-4 border-t border-gray-100">
+                        <div class="flex items-center space-x-3">
+                            <img th:src="@{${post.author.avatarUrl}}" alt="Author"
+                                 class="w-10 h-10 rounded-full border-2 border-indigo-200">
+                            <div>
+                                <div class="font-semibold text-gray-800 text-sm" th:text="${post.author.fullName}">
+                                    Author Name
+                                </div>
+                                <div class="text-xs text-gray-500" th:text="${post.timeAgo}">Date</div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-4 text-sm text-gray-500">
+                            <span class="flex items-center hover:text-indigo-600 transition-colors">
+                                    <i class="fa-solid fa-eye mr-1"></i>
+                                    <span th:text="${post.formattedViewCount}">0</span>
+                                </span>
+                            <span class="flex items-center hover:text-indigo-600 transition-colors">
+                                    <i class="fas fa-heart mr-1"></i>
+                                    <span th:text="${post.likeCount}">0</span>
+                                </span>
+                            <span class="flex items-center hover:text-indigo-600 transition-colors">
+                                    <i class="fas fa-comment mr-1"></i>
+                                    <span th:text="${post.commentCount}">0</span>
+                                </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${#lists.isEmpty(posts)}" class="text-center py-16 animate-fade-in-up delay-200">
+            <i class="fas fa-inbox text-gray-300 text-6xl mb-4"></i>
+            <p class="text-gray-500 text-lg">No posts available yet</p>
+            <a th:href="@{/posts/new}"
+               class="inline-block mt-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold px-6 py-3 rounded-xl hover:from-indigo-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-300 shadow-lg">
+                <i class="fas fa-plus mr-2"></i>Create First Post
+            </a>
         </div>
     </div>
 
-    <!-- Load More Button -->
-    <div th:if="${totalElements > 6}" class="text-center mt-8">
-        <a th:href="@{/posts}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-6 rounded-lg transition">
-            Load More Posts
+    <div class="grid md:grid-cols-3 gap-6 animate-fade-in-up delay-400">
+        <a th:href="@{/write-post}"
+           class="bg-gradient-to-br from-indigo-500 to-purple-600 text-white p-6 rounded-2xl shadow-lg hover-lift group">
+            <i class="fas fa-pen-fancy text-4xl mb-3 group-hover:scale-110 transition-transform"></i>
+            <h3 class="text-xl font-bold mb-2">Write a Post</h3>
+            <p class="text-indigo-100">Share your thoughts with the community</p>
+        </a>
+
+        <a th:href="@{/users/me}"
+           class="bg-gradient-to-br from-purple-500 to-pink-600 text-white p-6 rounded-2xl shadow-lg hover-lift group">
+            <i class="fas fa-user-circle text-4xl mb-3 group-hover:scale-110 transition-transform"></i>
+            <h3 class="text-xl font-bold mb-2">My Profile</h3>
+            <p class="text-purple-100">View and edit your profile</p>
+        </a>
+
+        <a th:href="@{/posts}"
+           class="bg-gradient-to-br from-pink-500 to-red-600 text-white p-6 rounded-2xl shadow-lg hover-lift group">
+            <i class="fas fa-compass text-4xl mb-3 group-hover:scale-110 transition-transform"></i>
+            <h3 class="text-xl font-bold mb-2">Explore</h3>
+            <p class="text-pink-100">Discover new content and writers</p>
         </a>
     </div>
 
