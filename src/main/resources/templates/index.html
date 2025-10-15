@@ -14,205 +14,201 @@
     <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
 </head>
-<body class="bg-gray-50 text-gray-800 font-sans">
-<!-- Navigation -->
+<body class="bg-white">
 <div th:replace="~{fragments/navbar :: navbar}"></div>
 
-<!-- Hero Section -->
-<section class="bg-gradient-to-br from-white to-slate-100 py-20">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center">
-            <h1 class="text-2xl lg:text-5xl font-bold text-gray-800 mb-6 text-balance">
-                Share Your Stories. <br>
-                <span class="text-indigo-500">Connect with Community</span>
+<section class="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 text-white py-24 overflow-hidden">
+    <div class="absolute inset-0 bg-black opacity-10"></div>
+    <div class="absolute inset-0" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'0.05\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+
+    <div class="container mx-auto px-4 relative z-10">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl md:text-6xl font-bold mb-6 animate-fade-in-up">
+                Share Your Stories with the World
             </h1>
-            <p class="text-base lg:text-xl text-gray-600 mb-8 max-w-3xl mx-auto text-pretty">
-                Join thousands of writers and readers in our vibrant community. Share your thoughts, discover amazing
-                content, and engage with stories that matter.
+            <p class="text-xl md:text-2xl mb-8 text-indigo-100 animate-fade-in-up delay-100">
+                Join thousands of writers and readers in our vibrant community
             </p>
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a th:href="@{/write-post}"
-                   class="bg-gray-700 hover:bg-gray-800 text-white px-8 py-4 rounded-lg text-sm lg:text-lg font-semibold transition shadow-lg">
-                    Start Writing Today
+            <div class="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up delay-200">
+                <a th:href="@{/auth/register}" class="bg-white text-indigo-600 font-semibold px-8 py-4 rounded-xl hover:bg-indigo-50 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl btn-ripple">
+                    <i class="fas fa-rocket mr-2"></i>Get Started Free
                 </a>
-                <a th:href="@{/home}"
-                   class="bg-white hover:bg-gray-50 text-gray-700 px-8 py-4 rounded-lg text-sm lg:text-lg font-semibold border border-gray-300 transition">
-                    Explore Stories
+                <a th:href="@{/posts}" class="bg-transparent border-2 border-white text-white font-semibold px-8 py-4 rounded-xl hover:bg-white hover:text-indigo-600 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
+                    <i class="fas fa-book-open mr-2"></i>Explore Posts
                 </a>
             </div>
         </div>
     </div>
+
+    <div class="absolute top-20 left-10 w-20 h-20 bg-white opacity-10 rounded-full animate-pulse-slow"></div>
+    <div class="absolute bottom-20 right-10 w-32 h-32 bg-white opacity-10 rounded-full animate-pulse-slow delay-300"></div>
 </section>
 
-<!-- Features Section -->
-<section class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-xl lg:text-4xl font-bold text-gray-800 mb-4">Everything You Need to Share & Discover</h2>
-            <p class="text-base lg:text-xl text-gray-600 max-w-2xl mx-auto">
-                Our platform provides all the tools you need to create, share, and engage with amazing content.
-            </p>
+<section class="py-20 bg-gradient-to-b from-white to-slate-50">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-16 animate-fade-in-up">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">Why Choose Our Platform?</h2>
+            <p class="text-xl text-gray-600">Everything you need to share your voice</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <!-- Write & Publish -->
-            <div class="bg-white p-4 lg:p-8 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition group">
-                <div class="w-10 h-10 lg:w-16 lg:h-16 bg-indigo-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-indigo-200 transition">
-                    <svg class="w-5 h-5 lg:w-8 lg:h-8 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-                    </svg>
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover-lift animate-fade-in-up delay-100">
+                <div class="w-16 h-16 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-xl flex items-center justify-center mb-6">
+                    <i class="fas fa-pen-fancy text-white text-2xl"></i>
                 </div>
-                <h3 class="text-base lg:text-xl font-semibold text-gray-800 mb-3">Write & Publish</h3>
-                <p class="text-sm lg:text-base text-gray-600 mb-4">Create beautiful blog posts with our intuitive editor. Format, add images,
-                    and publish with ease.</p>
-                <a href="#" class="text-sm lg:text-base text-indigo-500 font-medium hover:text-indigo-600 transition">Learn more →</a>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Rich Text Editor</h3>
+                <p class="text-gray-600">Create beautiful posts with our intuitive editor featuring formatting, images, and code blocks.</p>
             </div>
 
-            <!-- Upvote & Engage -->
-            <div class="bg-white p-4 lg:p-8 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition group">
-                <div class="w-10 h-10 lg:w-16 lg:h-16 bg-green-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-green-200 transition">
-                    <svg class="w-5 h-5 lg:w-8 lg:h-8 text-green-500" style="fill: none;" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M7 11l5-5m0 0l5 5m-5-5v12"></path>
-                    </svg>
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover-lift animate-fade-in-up delay-200">
+                <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center mb-6">
+                    <i class="fas fa-users text-white text-2xl"></i>
                 </div>
-                <h3 class="text-base lg:text-xl font-semibold text-gray-800 mb-3">Upvote & Engage</h3>
-                <p class="text-sm lg:text-base text-gray-600 mb-4">Show appreciation for great content. Upvote posts you love and help
-                    quality content rise to the top.</p>
-                <a href="#" class="text-sm lg:text-base text-indigo-500 font-medium hover:text-indigo-600 transition">Learn more →</a>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Engaged Community</h3>
+                <p class="text-gray-600">Connect with like-minded writers and readers. Follow, comment, and engage with content.</p>
             </div>
 
-            <!-- Smart Recommendations -->
-            <div class="bg-white p-4 lg:p-8 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition group">
-                <div class="w-10 h-10 lg:w-16 lg:h-16 bg-purple-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-purple-200 transition">
-                    <svg class="w-5 h-5 lg:w-8 lg:h-8 text-purple-500" style="fill: none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
-                    </svg>
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover-lift animate-fade-in-up delay-300">
+                <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-red-600 rounded-xl flex items-center justify-center mb-6">
+                    <i class="fas fa-chart-line text-white text-2xl"></i>
                 </div>
-                <h3 class="text-base lg:text-xl font-semibold text-gray-800 mb-3">Smart Recommendations</h3>
-                <p class="text-sm lg:text-base text-gray-600 mb-4">Discover content tailored to your interests. Our algorithm suggests posts
-                    you'll love based on your reading history.</p>
-                <a href="#" class="text-sm lg:text-base text-indigo-500 font-medium hover:text-indigo-600 transition">Learn more →</a>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Analytics & Insights</h3>
+                <p class="text-gray-600">Track your post performance with detailed analytics and grow your audience.</p>
             </div>
 
-            <!-- Comment & Discuss -->
-            <div class="bg-white p-4 lg:p-8 rounded-xl shadow-lg border border-gray-200 hover:shadow-xl transition group">
-                <div class="w-10 h-10 lg:w-16 lg:h-16 bg-blue-100 rounded-lg flex items-center justify-center mb-6 group-hover:bg-blue-200 transition">
-                    <svg class="w-5 h-5 lg:w-8 lg:h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                    </svg>
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover-lift animate-fade-in-up delay-100">
+                <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-xl flex items-center justify-center mb-6">
+                    <i class="fas fa-tags text-white text-2xl"></i>
                 </div>
-                <h3 class="text-base lg:text-xl font-semibold text-gray-800 mb-3">Comment & Discuss</h3>
-                <p class="text-sm lg:text-base text-gray-600 mb-4">Join meaningful conversations. Comment on posts, reply to others, and
-                    build connections through thoughtful discussions.</p>
-                <a href="#" class="text-sm lg:text-base text-indigo-500 font-medium hover:text-indigo-600 transition">Learn more →</a>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Smart Tagging</h3>
+                <p class="text-gray-600">Organize and discover content easily with our intelligent tagging system.</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover-lift animate-fade-in-up delay-200">
+                <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center mb-6">
+                    <i class="fas fa-mobile-alt text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Mobile Friendly</h3>
+                <p class="text-gray-600">Write and read on any device with our fully responsive design.</p>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover-lift animate-fade-in-up delay-300">
+                <div class="w-16 h-16 bg-gradient-to-br from-yellow-500 to-orange-600 rounded-xl flex items-center justify-center mb-6">
+                    <i class="fas fa-shield-alt text-white text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-4">Secure & Private</h3>
+                <p class="text-gray-600">Your data is protected with enterprise-grade security and privacy controls.</p>
             </div>
         </div>
     </div>
 </section>
 
-<!-- Community Stats -->
-<section class="py-16 bg-gray-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div>
-                <div class="text-xl lg:text-4xl font-bold text-gray-800 mb-2" th:text="${totalUsers ?: 0}"></div>
-                <div class="text-sm lg:text-base text-gray-600">Active Writers</div>
+<section class="py-20 bg-gradient-to-br from-indigo-600 to-purple-600 text-white">
+    <div class="container mx-auto px-4">
+        <div class="grid md:grid-cols-4 gap-8 text-center">
+            <div class="animate-scale-in delay-100">
+                <div class="text-5xl font-bold mb-2" th:text="${totalUsers}">10K+</div>
+                <div class="text-indigo-200">Active Writers</div>
             </div>
-            <div>
-                <div class="text-xl lg:text-4xl font-bold text-gray-800 mb-2" th:text="${totalPosts ?: 0}"></div>
-                <div class="text-sm lg:text-base text-gray-600">Published Posts</div>
+            <div class="animate-scale-in delay-200">
+                <div class="text-5xl font-bold mb-2" th:text="${totalPosts}">50K+</div>
+                <div class="text-indigo-200">Published Posts</div>
             </div>
-            <div>
-                <div class="text-xl lg:text-4xl font-bold text-gray-800 mb-2" th:text="${totalViews ?: 0}"></div>
-                <div class="text-sm lg:text-base text-gray-600">Total Views</div>
+            <div class="animate-scale-in delay-300">
+                <div class="text-5xl font-bold mb-2" th:text="${totalViews}">100K+</div>
+                <div class="text-indigo-200">Monthly Readers</div>
             </div>
-            <div>
-                <div class="text-xl lg:text-4xl font-bold text-gray-800 mb-2" th:text="${totalComments?: 0}"></div>
-                <div class="text-sm lg:text-base text-gray-600">Comments & Discussions</div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Testimonials -->
-<section class="py-20 bg-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center mb-16">
-            <h2 class="text-xl lg:text-4xl font-bold text-gray-800 mb-4">What Our Community Says</h2>
-            <p class="text-base lg:text-xl text-gray-600">Join thousands of satisfied writers and readers</p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-gray-50 p-8 rounded-xl">
-                <div class="flex items-center mb-4">
-                    <div class="w-10 h-10 lg:w-12 lg:h-12 bg-indigo-500 rounded-full flex items-center justify-center text-white font-semibold">
-                        S
-                    </div>
-                    <div class="ml-4">
-                        <div class="text-sm lg:text-base font-semibold text-gray-800">Sarah Johnson</div>
-                        <div class="text-gray-600 text-xs lg:text-sm">Tech Writer</div>
-                    </div>
-                </div>
-                <p class="text-xs lg:text-base text-gray-600 italic">"The recommendation system is incredible! I've discovered so many
-                    amazing writers I never would have found otherwise. The community here is truly supportive."</p>
-            </div>
-
-            <div class="bg-gray-50 p-8 rounded-xl">
-                <div class="flex items-center mb-4">
-                    <div class="w-10 h-10 lg:w-12 lg:h-12 bg-green-500 rounded-full flex items-center justify-center text-white font-semibold">
-                        M
-                    </div>
-                    <div class="ml-4">
-                        <div class="text-sm lg:text-base font-semibold text-gray-800">Mike Chen</div>
-                        <div class="text-gray-600 text-xs lg:text-sm">Travel Blogger</div>
-                    </div>
-                </div>
-                <p class="text-xs lg:text-base text-gray-600 italic">"The upvoting system really helps quality content shine. My travel
-                    stories have reached audiences I never imagined, and the engagement is fantastic!"</p>
-            </div>
-
-            <div class="bg-gray-50 p-8 rounded-xl">
-                <div class="flex items-center mb-4">
-                    <div class="w-10 h-10 lg:w-12 lg:h-12 bg-purple-500 rounded-full flex items-center justify-center text-white font-semibold">
-                        E
-                    </div>
-                    <div class="ml-4">
-                        <div class="text-sm lg:text-base font-semibold text-gray-800">Emily Rodriguez</div>
-                        <div class="text-gray-600 text-xs lg:text-sm">Food Enthusiast</div>
-                    </div>
-                </div>
-                <p class="text-xs lg:text-base text-gray-600 italic">"The commenting system creates such meaningful discussions. I've learned
-                    so much from the community feedback on my recipe posts. It's more than just a blog platform!"</p>
+            <div class="animate-scale-in delay-400">
+                <div class="text-5xl font-bold mb-2" th:text="${totalComments}">500K+</div>
+                <div class="text-indigo-200">Comments</div>
             </div>
         </div>
     </div>
 </section>
 
-<!-- CTA Section -->
-<section class="py-20 bg-gray-800">
-    <div class="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
-        <h2 class="text-xl lg:text-4xl font-bold text-white mb-6">Ready to Join Our Community?</h2>
-        <p class="text-base lg:text-xl text-gray-300 mb-8">
-            Start sharing your stories today and connect with readers who care about what you have to say.
-        </p>
-        <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a th:href="@{/auth/register}"
-               class="bg-indigo-500 hover:bg-indigo-600 text-white px-8 py-4 rounded-lg text-sm lg:text-lg font-semibold transition">
-                Create Your Account
-            </a>
-            <a th:href="@{/auth/login}"
-               class="bg-transparent hover:bg-gray-700 text-white px-8 py-4 rounded-lg text-sm lg:text-lg font-semibold border border-gray-600 transition">
-                Sign In
+<section class="py-20 bg-gradient-to-b from-slate-50 to-white">
+    <div class="container mx-auto px-4">
+        <div class="text-center mb-16 animate-fade-in-up">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">What Our Community Says</h2>
+            <p class="text-xl text-gray-600">Join thousands of satisfied writers</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover-lift animate-fade-in-up delay-100">
+                <div class="flex items-center mb-4">
+                    <div class="flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                <p class="text-gray-600 mb-6">"This platform has transformed how I share my thoughts. The editor is intuitive and the community is incredibly supportive!"</p>
+                <div class="flex items-center">
+                    <img src="/img/bear.png" alt="User" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                        <div class="font-semibold text-gray-800">Sarah Johnson</div>
+                        <div class="text-sm text-gray-500">Tech Blogger</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover-lift animate-fade-in-up delay-200">
+                <div class="flex items-center mb-4">
+                    <div class="flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                <p class="text-gray-600 mb-6">"I've tried many blogging platforms, but this one stands out. The analytics help me understand my audience better."</p>
+                <div class="flex items-center">
+                    <img src="/img/bear.png" alt="User" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                        <div class="font-semibold text-gray-800">Michael Chen</div>
+                        <div class="text-sm text-gray-500">Travel Writer</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-8 rounded-2xl shadow-lg hover-lift animate-fade-in-up delay-300">
+                <div class="flex items-center mb-4">
+                    <div class="flex text-yellow-400">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                </div>
+                <p class="text-gray-600 mb-6">"The community engagement features are fantastic. I've connected with so many amazing writers and readers!"</p>
+                <div class="flex items-center">
+                    <img src="/img/bear.png" alt="User" class="w-12 h-12 rounded-full mr-4">
+                    <div>
+                        <div class="font-semibold text-gray-800">Emily Rodriguez</div>
+                        <div class="text-sm text-gray-500">Lifestyle Blogger</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-20 bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 text-white">
+    <div class="container mx-auto px-4 text-center">
+        <div class="max-w-3xl mx-auto animate-fade-in-up">
+            <h2 class="text-4xl md:text-5xl font-bold mb-6">Ready to Start Writing?</h2>
+            <p class="text-xl mb-8 text-indigo-100">Join our community today and share your unique voice with the world</p>
+            <a th:href="@{/auth/register}" class="inline-block bg-white text-indigo-600 font-semibold px-10 py-4 rounded-xl hover:bg-indigo-50 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl btn-ripple">
+                <i class="fas fa-rocket mr-2"></i>Get Started Free
             </a>
         </div>
     </div>
 </section>
 
-<!-- Footer -->
 <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 </html>

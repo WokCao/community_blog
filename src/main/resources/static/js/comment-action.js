@@ -5,19 +5,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function updateButtonStyles(likeCommentButton, dislikeCommentButton, isLiked, isDisliked) {
         if (isLiked) {
-            likeCommentButton.classList.remove('text-gray-500', 'hover:bg-emerald-50', 'hover:text-emerald-600');
-            likeCommentButton.classList.add('bg-emerald-50', 'text-emerald-700', 'hover:bg-emerald-100');
+            likeCommentButton.classList.remove('text-gray-500', 'hover:text-emerald-600');
+            likeCommentButton.classList.add('text-emerald-700');
         } else {
-            likeCommentButton.classList.remove('bg-emerald-50', 'text-emerald-700', 'hover:bg-emerald-100');
-            likeCommentButton.classList.add('text-gray-500', 'hover:bg-emerald-50', 'hover:text-emerald-600');
+            likeCommentButton.classList.remove('text-emerald-700');
+            likeCommentButton.classList.add('text-gray-500', 'hover:text-emerald-600');
         }
 
         if (isDisliked) {
-            dislikeCommentButton.classList.remove('text-gray-500', 'hover:bg-red-50', 'hover:text-red-600');
-            dislikeCommentButton.classList.add('bg-red-50', 'text-red-700', 'hover:bg-red-100');
+            dislikeCommentButton.classList.remove('text-gray-500', 'hover:text-red-600');
+            dislikeCommentButton.classList.add('text-red-700');
         } else {
-            dislikeCommentButton.classList.remove('bg-red-50', 'text-red-700', 'hover:bg-red-100');
-            dislikeCommentButton.classList.add('text-gray-500', 'hover:bg-red-50', 'hover:text-red-600');
+            dislikeCommentButton.classList.remove('text-red-700');
+            dislikeCommentButton.classList.add('text-gray-500', 'hover:text-red-600');
         }
     }
 

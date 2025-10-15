@@ -6,6 +6,7 @@ import com.example.community_blog.models.CommentModel;
 import com.example.community_blog.models.PostModel;
 import com.example.community_blog.models.UserModel;
 import com.example.community_blog.services.FollowService;
+import com.example.community_blog.services.NotificationService;
 import com.example.community_blog.services.PostService;
 import com.example.community_blog.services.UserService;
 import jakarta.validation.Valid;
@@ -25,12 +26,14 @@ public class PostController {
     private final PostService postService;
     private final UserService userService;
     private final FollowService followService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public PostController(PostService postService, UserService userService, FollowService followService) {
+    public PostController(PostService postService, UserService userService, FollowService followService, NotificationService notificationService) {
         this.postService = postService;
         this.userService = userService;
         this.followService = followService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping
@@ -54,9 +57,13 @@ public class PostController {
             model.addAttribute("sortDir", sortDir);
             model.addAttribute("totalPages", postModelPage.getTotalPages());
             model.addAttribute("currentPage", postModelPage.getNumber());
+            model.addAttribute("unreadNotifications", notificationService.getUnreadNotifications(currentUser).size());
             return "posts";
         } catch (Exception e) {
-            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("status", 500);
+            model.addAttribute("error", "An error occurred while loading the homepage.");
+            model.addAttribute("message", e.getMessage());
+
             return "error";
         }
     }
@@ -110,10 +117,14 @@ public class PostController {
             model.addAttribute("isPostDislikedByUser", postModel.isDislikedBy(currentUser));
             model.addAttribute("comments", comments);
             model.addAttribute("isFollowing", currentUser != null && followService.isFollowing(currentUser, postModel.getAuthor().getId()));
+            model.addAttribute("unreadNotifications", notificationService.getUnreadNotifications(currentUser).size());
 
             return "post-details";
         } catch (Exception e) {
-            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("status", 500);
+            model.addAttribute("error", "An error occurred while loading the homepage.");
+            model.addAttribute("message", e.getMessage());
+
             return "error";
         }
     }
@@ -134,9 +145,13 @@ public class PostController {
             }
 
             model.addAttribute("post", postModel);
+            model.addAttribute("unreadNotifications", notificationService.getUnreadNotifications(currentUser).size());
             return "write-post";
         } catch (Exception e) {
-            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("status", 500);
+            model.addAttribute("error", "An error occurred while loading the homepage.");
+            model.addAttribute("message", e.getMessage());
+
             return "error";
         }
     }
@@ -147,7 +162,10 @@ public class PostController {
             PostModel post = postService.updatePost(postId, createPostRequest);
             return "redirect:/posts/" + post.getId();
         } catch (Exception e) {
-            model.addAttribute("errorMessage", e.getMessage());
+            model.addAttribute("status", 500);
+            model.addAttribute("error", "An error occurred while loading the homepage.");
+            model.addAttribute("message", e.getMessage());
+
             return "error";
         }
     }

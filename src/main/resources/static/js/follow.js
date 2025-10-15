@@ -23,14 +23,50 @@ document.addEventListener("DOMContentLoaded", () => {
                     // Toggle state
                     if (action === "follow") {
                         followBtn.dataset.action = "unfollow";
-                        followBtn.querySelector("span").textContent = "Unfollow";
-                        followBtn.classList.remove("bg-blue-500", "hover:bg-blue-600");
-                        followBtn.classList.add("bg-gray-500", "hover:bg-gray-600");
+                        followBtn.querySelector("span").textContent = "Following";
+
+                        // Change icon
+                        const icon = followBtn.querySelector("i");
+                        icon.classList.remove("fa-plus");
+                        icon.classList.add("fa-check");
+
+                        // Update styling: gradient → gray
+                        followBtn.classList.remove(
+                            "bg-gradient-to-r",
+                            "from-indigo-600",
+                            "to-purple-600",
+                            "text-white",
+                            "hover:from-indigo-700",
+                            "hover:to-purple-700"
+                        );
+                        followBtn.classList.add(
+                            "bg-gray-200",
+                            "text-gray-700",
+                            "hover:bg-gray-300"
+                        );
                     } else {
                         followBtn.dataset.action = "follow";
                         followBtn.querySelector("span").textContent = "Follow";
-                        followBtn.classList.remove("bg-gray-500", "hover:bg-gray-600");
-                        followBtn.classList.add("bg-blue-500", "hover:bg-blue-600");
+
+                        // Change icon
+                        const icon = followBtn.querySelector("i");
+                        icon.classList.remove("fa-check");
+                        icon.classList.add("fa-plus");
+
+                        // Update styling: gray → gradient
+                        followBtn.classList.remove(
+                            "bg-gray-200",
+                            "text-gray-700",
+                            "hover:bg-gray-300"
+                        );
+                        followBtn.classList.add(
+                            "bg-gradient-to-r",
+                            "from-indigo-600",
+                            "to-purple-600",
+                            "text-white",
+                            "hover:from-indigo-700",
+                            "hover:to-purple-700"
+                        );
                     }
                 } else {
                     window.location.href = "/auth/login";

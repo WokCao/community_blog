@@ -1,109 +1,121 @@
-<div th:fragment="post-form" class="space-y-8">
-    <!-- Post Title -->
-    <div class="mb-8">
-        <label for="postTitle" class="block text-lg font-semibold text-gray-800 mb-2">Post Title</label>
+<div th:fragment="post-form" class="space-y-10">
+
+    <!-- 📝 Post Title -->
+    <div>
+        <label for="postTitle" class="block text-sm font-semibold text-gray-700 mb-2">
+            <i class="fas fa-heading text-indigo-600 mr-2"></i>Post Title
+        </label>
         <input type="text" name="title" id="postTitle"
                th:value="${post != null ? post.title : ''}"
-               placeholder="Enter your post title..."
-               class="w-full px-4 py-3 text-xl border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition shadow-sm"
+               placeholder="Enter an engaging title..."
+               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-lg font-semibold shadow-sm"
                required>
     </div>
 
-    <!-- Post Topics/Tags -->
-    <div class="mb-8">
-        <label for="tagInput" class="block text-lg font-semibold text-gray-800 mb-2">Topics / Tags</label>
-        <div class="flex flex-wrap gap-2 mb-3 min-h-8" id="tagsContainer">
-            <!-- Tags will be added dynamically -->
-        </div>
+    <!-- 🏷️ Topics / Tags -->
+    <div>
+        <label for="tagInput" class="block text-sm font-semibold text-gray-700 mb-2">
+            <i class="fas fa-tags text-indigo-600 mr-2"></i>Topics / Tags
+        </label>
+
+        <div id="tagsContainer"
+             class="flex flex-wrap gap-2 mb-3 min-h-8 p-2 border border-gray-200 rounded-xl bg-gray-50"></div>
+
         <input type="text" id="tagInput"
                placeholder="Add topics (press Enter to add)..."
-               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition shadow-sm">
+               class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all shadow-sm">
         <input type="hidden" name="tags" id="topicsHidden" th:value="${post != null ? post.tags : ''}">
     </div>
 
-    <!-- Editor Container -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
-        <!-- Rich Text Editor Toolbar (fragment) -->
+    <!-- ✍️ Editor -->
+    <div class="bg-white rounded-xl shadow-md border border-gray-200 overflow-hidden">
         <div th:replace="~{fragments/editor-toolbar :: toolbar}"></div>
 
-        <!-- Editor -->
         <div id="editor"
              th:utext="${post != null ? post.content : ''}"
              contenteditable="true"
-             class="min-h-[400px] p-6 bg-white focus:outline-none focus:ring-1 focus:ring-indigo-500 prose max-w-none"
+             class="min-h-[400px] p-6 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500 prose prose-lg max-w-none rounded-b-xl"
              style="font-family: Georgia, serif; font-size: 18px; line-height: 1.8;"
              placeholder="Start writing your amazing post..."></div>
 
-        <!-- Hidden textarea to store content -->
-        <label for="contentHidden"></label><textarea name="content" id="contentHidden"
-                                                     style="display: none;"></textarea>
+        <label for="contentHidden"></label><textarea name="content" id="contentHidden" class="hidden"></textarea>
     </div>
 
-    <!-- File inputs for media upload -->
-    <input type="file" id="imageInput" name="images" accept="image/*" style="display: none;" multiple>
-    <input type="file" id="videoInput" name="video" accept="video/*" style="display: none;">
+    <!-- 📂 File Inputs -->
+    <input type="file" id="imageInput" name="images" accept="image/*" multiple class="hidden">
+    <input type="file" id="videoInput" name="video" accept="video/*" class="hidden">
 
-    <!-- Post Settings -->
-    <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm mt-8">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Post Settings</h3>
+    <!-- ⚙️ Post Settings -->
+    <div class="bg-gray-50 p-6 rounded-xl border border-gray-200 shadow-sm space-y-6">
+        <h3 class="text-lg font-semibold text-gray-800 mb-2">
+            <i class="fas fa-cog text-indigo-600 mr-2"></i>Post Settings
+        </h3>
 
-        <div class="flex flex-col w-3/4 space-y-4">
-            <div class="hidden">
-                <label for="visibility" class="block text-sm font-medium text-gray-700 mb-2">Visibility</label>
-                <select id="visibility" name="visibility"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                    <option value="PUBLIC" selected>Public</option>
-                    <option value="PRIVATE">Private</option>
-                </select>
-            </div>
+        <div class="grid md:grid-cols-2 items-end gap-6">
+            <div class="hidden"><label for="visibility"
+                                       class="block text-sm font-medium text-gray-700 mb-2">Visibility</label> <select
+                    id="visibility" name="visibility"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                <option value="PUBLIC" selected>Public</option>
+                <option value="PRIVATE">Private</option>
+            </select></div>
 
-            <!-- Select an available thumbnail image -->
+            <!-- Thumbnail -->
             <div>
-                <label for="thumbnailUrl" class="block text-sm font-medium text-gray-700 mb-2">Thumbnail</label>
-                <img id="thumbnailPreview" th:value="${post != null ? post.thumbnailUrl : ''}" alt="Thumbnail Preview" loading="lazy"
-                     class="mb-2 max-h-40 w-auto rounded-lg border border-gray-300 object-cover" src="">
+                <label for="thumbnailUrl" class="block text-sm font-semibold text-gray-700 mb-2">
+                    <i class="fas fa-image text-indigo-600 mr-2"></i>Thumbnail Image
+                </label>
+                <img id="thumbnailPreview"
+                     th:value="${post != null ? post.thumbnailUrl : ''}"
+                     alt="Thumbnail Preview"
+                     loading="lazy"
+                     class="mb-2 max-h-40 w-auto rounded-xl border border-gray-300 object-cover shadow-sm"
+                     src="">
                 <select id="thumbnailUrl" name="thumbnailUrl"
                         th:value="${post != null ? post.thumbnailUrl : ''}"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
-                    <!-- Options will be populated dynamically -->
+                        class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all text-sm">
+                    <!-- Options populated dynamically -->
                 </select>
-
             </div>
 
-            <!-- Select a specific time to publish the post automatically -->
+            <!-- Auto Publish -->
             <div>
-                <label for="autoPublishAt" class="block text-sm font-medium text-gray-700 mb-2">Auto
-                    Publish</label>
+                <label for="autoPublishAt" class="block text-sm font-semibold text-gray-700 mb-2">
+                    <i class="fas fa-clock text-indigo-600 mr-2"></i>Auto Publish
+                </label>
                 <input type="datetime-local" id="autoPublishAt" name="autoPublishAt"
                        th:value="${post != null ? post.autoPublishAt : ''}"
-                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent">
+                       class="w-full px-3 py-2 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 transition-all text-sm">
             </div>
 
-            <div>
-                <label for="allowComment" class="block text-sm font-medium text-gray-700 mb-2">Comment</label>
+            <!-- Comment Toggle -->
+            <div class="flex items-center justify-between p-4 bg-white rounded-xl border border-gray-200 shadow-sm md:col-span-2">
+                <div>
+                    <div class="font-semibold text-gray-800">
+                        <i class="fas fa-comments text-indigo-600 mr-2"></i>Allow Comments
+                    </div>
+                    <div class="text-sm text-gray-500">Let readers comment on your post</div>
+                </div>
                 <label class="relative inline-flex items-center cursor-pointer">
-                    <input type="checkbox" id="allowComment" name="allowComment" class="sr-only peer"
+                    <input type="checkbox" id="allowComment" name="allowComment"
+                           class="sr-only peer"
                            th:checked="${post != null ? post.allowComment : true}">
-                    <span class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-indigo-600 transition-colors"></span>
-                    <span class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full transition-transform peer-checked:translate-x-5"></span>
-                    <span class="ml-3 text-sm text-gray-700">Allow comments on this post</span>
+                    <div
+                            class="w-14 h-7 bg-gray-300 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-indigo-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all peer-checked:bg-gradient-to-r peer-checked:from-indigo-600 peer-checked:to-purple-600">
+                    </div>
                 </label>
             </div>
-
         </div>
 
+        <!-- Buttons -->
         <div class="mt-6 flex justify-end space-x-4">
-            <button id="saveBtn"
-                    type="button"
-                    class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-5 py-2 rounded-lg transition flex items-center hover:cursor-pointer">
-                <i class="fas fa-save mr-2"></i>
-                <span>Save Draft</span>
+            <button id="saveBtn" type="button"
+                    class="flex items-center px-5 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl transition-all shadow-sm font-medium">
+                <i class="fas fa-save mr-2"></i>Save Draft
             </button>
-            <button id="publishBtn"
-                    type="button"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg shadow-sm transition flex items-center hover:cursor-pointer">
-                <i class="fas fa-paper-plane mr-2"></i>
-                <span>Publish</span>
+            <button id="publishBtn" type="button"
+                    class="flex items-center px-6 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl shadow-md transition-all font-medium">
+                <i class="fas fa-paper-plane mr-2"></i>Publish
             </button>
         </div>
     </div>
