@@ -28,6 +28,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .headers(headers -> headers
+                        .contentSecurityPolicy(policy -> policy
+                                .policyDirectives(
+                                        "default-src 'self'; " +
+                                                "img-src 'self' data: https://lh3.googleusercontent.com https://platform-lookaside.fbsbx.com; " +
+                                                "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; " +
+                                                "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; " +
+                                                "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; " +
+                                                "connect-src 'self' ws://localhost:8080 wss://localhost:8080 https://cdn.jsdelivr.net;"
+                                )
+                        )
+                )
                 .cors(cors -> cors.configurationSource(new CorsConfigurationSource() {
                     public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                         CorsConfiguration config = new CorsConfiguration();
@@ -42,18 +54,6 @@ public class SecurityConfig {
                     }
                 }))
                 .csrf(csrf -> csrf.ignoringRequestMatchers("/login/oauth2/code/google", "/bot/fetch"))
-                .headers(headers -> headers
-                        .contentSecurityPolicy(policy -> policy
-                                .policyDirectives(
-                                        "default-src 'self'; " +
-                                                "img-src 'self' data: https://lh3.googleusercontent.com https://platform-lookaside.fbsbx.com; " +
-                                                "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; " +
-                                                "style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; " +
-                                                "font-src 'self' https://cdnjs.cloudflare.com https://fonts.gstatic.com data:; " +
-                                                "connect-src 'self' ws://localhost:8080 wss://localhost:8080 https://cdn.jsdelivr.net;"
-                                )
-                        )
-                )
                 .sessionManagement(session -> session
                         .maximumSessions(1)
                         .maxSessionsPreventsLogin(false)
