@@ -2,6 +2,7 @@ package com.example.community_blog.controllers;
 
 import com.example.community_blog.models.PostModel;
 import com.example.community_blog.models.UserModel;
+import com.example.community_blog.services.NotificationService;
 import com.example.community_blog.services.PostService;
 import com.example.community_blog.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,13 @@ import java.util.Map;
 public class UserController {
     private final UserService userService;
     private final PostService postService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public UserController(UserService userService, PostService postService) {
+    public UserController(UserService userService, PostService postService, NotificationService notificationService) {
         this.userService = userService;
         this.postService = postService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/me")
@@ -48,6 +51,7 @@ public class UserController {
 
             return "error";
         }
+        model.addAttribute("unreadNotifications", notificationService.getUnreadNotifications(currentUser).size());
         return "profile";
     }
 
@@ -107,6 +111,7 @@ public class UserController {
             model.addAttribute("totalPages", postModelPage.getTotalPages());
             model.addAttribute("currentPage", postModelPage.getNumber());
             model.addAttribute("postUserId", userId);
+            model.addAttribute("unreadNotifications", notificationService.getUnreadNotifications(currentUser).size());
             return "user-notable-posts";
         } catch (Exception e) {
             model.addAttribute("status", 500);

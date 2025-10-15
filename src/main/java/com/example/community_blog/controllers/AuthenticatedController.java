@@ -2,6 +2,7 @@ package com.example.community_blog.controllers;
 
 import com.example.community_blog.models.PostModel;
 import com.example.community_blog.models.UserModel;
+import com.example.community_blog.services.NotificationService;
 import com.example.community_blog.services.PostService;
 import com.example.community_blog.services.SchedulerService;
 import com.example.community_blog.services.UserService;
@@ -21,14 +22,16 @@ public class AuthenticatedController {
     private final PostService postService;
     private final UserService userService;
     private final SchedulerService schedulerService;
+    private final NotificationService notificationService;
     @Value("${header.bot.secret}")
     private String headerBotSecret;
 
     @Autowired
-    public AuthenticatedController(PostService postService, UserService userService, SchedulerService schedulerService) {
+    public AuthenticatedController(PostService postService, UserService userService, SchedulerService schedulerService, NotificationService notificationService) {
         this.postService = postService;
         this.userService = userService;
         this.schedulerService = schedulerService;
+        this.notificationService = notificationService;
     }
 
     @GetMapping("/home")
@@ -43,6 +46,7 @@ public class AuthenticatedController {
         Page<PostModel> postModelPage = postService.getLatestPosts();
         model.addAttribute("posts", postModelPage.getContent());
         model.addAttribute("totalElements", postModelPage.getTotalElements());
+        model.addAttribute("unreadNotifications", notificationService.getUnreadNotifications(currentUser).size());
         return "homepage";
     }
 
